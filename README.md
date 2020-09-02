@@ -5,5 +5,10 @@ Co-Code is a platform for computer students to collaborate in different projects
 
 ### 📑 Documentation
 
+Presentation
+https://docs.google.com/presentation/d/1vQnQm6L0g3tD_vhSTP3qnaCaompiuDif8_NM3bkarTo/edit?usp=sharing
+
 Class Diagram Draft
 https://cacoo.com/diagrams/141On337LjjvThYP/E3DF2
+
+
