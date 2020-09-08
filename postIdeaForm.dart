@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart' as intl;
-import 'buttons/postbutton.dart';
+import 'postbutton.dart';
 
 class PostIdeaFormPage extends StatefulWidget {
   PostIdeaFormPage({Key key, this.title}) : super(key: key);
