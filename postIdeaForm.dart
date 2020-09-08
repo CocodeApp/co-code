@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart' as intl;
-import 'postbutton.dart';
+import 'buttons/postbutton.dart';
 
 class PostIdeaFormPage extends StatefulWidget {
   PostIdeaFormPage({Key key, this.title}) : super(key: key);
@@ -73,11 +73,22 @@ class _MyHomePageState extends State<PostIdeaFormPage> {
                           _FormDatePicker(
                             date: date,
                             onChanged: (value) {
-                              setState(() {
-                                date = value;
-                              });
+                              setState(
+                                () {
+                                  date = value;
+                                },
+                              );
                             },
+                            datetext: "Start date",
                           ),
+                          _FormDatePicker(
+                              date: date,
+                              onChanged: (value) {
+                                setState(() {
+                                  date = value;
+                                });
+                              },
+                              datetext: "expected deadline"),
                           Column(
                             mainAxisAlignment: MainAxisAlignment.start,
                             crossAxisAlignment: CrossAxisAlignment.start,
@@ -157,10 +168,11 @@ class _MyHomePageState extends State<PostIdeaFormPage> {
 class _FormDatePicker extends StatefulWidget {
   final DateTime date;
   final ValueChanged onChanged;
-
+  final String datetext;
   _FormDatePicker({
     this.date,
     this.onChanged,
+    this.datetext,
   });
 
   @override
@@ -179,7 +191,7 @@ class _FormDatePickerState extends State<_FormDatePicker> {
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
             Text(
-              'Date',
+              widget.datetext,
               style: Theme.of(context).textTheme.bodyText1,
             ),
             Text(
