@@ -2,15 +2,14 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'Auth.dart';
 import 'HomePage.dart';
-import 'RegisterPage.dart';
-import 'services/database.dart';
+import 'LoginPage.dart';
 
-class LoginPage extends StatefulWidget {
+class RegisterPage extends StatefulWidget {
   @override
-  _LoginPageState createState() => _LoginPageState();
+  _RegisterPageState createState() => _RegisterPageState();
 }
 
-class _LoginPageState extends State<LoginPage> {
+class _RegisterPageState extends State<RegisterPage> {
   final _formKey = GlobalKey<FormState>();
   String email;
   String password;
@@ -64,11 +63,17 @@ class _LoginPageState extends State<LoginPage> {
                                         bottom: 11,
                                         top: 11,
                                         right: 15),
-                                    hintText: "Username"),
+                                    hintText: "Email"),
                                 onChanged: (value) {
                                   setState(() {
                                     email = value;
                                   });
+                                },
+                                validator: (text) {
+                                  if (text == null || text.isEmpty) {
+                                    return 'Text is empty';
+                                  }
+                                  return null;
                                 },
                               ),
                             ),
@@ -100,17 +105,23 @@ class _LoginPageState extends State<LoginPage> {
                                     password = value;
                                   });
                                 },
+                                validator: (text) {
+                                  if (text == null || text.isEmpty) {
+                                    return 'Text is empty';
+                                  }
+                                  return null;
+                                },
                               ),
                             ),
                             RaisedButton(
-                              child: Text('Log In'),
+                              child: Text('Register'),
                               onPressed: () async {
                                 if (_formKey.currentState.validate()) {
                                   setState(() {
                                     isLoading = true;
                                   });
                                   // call login
-                                  await Auth.loginUser(email, password)
+                                  await Auth.registerUser(email, password)
                                       .then((void nothing) {
                                     print("done");
                                     setState(() {
@@ -125,20 +136,16 @@ class _LoginPageState extends State<LoginPage> {
                               },
                             ),
                             RaisedButton(
-                              child: Text('New Account?'),
+                              child: Text('Already have account?'),
                               onPressed: () async {
                                 // call login
+
                                 Navigator.push(context,
                                     MaterialPageRoute(builder: (_) {
-                                  return RegisterPage();
+                                  return LoginPage();
                                 }));
                               },
                             ),
-                            RaisedButton(
-                                child: Text('Log In'),
-                                onPressed: () {
-                                  AddUser.addUser();
-                                })
                           ],
                         )))));
   }

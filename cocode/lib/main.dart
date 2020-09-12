@@ -2,19 +2,13 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import "LoginPage.dart";
 import 'postIdeaForm.dart';
+import 'Auth.dart';
 
-void main() async {
-  //wait until
+Future<void> main() async {
+  //https://stackoverflow.com/questions/54469191/persist-user-auth-flutter-firebase
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
-  runApp(MyApp());
-}
-
-class MyApp extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      home: LoginPage(),
-    );
-  }
+  runApp(new MaterialApp(
+    home: await Auth.directoryPage(),
+  ));
 }
