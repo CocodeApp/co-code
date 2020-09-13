@@ -1,3 +1,4 @@
+import 'package:cocode/VerifyEmail.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -13,9 +14,8 @@ class HomePage extends StatelessWidget {
         label: Text('Sign out'),
         onPressed: () async {
           await Auth.logout();
-
           Navigator.push(context, MaterialPageRoute(builder: (_) {
-            return LoginPage();
+            return new LoginPage();
           }));
         },
       ),
@@ -23,3 +23,16 @@ class HomePage extends StatelessWidget {
     );
   }
 }
+
+/*if () {
+                                    Navigator.push(context,
+                                        MaterialPageRoute(builder: (_) {
+                                      return HomePage();
+                                    }));
+                                  } else {
+                                    Navigator.push(context,
+                                        MaterialPageRoute(builder: (_) {
+                                      return VerifyEmail(email: email);
+                                    }));
+                                  }
+                                  */

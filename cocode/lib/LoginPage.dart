@@ -1,9 +1,14 @@
+import 'dart:io';
+
+import 'package:cocode/ForgotPassword.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'Auth.dart';
 import 'HomePage.dart';
 import 'RegisterPage.dart';
+import 'VerifyEmail.dart';
 import 'services/database.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 class LoginPage extends StatefulWidget {
   @override
@@ -64,7 +69,7 @@ class _LoginPageState extends State<LoginPage> {
                                         bottom: 11,
                                         top: 11,
                                         right: 15),
-                                    hintText: "Username"),
+                                    hintText: "Email"),
                                 onChanged: (value) {
                                   setState(() {
                                     email = value;
@@ -117,10 +122,27 @@ class _LoginPageState extends State<LoginPage> {
                                       isLoading = false;
                                     });
                                   });
-                                  Navigator.push(context,
-                                      MaterialPageRoute(builder: (_) {
-                                    return HomePage();
-                                  }));
+
+                                  Fluttertoast.showToast(
+                                      msg: "Logged In successfully",
+                                      toastLength: Toast.LENGTH_SHORT,
+                                      gravity: ToastGravity.CENTER,
+                                      timeInSecForIosWeb: 1,
+                                      backgroundColor: Colors.red,
+                                      textColor: Colors.white,
+                                      fontSize: 16.0);
+
+                                  if (Auth.isVerified()) {
+                                    Navigator.push(context,
+                                        MaterialPageRoute(builder: (_) {
+                                      return new HomePage();
+                                    }));
+                                  } else {
+                                    Navigator.push(context,
+                                        MaterialPageRoute(builder: (_) {
+                                      return new VerifyEmail();
+                                    }));
+                                  }
                                 }
                               },
                             ),
@@ -130,14 +152,17 @@ class _LoginPageState extends State<LoginPage> {
                                 // call login
                                 Navigator.push(context,
                                     MaterialPageRoute(builder: (_) {
-                                  return RegisterPage();
+                                  return new RegisterPage();
                                 }));
                               },
                             ),
                             RaisedButton(
-                                child: Text('Log In'),
-                                onPressed: () {
-                                  AddUser.addUser();
+                                child: Text('Forgot Password?'),
+                                onPressed: () async {
+                                  Navigator.push(context,
+                                      MaterialPageRoute(builder: (_) {
+                                    return new ForgotPassword();
+                                  }));
                                 })
                           ],
                         )))));

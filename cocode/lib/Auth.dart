@@ -1,6 +1,8 @@
 import 'dart:io';
+import 'package:cocode/VerifyEmail.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'ForgotPassword.dart';
 import 'HomePage.dart';
 import 'LoginPage.dart';
 
@@ -19,31 +21,45 @@ import 'LoginPage.dart';
 //https://stackoverflow.com/questions/51883112/how-to-use-circularprogressindicator-in-flutter
 //https://stackoverflow.com/questions/59050143/how-to-verify-an-email-in-firebase-auth-in-flutter
 //https://firebase.google.com/docs/firestore
+//https://stackoverflow.com/questions/46601040/how-to-send-verification-mail-in-firebase-and-forgot-password-link-in-firebase-f
+//https://medium.com/@levimatheri/flutter-email-verification-and-password-reset-db2eed893d1d
+//https://stackoverflow.com/questions/57362166/flutter-navigate-back-to-selected-page
+//https://api.flutter.dev/flutter/widgets/StatefulWidget-class.html
+//https://stackoverflow.com/questions/50818770/passing-data-to-a-stateful-widget
+//https://pub.dev/packages/fluttertoast
 
 enum authProblems { UserNotFound, PasswordNotValid, NetworkError }
 
 class Auth {
   static final auth = FirebaseAuth.instance;
 
+  //is user currently logged In?
   static Future<bool> isLoggedIn() async {
     User user = auth.currentUser;
+
     if (user == null) {
       return false;
     }
     return true;
   }
 
+  // Register new user
   static Future<void> registerUser(
-      String userEmail, String userPassword) async {
+    String userEmail,
+    String userPassword,
+    String displayName,
+  ) async {
     await auth.createUserWithEmailAndPassword(
         email: userEmail, password: userPassword);
+    await auth.currentUser.updateProfile(displayName: displayName);
+    await auth.currentUser.sendEmailVerification();
   }
 
+  //Log In user
   static Future<void> loginUser(String userEmail, String userPassword) async {
     try {
       await auth.signInWithEmailAndPassword(
           email: userEmail, password: userPassword);
-      //await user.sendEmailVerification();
     } catch (e) {
       authProblems errorType;
       if (Platform.isAndroid) {
@@ -86,28 +102,52 @@ class Auth {
     }
   }
 
+  //Logout Current user
   static Future<void> logout() async {
     await auth.signOut();
   }
 
+  //get current user
   static Future<User> getCurrentUser() async {
     return auth.currentUser;
   }
 
+  //get current user ID
   static String getCurrentUserID() {
     return auth.currentUser.uid;
   }
 
+  //get current user email
+  static String getCurrentUserEmail() {
+    return auth.currentUser.email;
+  }
+
+  //method to direct
   static Future<Widget> directoryPage() async {
     return StreamBuilder<User>(
       stream: auth.authStateChanges(),
       builder: (BuildContext context, snapshot) {
-        if (snapshot.hasData && (!snapshot.data.isAnonymous)) {
-          return HomePage();
-        }
+        if (snapshot.hasData) {
+          if (Auth.isVerified()) {
+            return HomePage();
+          } else {
+            return new VerifyEmail();
+          }
 
-        return LoginPage();
+          //auth.sendPasswordResetEmail(email:"email@email.com");
+
+        } else {
+          return new LoginPage();
+        }
       },
     );
+  }
+
+  static Future<void> resetPassword(String email) async {
+    await auth.sendPasswordResetEmail(email: email);
+  }
+
+  static bool isVerified() {
+    return auth.currentUser.emailVerified;
   }
 }

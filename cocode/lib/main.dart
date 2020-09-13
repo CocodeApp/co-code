@@ -8,7 +8,7 @@ Future<void> main() async {
   //https://stackoverflow.com/questions/54469191/persist-user-auth-flutter-firebase
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
-  runApp(new MaterialApp(
+  runApp(MaterialApp(
     home: await Auth.directoryPage(),
   ));
 }

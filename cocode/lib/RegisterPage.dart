@@ -1,8 +1,11 @@
-import 'package:firebase_auth/firebase_auth.dart';
+import 'dart:io';
+
+import 'package:image_picker/image_picker.dart';
 import 'package:flutter/material.dart';
 import 'Auth.dart';
 import 'HomePage.dart';
 import 'LoginPage.dart';
+import 'VerifyEmail.dart';
 
 class RegisterPage extends StatefulWidget {
   @override
@@ -11,8 +14,12 @@ class RegisterPage extends StatefulWidget {
 
 class _RegisterPageState extends State<RegisterPage> {
   final _formKey = GlobalKey<FormState>();
+  String displayName;
   String email;
   String password;
+  File _image;
+  final picker = ImagePicker();
+
   bool isLoading = false;
 
   @override
@@ -26,7 +33,7 @@ class _RegisterPageState extends State<RegisterPage> {
                 key: _formKey,
                 child: Center(
                     child: new Container(
-                        height: 300.0,
+                        height: 350.0,
                         width: 300,
                         decoration: new BoxDecoration(
                           color: Colors.white,
@@ -42,6 +49,58 @@ class _RegisterPageState extends State<RegisterPage> {
                         ),
                         child: Column(
                           children: <Widget>[
+                            Center(
+                              child: _image == null
+                                  ? Text('No image selected.')
+                                  : Image.file(_image),
+                            ),
+                            FloatingActionButton(
+                              onPressed: () async {
+                                final pickedFile = await picker.getImage(
+                                    source: ImageSource.camera);
+
+                                setState(() {
+                                  _image = File(pickedFile.path);
+                                });
+                              },
+                              tooltip: 'Pick Image',
+                              child: Icon(Icons.add_a_photo),
+                            ),
+                            Container(
+                              width: 200.0,
+                              child: TextFormField(
+                                decoration: new InputDecoration(
+                                    border: InputBorder.none,
+                                    focusedBorder: UnderlineInputBorder(
+                                      borderSide:
+                                          BorderSide(color: Colors.grey),
+                                    ),
+                                    enabledBorder: UnderlineInputBorder(
+                                      borderSide:
+                                          BorderSide(color: Colors.grey),
+                                    ),
+                                    errorBorder: UnderlineInputBorder(
+                                        borderSide:
+                                            BorderSide(color: Colors.red)),
+                                    contentPadding: EdgeInsets.only(
+                                        left: 15,
+                                        bottom: 11,
+                                        top: 11,
+                                        right: 15),
+                                    hintText: "Username"),
+                                onChanged: (value) {
+                                  setState(() {
+                                    displayName = value;
+                                  });
+                                },
+                                validator: (text) {
+                                  if (text == null || text.isEmpty) {
+                                    return 'username can\'t be empty';
+                                  }
+                                  return null;
+                                },
+                              ),
+                            ),
                             Container(
                               width: 200.0,
                               child: TextFormField(
@@ -71,7 +130,7 @@ class _RegisterPageState extends State<RegisterPage> {
                                 },
                                 validator: (text) {
                                   if (text == null || text.isEmpty) {
-                                    return 'Text is empty';
+                                    return 'Email can\'t be empty';
                                   }
                                   return null;
                                 },
@@ -107,34 +166,41 @@ class _RegisterPageState extends State<RegisterPage> {
                                 },
                                 validator: (text) {
                                   if (text == null || text.isEmpty) {
-                                    return 'Text is empty';
+                                    return 'Pawword can\'t be empty';
                                   }
                                   return null;
                                 },
                               ),
                             ),
                             RaisedButton(
-                              child: Text('Register'),
-                              onPressed: () async {
-                                if (_formKey.currentState.validate()) {
-                                  setState(() {
-                                    isLoading = true;
-                                  });
-                                  // call login
-                                  await Auth.registerUser(email, password)
-                                      .then((void nothing) {
-                                    print("done");
+                                child: Text('Register'),
+                                onPressed: () async {
+                                  if (_formKey.currentState.validate()) {
                                     setState(() {
-                                      isLoading = false;
+                                      isLoading = true;
                                     });
-                                  });
-                                  Navigator.push(context,
-                                      MaterialPageRoute(builder: (_) {
-                                    return HomePage();
-                                  }));
-                                }
-                              },
-                            ),
+                                    // call login
+                                    await Auth.registerUser(
+                                            email, password, displayName)
+                                        .then((void nothing) {
+                                      print("done");
+                                      setState(() {
+                                        isLoading = false;
+                                      });
+                                    });
+                                    if (Auth.isVerified()) {
+                                      Navigator.push(context,
+                                          MaterialPageRoute(builder: (_) {
+                                        return new HomePage();
+                                      }));
+                                    } else {
+                                      Navigator.push(context,
+                                          MaterialPageRoute(builder: (_) {
+                                        return new VerifyEmail();
+                                      }));
+                                    }
+                                  }
+                                }),
                             RaisedButton(
                               child: Text('Already have account?'),
                               onPressed: () async {
