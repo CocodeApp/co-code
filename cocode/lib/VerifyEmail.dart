@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'Auth.dart';
 import 'ForgotPassword.dart';
 import 'HomePage.dart';
@@ -55,14 +56,33 @@ class _VerifyEmailState extends State<VerifyEmail> {
                                     isLoading = true;
                                   });
                                   // call login
-                                  await Auth.sendVerificationEmail()
-                                      .then((void nothing) {
-                                    print("back");
-                                    setState(() {
-                                      isLoading = false;
+                                  try {
+                                    await Auth.sendVerificationEmail()
+                                        .then((void nothing) {
+                                      print("back");
+                                      setState(() {
+                                        isLoading = false;
+                                      });
+
+                                      Fluttertoast.showToast(
+                                          msg: "Email Sent",
+                                          toastLength: Toast.LENGTH_LONG,
+                                          gravity: ToastGravity.CENTER,
+                                          timeInSecForIosWeb: 1,
+                                          backgroundColor: Colors.blueAccent,
+                                          textColor: Colors.white,
+                                          fontSize: 16.0);
                                     });
-                                  });
-                                  await Auth.logout();
+                                  } catch (e) {
+                                    Fluttertoast.showToast(
+                                        msg: "${e.message}",
+                                        toastLength: Toast.LENGTH_LONG,
+                                        gravity: ToastGravity.CENTER,
+                                        timeInSecForIosWeb: 1,
+                                        backgroundColor: Colors.blueAccent,
+                                        textColor: Colors.white,
+                                        fontSize: 16.0);
+                                  }
                                 }
                               },
                             ),
