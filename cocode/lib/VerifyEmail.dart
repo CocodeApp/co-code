@@ -55,14 +55,14 @@ class _VerifyEmailState extends State<VerifyEmail> {
                                     isLoading = true;
                                   });
                                   // call login
-                                  await Auth.resetPassword(email)
+                                  await Auth.sendVerificationEmail()
                                       .then((void nothing) {
                                     print("back");
                                     setState(() {
                                       isLoading = false;
                                     });
                                   });
-                                  await Auth.sendVerificationEmail();
+                                  await Auth.logout();
                                 }
                               },
                             ),

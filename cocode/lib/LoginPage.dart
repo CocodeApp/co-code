@@ -76,7 +76,7 @@ class _LoginPageState extends State<LoginPage> {
                                   });
                                 },
                                 validator: (text) {
-                                  return Auth.validateEmail(email);
+                                  return Auth.validateEmail(text);
                                 },
                               ),
                             ),

@@ -208,7 +208,7 @@ class Auth {
           break;
 
         default:
-          warnMessage = "A problem occured. Error code: ${e.message}";
+          warnMessage = "${e.message}";
       }
     }
 
@@ -218,7 +218,7 @@ class Auth {
   //validate password
   static String validatePassword(String password) {
     bool empty = password == null || password.isEmpty;
-    bool hasMinLength = password.length > 8;
+    bool hasMinLength = password.length >= 8;
     bool hasUppercase = password.contains(new RegExp(r'[A-Z]'));
     bool hasDigits = password.contains(new RegExp(r'[0-9]'));
     bool hasLowercase = password.contains(new RegExp(r'[a-z]'));
