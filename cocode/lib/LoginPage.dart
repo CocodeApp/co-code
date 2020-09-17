@@ -136,6 +136,8 @@ class _LoginPageState extends State<LoginPage> {
                                         backgroundColor: Colors.blueAccent,
                                         textColor: Colors.white,
                                         fontSize: 16.0);
+
+                                        
                                   } catch (e) {
                                     Fluttertoast.showToast(
                                         msg: Auth.AuthErrorMessage(e),
