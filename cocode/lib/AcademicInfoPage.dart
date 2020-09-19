@@ -118,7 +118,6 @@ class _AcademicInfoPageState extends State<AcademicInfoPage> {
                                 Container(
                                   width: 250.0,
                                   child: TextFormField(
-                                    obscureText: true,
                                     decoration: new InputDecoration(
                                       border: UnderlineInputBorder(
                                           borderSide:

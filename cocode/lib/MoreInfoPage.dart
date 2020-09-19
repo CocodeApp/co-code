@@ -147,7 +147,6 @@ class _MoreInfoPageState extends State<MoreInfoPage> {
                                     Container(
                                       width: 250.0,
                                       child: TextFormField(
-                                        obscureText: true,
                                         decoration: new InputDecoration(
                                           border: UnderlineInputBorder(
                                               borderSide: BorderSide(
