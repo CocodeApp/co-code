@@ -1,4 +1,4 @@
-import 'package:cocode/HomePage.dart';
+import 'features/homePage/homePage.dart';
 import 'package:flutter/material.dart';
 import 'form.dart';
 
@@ -30,7 +30,7 @@ class _MyHomePageState extends State<PostIdeaFormPage> {
               icon: const Icon(Icons.arrow_back_ios),
               onPressed: () {
                 Navigator.push(context, MaterialPageRoute(builder: (_) {
-                  return HomePage();
+                  return homePage();
                 })); //check
               },
               tooltip: MaterialLocalizations.of(context).openAppDrawerTooltip,

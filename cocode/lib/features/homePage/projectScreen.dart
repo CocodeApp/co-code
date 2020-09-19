@@ -44,7 +44,9 @@ class _ProjectScreenState extends State<ProjectScreen> {
           //for adding new Idea
           onPressed: () {
             Navigator.push(context, MaterialPageRoute(builder: (_) {
-              return PostIdea.PostIdeaFormPage();
+              return PostIdea.PostIdeaFormPage(
+                title: 'Post new idea',
+              );
             }));
           },
           child: Icon(Icons.add),
