@@ -1,0 +1,69 @@
+{
+  "project_info": {
+    "project_number": "592759573393",
+    "firebase_url": "https://co-code-f2f18.firebaseio.com",
+    "project_id": "co-code-f2f18",
+    "storage_bucket": "co-code-f2f18.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:592759573393:android:ba5e02f57b22b11515e830",
+        "android_client_info": {
+          "package_name": "com.example.coco"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "592759573393-kje430opaan22ih70985sr4bftr3vp8q.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDtM5N5GEIiEjzuwP0om5Emy1AAdHjdAgU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "592759573393-kje430opaan22ih70985sr4bftr3vp8q.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:592759573393:android:121306d195cf758715e830",
+        "android_client_info": {
+          "package_name": "com.heilamogren.cocode"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "592759573393-kje430opaan22ih70985sr4bftr3vp8q.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDtM5N5GEIiEjzuwP0om5Emy1AAdHjdAgU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "592759573393-kje430opaan22ih70985sr4bftr3vp8q.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
