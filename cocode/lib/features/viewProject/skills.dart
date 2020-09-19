@@ -18,19 +18,27 @@ class _skillsState extends State<skills> {
     return ListView.builder(
       itemCount: skills.length, //here
       itemBuilder: (context, index) {
-        return InkWell(
-          //A rectangular area of a Material that responds to touch.
-          splashColor: Colors.blue.withAlpha(30),
-          onTap: () {
-            //view Profile goes here
-          },
-          child: Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: ListTile(
-              //this widget contain the project details
+        return Container(
+          height: 50.0,
+          margin: new EdgeInsets.all(10.0),
+          decoration: new BoxDecoration(
+            color: new Color(0xFFD1DDED),
+            shape: BoxShape.rectangle,
+            borderRadius: new BorderRadius.circular(8.0),
+            boxShadow: <BoxShadow>[
+              new BoxShadow(
+                color: Colors.black12,
+                blurRadius: 10.0,
+                offset: new Offset(0.0, 10.0),
+              ),
+            ],
+          ),
+          child: ListTile(
+            //this widget contain the project details
 
-              title: Center(child: Text(skills[index])),
-            ),
+            title: Center(
+                child: Text(skills[index],
+                    style: new TextStyle(fontWeight: FontWeight.bold))),
           ),
         );
       },

@@ -21,6 +21,8 @@ class _ProjectScreenState extends State<ProjectScreen> {
       length: 2, //our tabs
       child: Scaffold(
         appBar: AppBar(
+          leading: Container(),
+          centerTitle: true,
           backgroundColor: Color(0xff2A4793),
           title: Text(
             'Explore',

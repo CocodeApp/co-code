@@ -13,6 +13,8 @@ class _userProjectsState extends State<userProjects> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        leading: Container(),
+        centerTitle: true,
         title: Text('my projects'),
         backgroundColor: Color(0xff2A4793),
       ),
