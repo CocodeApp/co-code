@@ -76,7 +76,8 @@ class LoginFormBloc extends FormBloc<String, String> {
 
       yield currentState.toSuccess();
     } catch (e) {
-      yield currentState.toFailure(e);
+      String err = Auth.AuthErrorMessage(e);
+      yield currentState.toFailure(err);
     }
   }
 }
@@ -148,7 +149,7 @@ class LoginPage extends StatelessWidget {
                     // Hide the progress dialog
                     Navigator.of(context).pop();
                     Fluttertoast.showToast(
-                        msg: "An error accured: " + state.failureResponse,
+                        msg: state.failureResponse,
                         toastLength: Toast.LENGTH_LONG,
                         gravity: ToastGravity.CENTER,
                         timeInSecForIosWeb: 1,

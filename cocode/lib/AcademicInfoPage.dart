@@ -68,16 +68,28 @@ class _AcademicInfoPageState extends State<AcademicInfoPage> {
                               children: <Widget>[
                                 SizedBox(
                                     height: CommonThings.size.height * 0.03),
-                                Container(
+                                Center(
+                                    child: Container(
                                   child: Text(
-                                    'Now Let\'s Know more about your academic life..',
+                                    'Now Let\'s Know more',
                                     style: TextStyle(
                                         color: Colors.grey[800],
                                         fontWeight: FontWeight.bold,
                                         fontSize: 15),
                                     textAlign: TextAlign.left,
                                   ),
-                                ),
+                                )),
+                                Center(
+                                    child: Container(
+                                  child: Text(
+                                    'about your academic life..',
+                                    style: TextStyle(
+                                        color: Colors.grey[800],
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 15),
+                                    textAlign: TextAlign.left,
+                                  ),
+                                )),
                                 Container(
                                   width: 250.0,
                                   child: TextFormField(
