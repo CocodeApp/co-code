@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'Auth.dart';
 import 'ForgotPassword.dart';
 
@@ -13,6 +14,10 @@ class ForgotPassword extends StatefulWidget {
   _ForgotPasswordState createState() => _ForgotPasswordState();
 }
 
+class CommonThings {
+  static Size size;
+}
+
 class _ForgotPasswordState extends State<ForgotPassword> {
   final _formKey = GlobalKey<FormState>();
   String recoveryEmail;
@@ -20,6 +25,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
 
   @override
   Widget build(BuildContext context) {
+    CommonThings.size = MediaQuery.of(context).size;
     return new WillPopScope(
         onWillPop: () async => false,
         child: Scaffold(
@@ -54,9 +60,12 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                                 child: Center(
                                     child: Column(
                                   children: <Widget>[
+                                    SizedBox(
+                                        height:
+                                            CommonThings.size.height * 0.03),
                                     Container(
                                       child: Text(
-                                        'Forgot Password.',
+                                        'Forgot Password?',
                                         style: TextStyle(
                                             color: Colors.grey[800],
                                             fontWeight: FontWeight.bold,
@@ -103,18 +112,44 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                                             isLoading = true;
                                           });
                                           // call login
-                                          await Auth.resetPassword(
-                                                  recoveryEmail)
-                                              .then((void nothing) {
-                                            print("done");
+
+                                          try {
+                                            await Auth.resetPassword(
+                                                    recoveryEmail)
+                                                .then((void nothing) {
+                                              print("done");
+                                              setState(() {
+                                                isLoading = false;
+                                              });
+                                            });
+
+                                            Fluttertoast.showToast(
+                                                msg:
+                                                    "Reset password instructions were sent to your email",
+                                                toastLength: Toast.LENGTH_LONG,
+                                                gravity: ToastGravity.CENTER,
+                                                timeInSecForIosWeb: 1,
+                                                backgroundColor:
+                                                    Colors.blueAccent,
+                                                textColor: Colors.white,
+                                                fontSize: 16.0);
+                                          } catch (e) {
+                                            String err =
+                                                Auth.AuthErrorMessage(e);
+                                            Fluttertoast.showToast(
+                                                msg: err,
+                                                toastLength: Toast.LENGTH_LONG,
+                                                gravity: ToastGravity.CENTER,
+                                                timeInSecForIosWeb: 1,
+                                                backgroundColor:
+                                                    Colors.blueAccent,
+                                                textColor: Colors.white,
+                                                fontSize: 16.0);
+
                                             setState(() {
                                               isLoading = false;
                                             });
-                                          });
-                                          Navigator.push(context,
-                                              MaterialPageRoute(builder: (_) {
-                                            return new LoginPage();
-                                          }));
+                                          }
                                         }
                                       },
                                     ),

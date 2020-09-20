@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:cocode/ForgotPassword.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_form_bloc/flutter_form_bloc.dart';
@@ -309,6 +310,22 @@ class LoginPage extends StatelessWidget {
                                           Navigator.push(context,
                                               MaterialPageRoute(builder: (_) {
                                             return RegisterPage();
+                                          }));
+                                        },
+                                      ),
+                                      SizedBox(
+                                          height:
+                                              CommonThings.size.height * 0.003),
+                                      RoundedButton(
+                                        text: "Forgot password?",
+                                        color: Colors.blue[100],
+                                        textColor: Colors.black,
+                                        press: () {
+                                          // call login
+
+                                          Navigator.push(context,
+                                              MaterialPageRoute(builder: (_) {
+                                            return ForgotPassword();
                                           }));
                                         },
                                       ),

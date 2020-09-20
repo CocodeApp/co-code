@@ -93,7 +93,8 @@ class ProjectDetails extends StatelessWidget {
         ? startdate = 'not assigned yet'
         : startdate = data['startdate'];
 
-    return Column(
+    return SingleChildScrollView(
+        child: Column(
       children: [
         SizedBox(
           height: 30,
@@ -167,6 +168,7 @@ class ProjectDetails extends StatelessWidget {
           ),
         ),
       ],
-    );
+    ));
+    ;
   }
 } // there is some missing details , see our class diagram for more info
