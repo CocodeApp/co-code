@@ -1,10 +1,16 @@
 import 'dart:io';
+
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
+
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cocode/VerifyEmail.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'ForgotPassword.dart';
-import 'HomePage.dart';
+import 'features/homePage/homePage.dart';
 import 'LoginPage.dart';
+import 'WelcomeScreen.dart';
 
 //sources
 //https://firebase.flutter.dev/docs/auth/usage/
@@ -31,6 +37,16 @@ import 'LoginPage.dart';
 //https://gist.github.com/rahulbagal/4a06a997497e6f921663b69e5286d859
 //https://stackoverflow.com/questions/37859582/how-to-catch-a-firebase-auth-specific-exceptions
 //https://pub.dev/packages/fluttertoast
+//https://github.com/abuanwar072/Welcome-Login-Signup-Page-Flutter
+//https://stackoverflow.com/questions/58584092/textfieldblocbuilder-in-forms-not-working-when-text-field-is-tapped-on
+//https://stackoverflow.com/questions/49040679/flutter-how-to-make-a-textfield-with-hinttext-but-no-underline
+//https://stackoverflow.com/questions/54143526/flutter-outline-input-border
+//https://stackoverflow.com/questions/50122394/not-able-to-change-textfield-border-color
+//https://stackoverflow.com/questions/62210807/firebase-rules-and-flutter-how-to-check-for-username-availability
+//https://stackoverflow.com/questions/57546946/overflow-issue-in-flutter
+//https://stackoverflow.com/questions/55360628/create-async-validator-in-flutter
+//https://stackoverflow.com/questions/55328838/flutter-firestore-add-new-document-with-custom-id
+//https://firebase.flutter.dev/docs/firestore/usage/
 
 enum authProblems { UserNotFound, PasswordNotValid, NetworkError }
 
@@ -81,6 +97,10 @@ class Auth {
     return auth.currentUser.uid;
   }
 
+  static String getCurrentUsername() {
+    return auth.currentUser.displayName;
+  }
+
   //get current user email
   static String getCurrentUserEmail() {
     return auth.currentUser.email;
@@ -93,7 +113,7 @@ class Auth {
       builder: (BuildContext context, snapshot) {
         if (snapshot.hasData) {
           if (Auth.isVerified()) {
-            return HomePage();
+            return homePage();
           } else {
             return new VerifyEmail();
           }
@@ -101,7 +121,7 @@ class Auth {
           //auth.sendPasswordResetEmail(email:"email@email.com");
 
         } else {
-          return new LoginPage();
+          return new WelcomeScreen(); //LoginPage();
         }
       },
     );
@@ -226,22 +246,22 @@ class Auth {
         password.contains(new RegExp(r'[!@#$%^&*(),.?":{}|<>]'));
 
     if (empty) {
-      return 'passsword can\'t be empty';
+      return 'passsword can\'t be empty!';
     }
     if (!hasMinLength) {
-      return 'Password shall be at least 8 characters';
+      return 'Make it 8 characters or more!';
     }
     if (!hasDigits) {
-      return 'Password shall be at least 1 number';
+      return 'add at least 1 number';
     }
     if (!hasUppercase) {
-      return 'Password shall be at least 1 uppercase letter';
+      return 'Add at least 1 uppercase letter';
     }
     if (!hasLowercase) {
-      return 'Password shall be at least 1 lowercase letter';
+      return 'Add at least 1 lowercase letter';
     }
     if (!hasSpecialCharacters) {
-      return 'Password shall be at least 1 special character ';
+      return 'Add at least 1 special character';
     }
     return null;
   }
@@ -261,5 +281,23 @@ class Auth {
     }
 
     return null;
+  }
+
+  static Future<bool> checkUsernameAvailability(String val) async {
+    final result = await FirebaseFirestore.instance
+        .collection("User")
+        .where('userName', isEqualTo: val)
+        .get();
+
+    return result.docs.isEmpty;
+  }
+
+  static Future<bool> checkemailAvailability(String val) async {
+    final result = await FirebaseFirestore.instance
+        .collection("User")
+        .where('email', isEqualTo: val)
+        .get();
+
+    return result.docs.isEmpty;
   }
 }

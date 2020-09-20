@@ -1,194 +1,343 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:cocode/ForgotPassword.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_form_bloc/flutter_form_bloc.dart';
+import 'package:form_bloc/form_bloc.dart';
+import 'dart:async';
 import 'dart:io';
 
-import 'package:cocode/ForgotPassword.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter_form_bloc/flutter_form_bloc.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:form_bloc/form_bloc.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:flutter/material.dart';
 import 'Auth.dart';
-import 'HomePage.dart';
+
+import 'features/homePage/homePage.dart';
+import 'LoginPage.dart';
+import 'MoreInfoPage.dart';
 import 'RegisterPage.dart';
 import 'VerifyEmail.dart';
-import 'services/database.dart';
-import 'package:fluttertoast/fluttertoast.dart';
+import 'buttons/RoundeButton.dart';
 
-class LoginPage extends StatefulWidget {
-  @override
-  _LoginPageState createState() => _LoginPageState();
+class CommonThings {
+  static Size size;
 }
 
-class _LoginPageState extends State<LoginPage> {
-  final _formKey = GlobalKey<FormState>();
+class LoginFormBloc extends FormBloc<String, String> {
+  final _emailFieldBloc =
+      TextFieldBloc(asyncValidatorDebounceTime: Duration(milliseconds: 300));
+  final _passwordFieldBloc =
+      TextFieldBloc(asyncValidatorDebounceTime: Duration(milliseconds: 300));
+
+  @override
+  List<FieldBloc> get fieldBlocs => [_emailFieldBloc, _passwordFieldBloc];
+
+  LoginFormBloc() {
+    _emailFieldBloc.addAsyncValidators([_validateemail]);
+    _passwordFieldBloc.addAsyncValidators([_validatepassword]);
+  }
+
+  Future<String> _validateemail(String temail) async {
+    // validate if email exists
+    String isValid = Auth.validateEmail(temail);
+    if (isValid != null) {
+      return isValid;
+    }
+    await Future<void>.delayed(Duration(milliseconds: 200));
+    if (await Auth.checkemailAvailability(temail)) {
+      return "Email doesn't exists";
+    }
+
+    return null;
+  }
+
+  Future<String> _validatepassword(String tpass) async {
+    if (tpass == null || tpass.isEmpty) {
+      return "Password can\'t be empty";
+    }
+    return null;
+  }
+
+  StreamSubscription<TextFieldBlocState> _textFieldBlocSubscription;
+
+  @override
+  void dispose() {
+    _emailFieldBloc.dispose();
+    _passwordFieldBloc.dispose();
+    _textFieldBlocSubscription.cancel();
+    super.dispose();
+  }
+
+  @override
+  Stream<FormBlocState<String, String>> onSubmitting() async* {
+    try {
+      await Auth.loginUser(_emailFieldBloc.value, _passwordFieldBloc.value);
+
+      yield currentState.toSuccess();
+    } catch (e) {
+      String err = Auth.AuthErrorMessage(e);
+      yield currentState.toFailure(err);
+    }
+  }
+}
+
+class LoginPage extends StatelessWidget {
   String email;
   String password;
+
   bool isLoading = false;
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        body: isLoading
-            ? Center(
-                child: CircularProgressIndicator(),
-              )
-            : Form(
-                key: _formKey,
-                child: Center(
-                    child: new Container(
-                        height: 300.0,
-                        width: 300,
-                        decoration: new BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(20),
-                          boxShadow: [
-                            BoxShadow(
-                              color: Color.fromRGBO(0, 0, 0, 0.2),
-                              offset: Offset(1.0, 1.0),
-                              blurRadius: 15.0,
-                              spreadRadius: 1.0,
-                            )
-                          ],
+    return new WillPopScope(
+        onWillPop: () async => false,
+        child: BlocProvider<LoginFormBloc>(
+          builder: (context) => LoginFormBloc(),
+          child: Builder(
+            builder: (context) {
+              final _LoginFormBloc = BlocProvider.of<LoginFormBloc>(context);
+              CommonThings.size = MediaQuery.of(context).size;
+              return Scaffold(
+                body: FormBlocListener<LoginFormBloc, String, String>(
+                  onSubmitting: (context, state) {
+                    // Show the progress dialog
+                    showDialog(
+                      context: context,
+                      barrierDismissible: false,
+                      builder: (_) => WillPopScope(
+                        onWillPop: () async => false,
+                        child: Center(
+                          child: Card(
+                            child: Container(
+                              width: 80,
+                              height: 80,
+                              padding: EdgeInsets.all(12.0),
+                              child: CircularProgressIndicator(),
+                            ),
+                          ),
                         ),
-                        child: Column(
-                          children: <Widget>[
-                            Container(
-                              width: 200.0,
-                              child: TextFormField(
-                                decoration: new InputDecoration(
-                                    border: InputBorder.none,
-                                    focusedBorder: UnderlineInputBorder(
-                                      borderSide:
-                                          BorderSide(color: Colors.grey),
-                                    ),
-                                    enabledBorder: UnderlineInputBorder(
-                                      borderSide:
-                                          BorderSide(color: Colors.grey),
-                                    ),
-                                    errorBorder: UnderlineInputBorder(
-                                        borderSide:
-                                            BorderSide(color: Colors.red)),
-                                    contentPadding: EdgeInsets.only(
-                                        left: 15,
-                                        bottom: 11,
-                                        top: 11,
-                                        right: 15),
-                                    hintText: "Email"),
-                                onChanged: (value) {
-                                  setState(() {
-                                    email = value;
-                                  });
-                                },
-                                validator: (text) {
-                                  return Auth.validateEmail(text);
-                                },
-                              ),
-                            ),
-                            Container(
-                              width: 200.0,
-                              child: TextFormField(
-                                obscureText: true,
-                                decoration: new InputDecoration(
-                                    border: InputBorder.none,
-                                    focusedBorder: UnderlineInputBorder(
-                                      borderSide:
-                                          BorderSide(color: Colors.grey),
-                                    ),
-                                    enabledBorder: UnderlineInputBorder(
-                                      borderSide:
-                                          BorderSide(color: Colors.grey),
-                                    ),
-                                    errorBorder: UnderlineInputBorder(
-                                        borderSide:
-                                            BorderSide(color: Colors.red)),
-                                    contentPadding: EdgeInsets.only(
-                                        left: 15,
-                                        bottom: 11,
-                                        top: 11,
-                                        right: 15),
-                                    hintText: "password"),
-                                onChanged: (value) {
-                                  setState(() {
-                                    password = value;
-                                  });
-                                },
-                                validator: (text) {
-                                  if (text == null || text.isEmpty) {
-                                    return 'passsword can\'t be empty';
-                                  }
+                      ),
+                    );
+                  },
+                  onSuccess: (context, state) {
+                    // Hide the progress dialog
+                    Navigator.of(context).pop();
+                    Fluttertoast.showToast(
+                        msg: "Logged In Successfully",
+                        toastLength: Toast.LENGTH_LONG,
+                        gravity: ToastGravity.CENTER,
+                        timeInSecForIosWeb: 1,
+                        backgroundColor: Colors.blueAccent,
+                        textColor: Colors.white,
+                        fontSize: 16.0);
+                    // Navigate to success screen
 
-                                  return null;
-                                },
-                              ),
-                            ),
-                            RaisedButton(
-                              child: Text('Log In'),
-                              onPressed: () async {
-                                if (_formKey.currentState.validate()) {
-                                  setState(() {
-                                    isLoading = true;
-                                  });
-                                  // call login
-                                  try {
-                                    await Auth.loginUser(email, password);
+                    if (Auth.isLoggedIn()) {
+                      if (Auth.isVerified()) {
+                        Navigator.push(context, MaterialPageRoute(builder: (_) {
+                          return new homePage();
+                        }));
+                      } else {
+                        Navigator.push(context, MaterialPageRoute(builder: (_) {
+                          return new VerifyEmail();
+                        }));
+                      }
+                    }
+                  },
+                  onFailure: (context, state) {
+                    // Hide the progress dialog
+                    Navigator.of(context).pop();
+                    Fluttertoast.showToast(
+                        msg: state.failureResponse,
+                        toastLength: Toast.LENGTH_LONG,
+                        gravity: ToastGravity.CENTER,
+                        timeInSecForIosWeb: 1,
+                        backgroundColor: Colors.blueAccent,
+                        textColor: Colors.white,
+                        fontSize: 16.0);
+                    // Show snackbar with the error
+                  },
+                  child: DecoratedBox(
+                    decoration: BoxDecoration(
+                      image: DecorationImage(
+                          image: AssetImage("imeges/background.png"),
+                          fit: BoxFit.cover),
+                    ),
+                    child: isLoading
+                        ? Center(
+                            child: CircularProgressIndicator(),
+                          )
+                        : Center(
+                            child: new Container(
+                                height: CommonThings.size.height * 0.8,
+                                width: 325,
+                                decoration: new BoxDecoration(
+                                  color: Colors.white,
+                                  borderRadius: BorderRadius.circular(20),
+                                  boxShadow: [
+                                    BoxShadow(
+                                      color: Color.fromRGBO(0, 0, 0, 0.2),
+                                      offset: Offset(1.0, 1.0),
+                                      blurRadius: 15.0,
+                                      spreadRadius: 1.0,
+                                    )
+                                  ],
+                                ),
+                                child: SingleChildScrollView(
+                                  child: Column(
+                                    children: <Widget>[
+                                      SizedBox(
+                                          height:
+                                              CommonThings.size.height * 0.03),
+                                      Text(
+                                        'Login',
+                                        style: TextStyle(
+                                            color: Colors.grey[800],
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 20),
+                                        textAlign: TextAlign.left,
+                                      ),
+                                      SizedBox(
+                                          height:
+                                              CommonThings.size.height * 0.01),
+                                      Container(
+                                        width: 250.0,
+                                        child: TextFieldBlocBuilder(
+                                          textFieldBloc:
+                                              _LoginFormBloc._emailFieldBloc,
+                                          suffixButton: SuffixButton
+                                              .circularIndicatorWhenIsAsyncValidating,
+                                          //
+                                          decoration: new InputDecoration(
+                                            border: UnderlineInputBorder(
+                                                borderSide: BorderSide(
+                                                    color: Colors.red)),
+                                            focusedBorder: UnderlineInputBorder(
+                                              borderSide: BorderSide(
+                                                  color: Colors.indigo,
+                                                  width: 2.0),
+                                            ),
+                                            enabledBorder: UnderlineInputBorder(
+                                              borderSide: BorderSide(
+                                                  color: Colors.indigo),
+                                            ),
+                                            disabledBorder:
+                                                UnderlineInputBorder(
+                                                    borderSide: BorderSide(
+                                                        color: Colors.red)),
+                                            errorBorder: UnderlineInputBorder(
+                                                borderSide: BorderSide(
+                                                    color: Colors.red)),
+                                            contentPadding: EdgeInsets.only(
+                                                left: 15,
+                                                bottom: 11,
+                                                top: 11,
+                                                right: 15),
+                                            hintText: "Email",
+                                            prefixIcon: const Icon(
+                                              Icons.email,
+                                              color: Colors.green,
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                      SizedBox(
+                                          height:
+                                              CommonThings.size.height * 0.03),
+                                      Container(
+                                        width: 250.0,
+                                        child: TextFieldBlocBuilder(
+                                          textFieldBloc:
+                                              _LoginFormBloc._passwordFieldBloc,
 
-                                    Fluttertoast.showToast(
-                                        msg: "Logged In successfully",
-                                        toastLength: Toast.LENGTH_LONG,
-                                        gravity: ToastGravity.CENTER,
-                                        timeInSecForIosWeb: 1,
-                                        backgroundColor: Colors.blueAccent,
+                                          suffixButton:
+                                              SuffixButton.obscureText,
+                                          //
+                                          decoration: new InputDecoration(
+                                            border: UnderlineInputBorder(
+                                                borderSide: BorderSide(
+                                                    color: Colors.red)),
+                                            focusedBorder: UnderlineInputBorder(
+                                              borderSide: BorderSide(
+                                                  color: Colors.indigo,
+                                                  width: 2.0),
+                                            ),
+                                            enabledBorder: UnderlineInputBorder(
+                                              borderSide: BorderSide(
+                                                  color: Colors.indigo),
+                                            ),
+                                            disabledBorder:
+                                                UnderlineInputBorder(
+                                                    borderSide: BorderSide(
+                                                        color: Colors.red)),
+                                            errorBorder: UnderlineInputBorder(
+                                                borderSide: BorderSide(
+                                                    color: Colors.red)),
+                                            contentPadding: EdgeInsets.only(
+                                                left: 15,
+                                                bottom: 11,
+                                                top: 11,
+                                                right: 15),
+                                            hintText: "Password",
+                                            prefixIcon: const Icon(
+                                              Icons.lock,
+                                              color: Colors.green,
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                      SizedBox(
+                                          height:
+                                              CommonThings.size.height * 0.035),
+                                      RoundedButton(
+                                        text: "Login",
+                                        color: Colors.indigo,
                                         textColor: Colors.white,
-                                        fontSize: 16.0);
+                                        press: _LoginFormBloc.submit,
+                                      ),
+                                      SizedBox(
+                                          height:
+                                              CommonThings.size.height * 0.003),
+                                      RoundedButton(
+                                        text: "don't have an Account?",
+                                        color: Colors.blue[100],
+                                        textColor: Colors.black,
+                                        press: () async {
+                                          // call login
 
-                                        
-                                  } catch (e) {
-                                    Fluttertoast.showToast(
-                                        msg: Auth.AuthErrorMessage(e),
-                                        toastLength: Toast.LENGTH_LONG,
-                                        gravity: ToastGravity.CENTER,
-                                        timeInSecForIosWeb: 1,
-                                        backgroundColor: Colors.blueAccent,
-                                        textColor: Colors.white,
-                                        fontSize: 16.0);
-                                  }
+                                          Navigator.push(context,
+                                              MaterialPageRoute(builder: (_) {
+                                            return RegisterPage();
+                                          }));
+                                        },
+                                      ),
+                                      SizedBox(
+                                          height:
+                                              CommonThings.size.height * 0.003),
+                                      RoundedButton(
+                                        text: "Forgot password?",
+                                        color: Colors.blue[100],
+                                        textColor: Colors.black,
+                                        press: () {
+                                          // call login
 
-                                  print("done");
-                                  setState(() {
-                                    isLoading = false;
-                                  });
-
-                                  if (Auth.isLoggedIn()) {
-                                    if (Auth.isVerified()) {
-                                      Navigator.push(context,
-                                          MaterialPageRoute(builder: (_) {
-                                        return new HomePage();
-                                      }));
-                                    } else {
-                                      Navigator.push(context,
-                                          MaterialPageRoute(builder: (_) {
-                                        return new VerifyEmail();
-                                      }));
-                                    }
-                                  }
-                                }
-                              },
-                            ),
-                            RaisedButton(
-                              child: Text('New Account?'),
-                              onPressed: () async {
-                                // call login
-                                Navigator.push(context,
-                                    MaterialPageRoute(builder: (_) {
-                                  return new RegisterPage();
-                                }));
-                              },
-                            ),
-                            RaisedButton(
-                                child: Text('Forgot Password?'),
-                                onPressed: () async {
-                                  Navigator.push(context,
-                                      MaterialPageRoute(builder: (_) {
-                                    return new ForgotPassword();
-                                  }));
-                                })
-                          ],
-                        )))));
+                                          Navigator.push(context,
+                                              MaterialPageRoute(builder: (_) {
+                                            return ForgotPassword();
+                                          }));
+                                        },
+                                      ),
+                                    ],
+                                  ),
+                                )),
+                          ),
+                  ),
+                ),
+              );
+            },
+          ),
+        ));
   }
 }
