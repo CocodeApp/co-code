@@ -58,8 +58,26 @@ class _VerifyEmailState extends State<VerifyEmail> {
                                 child: Center(
                                     child: Column(
                                   children: <Widget>[
-                                    Text("Please Verify your Email"),
-                                    Text(email),
+                                    Icon(
+                                      Icons.lock,
+                                      color: Colors.green,
+                                    ),
+                                    Container(
+                                      child: Text(
+                                        'Forgot Password.',
+                                        style: TextStyle(
+                                            color: Colors.grey[800],
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 15),
+                                      ),
+                                    ),
+                                    Text(
+                                      email,
+                                      style: TextStyle(
+                                          color: Colors.grey[800],
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 15),
+                                    ),
                                     RoundedButton(
                                       text: "Send Again",
                                       color: Colors.deepOrangeAccent,

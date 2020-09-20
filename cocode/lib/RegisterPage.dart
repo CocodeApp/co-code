@@ -91,10 +91,10 @@ class RegisterFormBloc extends FormBloc<String, String> {
           _usernameFieldBloc.value);
       String uID = Auth.getCurrentUserID();
       DocumentReference reference =
-          FirebaseFirestore.instance.doc('person/' + uID);
+          FirebaseFirestore.instance.doc('User/' + uID);
       reference.set({
         'email': _emailFieldBloc.value,
-        'username': _usernameFieldBloc.value,
+        'userName': _usernameFieldBloc.value,
       });
 
       yield currentState.toSuccess();
@@ -341,7 +341,7 @@ class RegisterPage extends StatelessWidget {
                                                 right: 15),
                                             hintText: "Password",
                                             prefixIcon: const Icon(
-                                              Icons.email,
+                                              Icons.lock,
                                               color: Colors.green,
                                             ),
                                           ),
@@ -360,7 +360,7 @@ class RegisterPage extends StatelessWidget {
                                           height:
                                               CommonThings.size.height * 0.003),
                                       RoundedButton(
-                                        text: "Already have an account ?",
+                                        text: "Already have account?",
                                         color: Colors.blue[100],
                                         textColor: Colors.black,
                                         press: () async {

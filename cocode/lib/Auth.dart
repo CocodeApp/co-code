@@ -285,8 +285,8 @@ class Auth {
 
   static Future<bool> checkUsernameAvailability(String val) async {
     final result = await FirebaseFirestore.instance
-        .collection("person")
-        .where('username', isEqualTo: val)
+        .collection("User")
+        .where('userName', isEqualTo: val)
         .get();
 
     return result.docs.isEmpty;
@@ -294,7 +294,7 @@ class Auth {
 
   static Future<bool> checkemailAvailability(String val) async {
     final result = await FirebaseFirestore.instance
-        .collection("person")
+        .collection("User")
         .where('email', isEqualTo: val)
         .get();
 

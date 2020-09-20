@@ -8,30 +8,34 @@ import 'package:cocode/buttons/RoundeButton.dart';
 class CommonThings {
   static Size size;
 }
+
 class WelcomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(body: body(),);
+    return Scaffold(
+      body: body(),
+    );
   }
 }
 
 class body extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    CommonThings.size = MediaQuery.of(context).size; // this size provide us total height and width of screenSize
+    CommonThings.size = MediaQuery.of(context)
+        .size; // this size provide us total height and width of screenSize
     return Background(
       child: SingleChildScrollView(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-
             Text(
-              "Welcome to Co-Code", textAlign: TextAlign.center,
-              style: TextStyle(fontSize: 40.0,fontWeight: FontWeight.bold),
+              "Co-Code",
+              textAlign: TextAlign.center,
+              style: TextStyle(fontSize: 40.0, fontWeight: FontWeight.bold),
             ),
-
             SizedBox(height: CommonThings.size.height * 0.5),
-            RoundedButton( //login button
+            RoundedButton(
+              //login button
               text: "LOGIN",
               press: () {
                 Navigator.push(
@@ -45,7 +49,8 @@ class body extends StatelessWidget {
               },
             ),
             SizedBox(height: CommonThings.size.height * 0.03),
-            RoundedButton( // register button
+            RoundedButton(
+              // register button
               text: "REGISTER",
               color: Colors.blue[200],
               textColor: Colors.black,

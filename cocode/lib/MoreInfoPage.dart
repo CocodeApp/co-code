@@ -203,7 +203,7 @@ class _MoreInfoPageState extends State<MoreInfoPage> {
                                             String uID =
                                                 Auth.getCurrentUserID();
                                             await FirebaseFirestore.instance
-                                                .collection('person')
+                                                .collection('User')
                                                 .doc(uID)
                                                 .update({
                                               'firstName': firstName,

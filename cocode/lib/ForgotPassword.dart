@@ -54,7 +54,16 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                                 child: Center(
                                     child: Column(
                                   children: <Widget>[
-                                    Text("Forgot password?"),
+                                    Container(
+                                      child: Text(
+                                        'Forgot Password.',
+                                        style: TextStyle(
+                                            color: Colors.grey[800],
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 15),
+                                        textAlign: TextAlign.left,
+                                      ),
+                                    ),
                                     Container(
                                       width: 200.0,
                                       child: TextFormField(

@@ -165,7 +165,7 @@ class _AcademicInfoPageState extends State<AcademicInfoPage> {
                                         //await Auth.loginUser(email, password);
                                         String uID = Auth.getCurrentUserID();
                                         await FirebaseFirestore.instance
-                                            .collection('person')
+                                            .collection('User')
                                             .doc(uID)
                                             .update({
                                           'university': university,

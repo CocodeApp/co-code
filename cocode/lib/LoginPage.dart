@@ -280,7 +280,7 @@ class LoginPage extends StatelessWidget {
                                                 right: 15),
                                             hintText: "Password",
                                             prefixIcon: const Icon(
-                                              Icons.email,
+                                              Icons.lock,
                                               color: Colors.green,
                                             ),
                                           ),
@@ -299,7 +299,7 @@ class LoginPage extends StatelessWidget {
                                           height:
                                               CommonThings.size.height * 0.003),
                                       RoundedButton(
-                                        text: "You don't have an Account?",
+                                        text: "don't have an Account?",
                                         color: Colors.blue[100],
                                         textColor: Colors.black,
                                         press: () async {
