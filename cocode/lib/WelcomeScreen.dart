@@ -28,6 +28,7 @@ class body extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
+            SizedBox(height: CommonThings.size.height * 0.1),
             Text(
               "Co-Code",
               textAlign: TextAlign.center,

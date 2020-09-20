@@ -3,6 +3,7 @@
 import 'package:flutter/services.dart';
 
 import 'buttons/postbutton.dart';
+import 'features/homePage/homePage.dart';
 import 'services/database.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -305,6 +306,11 @@ class _State extends State<form> {
                                     print("project Added to the user"))
                                 .catchError((error) =>
                                     print("Failed to add project: $error"));
+
+                            Navigator.push(context,
+                                MaterialPageRoute(builder: (_) {
+                              return homePage();
+                            }));
                           }
                         },
                       ),

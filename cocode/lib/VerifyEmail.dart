@@ -64,7 +64,7 @@ class _VerifyEmailState extends State<VerifyEmail> {
                                     ),
                                     Container(
                                       child: Text(
-                                        'Forgot Password.',
+                                        'Verify your email',
                                         style: TextStyle(
                                             color: Colors.grey[800],
                                             fontWeight: FontWeight.bold,
