@@ -21,22 +21,35 @@ class _ProjectScreenState extends State<ProjectScreen> {
       length: 2, //our tabs
       child: Scaffold(
         appBar: AppBar(
-          leading: Container(),
+          // leading: Container(), no need for container here
           centerTitle: true,
           backgroundColor: Color(0xff2A4793),
-          title: Text(
-            'Explore',
+          title: Text( "Explore",
+           // style: TextStyle(color: Colors.deepOrangeAccent), chang it to orange ?
             textAlign: TextAlign.center,
           ),
           bottom: TabBar(
+            labelColor: Colors.deepOrangeAccent,
+            unselectedLabelColor: Colors.white,
+            indicatorSize: TabBarIndicatorSize.label,
+            indicator: BoxDecoration(
+                borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(10),
+                    topRight: Radius.circular(10)),
+                color: Colors.white),
             tabs: [
-              Tab(
-                text: "need team member",
-              ),
-              Tab(
-                text: 'need subervisor',
-              )
-            ],
+          Tab(
+          child: Align(
+          alignment: Alignment.center,
+            child: Text("Need Team Member"),
+          ),
+        ), Tab(
+        child: Align(
+          alignment: Alignment.center,
+          child: Text("Need Supervisor"),
+        ),
+      ),
+        ]
           ),
         ),
         body: TabBarView(
