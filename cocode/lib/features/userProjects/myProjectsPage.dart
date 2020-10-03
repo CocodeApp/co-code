@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:cocode/features/homePage/projectScreen.dart';
 import 'package:cocode/features/userProfile.dart/userProfile.dart';
+import 'package:kf_drawer/kf_drawer.dart';
 
-class userProjects extends StatefulWidget {
+class userProjects extends KFDrawerContent {
   @override
   _userProjectsState createState() => _userProjectsState();
 }
@@ -13,10 +14,19 @@ class _userProjectsState extends State<userProjects> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        leading: Container(),
+        leading: IconButton(
+          icon: Icon(
+            Icons.menu,
+            color: Colors.black,
+          ),
+          onPressed: widget.onMenuPressed,
+        ),
         centerTitle: true,
-        title: Text('my projects'),
         backgroundColor: Color(0xff2A4793),
+        title: Text(
+          'My projects',
+          textAlign: TextAlign.center,
+        ),
       ),
       body: Text(""),
     );

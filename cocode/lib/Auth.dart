@@ -4,13 +4,13 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:cocode/VerifyEmail.dart';
+import 'package:cocode/features/verifyEmail/VerifyEmail.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'ForgotPassword.dart';
+import 'features/Login/ForgotPassword.dart';
 import 'features/homePage/homePage.dart';
-import 'LoginPage.dart';
-import 'WelcomeScreen.dart';
+import 'features/Login/LoginPage.dart';
+import 'package:cocode/features/welcomePage/WelcomeScreen.dart';
 
 //sources
 //https://firebase.flutter.dev/docs/auth/usage/

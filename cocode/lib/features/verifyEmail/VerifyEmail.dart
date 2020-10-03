@@ -2,11 +2,11 @@ import 'dart:io';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'Auth.dart';
-import 'ForgotPassword.dart';
-import 'LoginPage.dart';
-import 'RegisterPage.dart';
-import 'buttons/RoundeButton.dart';
+import 'package:cocode/Auth.dart';
+import 'package:cocode/features/Login/LoginPage.dart';
+import 'package:cocode/features/Login/ForgotPassword.dart';
+import 'package:cocode/features/registertion/RegisterPage.dart';
+import 'package:cocode/buttons/RoundeButton.dart';
 
 class CommonThings {
   static Size size;

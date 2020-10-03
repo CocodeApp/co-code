@@ -1,15 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'homePageData.dart';
+import 'projectsCardData.dart';
 import 'package:cocode/features/userProfile.dart/userProfile.dart' as profile;
-import 'package:cocode/postIdeaForm.dart' as PostIdea;
+import 'package:cocode/features/postIdea/postIdeaForm.dart' as PostIdea;
 import 'package:cocode/features/userProjects/myProjectsPage.dart';
 
 import 'package:cocode/Auth.dart';
-import 'package:cocode/LoginPage.dart';
+import 'package:cocode/features/Login/LoginPage.dart';
+import 'package:cocode/features/userProfile.dart/userData.dart';
+import 'package:cocode/features/userProfile.dart/userModel.dart';
+import 'package:kf_drawer/kf_drawer.dart';
 
-class ProjectScreen extends StatefulWidget {
+class ProjectScreen extends KFDrawerContent {
   @override
   _ProjectScreenState createState() => _ProjectScreenState();
 }
@@ -20,62 +23,32 @@ class _ProjectScreenState extends State<ProjectScreen> {
     return DefaultTabController(
       length: 2, //our tabs
       child: Scaffold(
-        appBar: AppBar(
-          leading: Container(),
-          centerTitle: true,
-          backgroundColor: Color(0xff2A4793),
-          title: Text(
-            'Explore',
-            textAlign: TextAlign.center,
-          ),
-          bottom: TabBar(
-            tabs: [
-              Tab(
-                text: "need team member",
-              ),
-              Tab(
-                text: 'need subervisor',
-              )
-            ],
+        backgroundColor: Colors.white,
+        appBar: PreferredSize(
+          preferredSize: Size.fromHeight(50.0),
+          child: AppBar(
+            elevation: 0.0,
+            backgroundColor: Colors.white,
+            bottom: TabBar(
+              indicatorColor: Color(0xffF57862),
+              tabs: [
+                Tab(
+                  child: Text("need team member",
+                      style: TextStyle(color: Color(0xff2A4793))),
+                  // text: "need team member",
+                ),
+                Tab(
+                  child: Text("need supervisor",
+                      style: TextStyle(color: Color(0xff2A4793))),
+                )
+              ],
+            ),
           ),
         ),
         body: TabBarView(
           children: [needTeamMember(), needSupervisor()],
         ),
-        floatingActionButton: FloatingActionButton(
-          //for adding new Idea
-          onPressed: () {
-            Navigator.push(context, MaterialPageRoute(builder: (_) {
-              return PostIdea.PostIdeaFormPage(
-                title: 'Post new idea',
-              );
-            }));
-          },
-          child: Icon(Icons.add),
-          backgroundColor: Color(0xffF57862),
-        ),
       ),
     );
   }
 }
-
-//   SizedBox(
-//             width: 60,
-//             child: RaisedButton(
-//               child: Text('logout'),
-//               textColor: Colors.white,
-//               color: Color(0xffF57862),
-//               onPressed: () async {
-//                 await Auth.logout();
-
-//                 Navigator.push(context, MaterialPageRoute(builder: (_) {
-//                   return LoginPage();
-//                 }));
-//               },
-//             ),
-//           ),
-
-//       }),
-//     );
-//   }
-// }

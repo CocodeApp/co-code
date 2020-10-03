@@ -1,25 +1,23 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:cocode/ForgotPassword.dart';
+import 'package:cocode/features/Login/ForgotPassword.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_form_bloc/flutter_form_bloc.dart';
 import 'package:form_bloc/form_bloc.dart';
 import 'dart:async';
 import 'dart:io';
-
 import 'package:flutter_form_bloc/flutter_form_bloc.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:form_bloc/form_bloc.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:flutter/material.dart';
-import 'Auth.dart';
-
-import 'features/homePage/homePage.dart';
+import 'package:cocode/Auth.dart';
+import 'package:cocode/features/homePage/homePage.dart';
 import 'LoginPage.dart';
-import 'MoreInfoPage.dart';
-import 'RegisterPage.dart';
-import 'VerifyEmail.dart';
-import 'buttons/RoundeButton.dart';
+import 'package:cocode/features/registertion/MoreInfoPage.dart';
+import 'package:cocode/features/registertion/RegisterPage.dart';
+import 'package:cocode/features/verifyEmail/VerifyEmail.dart';
+import 'package:cocode/buttons/RoundeButton.dart';
 
 class CommonThings {
   static Size size;

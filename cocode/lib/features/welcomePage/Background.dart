@@ -1,9 +1,9 @@
-import 'package:cocode/LoginPage.dart';
+import 'package:cocode/features/Login/LoginPage.dart';
 import 'package:flutter/material.dart';
 
 class Background extends StatelessWidget {
   final Widget child;
-  const Background( {
+  const Background({
     Key key,
     @required this.child,
   }) : super(key: key);

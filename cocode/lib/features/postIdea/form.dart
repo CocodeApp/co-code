@@ -1,15 +1,12 @@
 //form.dart
-
 import 'package:flutter/services.dart';
-
-import 'buttons/postbutton.dart';
-import 'features/homePage/homePage.dart';
-import 'services/database.dart';
+import 'package:cocode/buttons/postbutton.dart';
+import 'package:cocode/features/homePage/homePage.dart';
+import 'package:cocode/services/database.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-
-import 'services/datepicker.dart';
+import 'package:cocode/services/datepicker.dart';
 
 class form extends StatefulWidget {
   @override

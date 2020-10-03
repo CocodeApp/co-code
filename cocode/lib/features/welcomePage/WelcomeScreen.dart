@@ -1,8 +1,8 @@
-import 'package:cocode/LoginPage.dart';
-import 'package:cocode/RegisterPage.dart';
+import 'package:cocode/features/Login/LoginPage.dart';
+import 'package:cocode/features/registertion/RegisterPage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/material.dart';
-import 'package:cocode/Background.dart';
+import 'Background.dart';
 import 'package:cocode/buttons/RoundeButton.dart';
 
 class CommonThings {

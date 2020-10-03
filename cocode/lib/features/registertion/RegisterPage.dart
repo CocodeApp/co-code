@@ -5,18 +5,17 @@ import 'package:flutter_form_bloc/flutter_form_bloc.dart';
 import 'package:form_bloc/form_bloc.dart';
 import 'dart:async';
 import 'dart:io';
-
 import 'package:flutter_form_bloc/flutter_form_bloc.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:form_bloc/form_bloc.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:flutter/material.dart';
-import 'Auth.dart';
-import 'features/homePage/projectScreen.dart';
-import 'LoginPage.dart';
+import 'package:cocode/Auth.dart';
+import 'package:cocode/features/homePage/projectScreen.dart';
+import 'package:cocode/features/Login/LoginPage.dart';
 import 'MoreInfoPage.dart';
-import 'VerifyEmail.dart';
-import 'buttons/RoundeButton.dart';
+import 'package:cocode/features/verifyEmail/VerifyEmail.dart';
+import 'package:cocode/buttons/RoundeButton.dart';
 
 class CommonThings {
   static Size size;

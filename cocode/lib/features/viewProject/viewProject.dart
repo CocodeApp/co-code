@@ -1,3 +1,4 @@
+import 'package:cocode/features/homePage/homePage.dart';
 import 'package:cocode/features/viewProject/skills.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -33,7 +34,13 @@ class _viewProjectState extends State<viewProject> {
               appBar: AppBar(
                 leading: BackButton(
                   color: Colors.white,
-                  onPressed: () => (Navigator.pop(context)),
+                  onPressed: () {
+                    Navigator.push(
+                        context,
+                        new MaterialPageRoute(
+                          builder: (context) => homePage(),
+                        )).then((value) {});
+                  },
                 ),
                 backgroundColor: Color(0xff2A4793),
                 title: Text(data['projectName']),

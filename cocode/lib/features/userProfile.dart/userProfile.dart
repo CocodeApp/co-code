@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:cocode/Auth.dart';
-import 'package:cocode/LoginPage.dart';
+import 'package:cocode/features/Login/LoginPage.dart';
 import 'package:cocode/features/homePage/projectScreen.dart';
 import 'package:cocode/features/userProjects/myProjectsPage.dart';
+import 'package:kf_drawer/kf_drawer.dart';
 
-class profilePage extends StatefulWidget {
+class profilePage extends KFDrawerContent {
   @override
   _profilePageState createState() => _profilePageState();
 }
@@ -14,7 +15,13 @@ class _profilePageState extends State<profilePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        leading: Container(),
+        leading: IconButton(
+          icon: Icon(
+            Icons.menu,
+            color: Colors.black,
+          ),
+          onPressed: widget.onMenuPressed,
+        ),
         centerTitle: true,
         backgroundColor: Color(0xff2A4793),
         title: Text(
