@@ -59,7 +59,8 @@ needTeamMember() {
                         Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (context) => viewProject(id: ID),
+                              builder: (context) =>
+                                  viewProject(id: ID, tab: "member"),
                             ));
                         //VIEW PROJECT DETAILS GOES HERE
                       },
@@ -150,7 +151,8 @@ needSupervisor() {
                         Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (context) => viewProject(id: ID),
+                              builder: (context) =>
+                                  viewProject(id: ID, tab: "supervisor"),
                             ));
                         //VIEW PROJECT DETAILS GOES HERE
                       },
