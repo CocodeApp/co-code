@@ -1,3 +1,4 @@
+import 'package:cocode/features/userProfile.dart/userProfile.dart';
 import 'package:cocode/features/viewProject/skills.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -248,7 +249,7 @@ class ProjectDetails extends StatelessWidget {
                     ),
                   ),
                   Padding(
-                    padding: const EdgeInsets.fromLTRB(0, 25, 0, 20),
+                    padding: const EdgeInsets.fromLTRB(0, 15, 0, 15),
                     child: Row(
                       children: [
                         SizedBox(
@@ -334,7 +335,12 @@ class ProjectDetails extends StatelessWidget {
                                         color: Colors.white, fontSize: 20.0),
                                   ),
                                 ),
-                                onPressed: () {},
+                                onPressed: () {
+                                  Navigator.push(context,
+                                      MaterialPageRoute(builder: (_) {
+                                    return profilePage(); //update
+                                  }));
+                                },
                                 shape: const StadiumBorder(),
                               ),
                             );

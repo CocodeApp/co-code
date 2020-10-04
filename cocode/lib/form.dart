@@ -69,6 +69,8 @@ class _State extends State<form> {
                           validator: (value) {
                             if (value.isEmpty) {
                               return 'Please enter Project Name';
+                            } else if (value.length > 12) {
+                              return 'Project Name must not exceed 12 characters';
                             }
                             projectName = value;
 
@@ -95,9 +97,11 @@ class _State extends State<form> {
                           validator: (value) {
                             if (value.isEmpty) {
                               return 'Please enter Project Description';
-                            } else {
-                              projectDescription = value;
+                            } else if (value.length > 170) {
+                              return 'Project description must not exceed 170 characters';
                             }
+                            projectDescription = value;
+
                             return null;
                           },
                         ),
