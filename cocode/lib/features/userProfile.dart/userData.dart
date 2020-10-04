@@ -3,7 +3,7 @@ import 'package:cocode/Auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'userModel.dart';
 
-String userData() {
+Future<Map> userData() async {
   String email = Auth.getCurrentUserEmail();
   String userName = Auth.getCurrentUserEmail();
   String ID = Auth.getCurrentUserID();
@@ -11,6 +11,20 @@ String userData() {
   String lastName = '';
   String major = '';
   String university = '';
+  var data;
+
+  var document = await Firestore.instance.collection('User').document(ID);
+  document.get().then((document) {
+    var data = document.data();
+    var returend = {
+      'firstName': data['firstName'],
+      'lastName': lastName,
+      'major': major,
+      'university': university
+    };
+    return returend;
+  });
+
   CollectionReference users = FirebaseFirestore.instance.collection('User');
   FutureBuilder<DocumentSnapshot>(
       future: users.doc(ID).get(),
@@ -25,8 +39,14 @@ String userData() {
           lastName = data['lastName'];
           major = data['major'];
           university = data['university'];
-          print(lastName);
+          data = {
+            'firstName': firstName,
+            'lastName': lastName,
+            'major': major,
+            'university': university
+          };
         }
       });
-  return firstName;
+
+  return data;
 }

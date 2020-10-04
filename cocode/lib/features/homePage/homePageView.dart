@@ -4,26 +4,27 @@ import 'package:cocode/features/userProfile.dart/userProfile.dart';
 import 'package:kf_drawer/kf_drawer.dart';
 import 'package:cocode/Auth.dart';
 import 'package:cocode/features/Login/LoginPage.dart';
-import 'homePage.dart' as home;
+import 'homePageController.dart';
 
-class homePage extends StatefulWidget {
+//هذي الصفحة مسؤولة عن عرض المحتويات للهوم بيج .. تحتوي على المنيو الذي بدوره سيستدعي البيانات من الكنترولر لعرضها
+
+class homePageView extends StatefulWidget {
   @override
-  _homePageState createState() => _homePageState();
+  _homePageViewState createState() => _homePageViewState();
 }
 
-class _homePageState extends State<homePage> {
+class _homePageViewState extends State<homePageView> {
   KFDrawerController _drawerController;
 
   @override
   void initState() {
     super.initState();
     _drawerController = KFDrawerController(
-      initialPage: home.homePage(),
       items: [
         KFDrawerItem.initWithPage(
           text: Text('Explore', style: TextStyle(color: Colors.white)),
           icon: Icon(Icons.home, color: Colors.white),
-          page: home.homePage(),
+          page: homePageController(),
         ),
         KFDrawerItem.initWithPage(
           text: Text('My profile', style: TextStyle(color: Colors.white)),
@@ -36,6 +37,7 @@ class _homePageState extends State<homePage> {
           page: userProjects(),
         ),
       ],
+      initialPage: homePageController(),
     );
   }
 

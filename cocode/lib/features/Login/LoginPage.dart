@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cocode/features/Login/ForgotPassword.dart';
+import 'package:cocode/features/homePage/homePageView.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_form_bloc/flutter_form_bloc.dart';
@@ -12,8 +13,8 @@ import 'package:form_bloc/form_bloc.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:cocode/Auth.dart';
-import 'package:cocode/features/homePage/homePage.dart';
 import 'LoginPage.dart';
+
 import 'package:cocode/features/registertion/MoreInfoPage.dart';
 import 'package:cocode/features/registertion/RegisterPage.dart';
 import 'package:cocode/features/verifyEmail/VerifyEmail.dart';
@@ -135,7 +136,7 @@ class LoginPage extends StatelessWidget {
                     if (Auth.isLoggedIn()) {
                       if (Auth.isVerified()) {
                         Navigator.push(context, MaterialPageRoute(builder: (_) {
-                          return new homePage();
+                          return new homePageView();
                         }));
                       } else {
                         Navigator.push(context, MaterialPageRoute(builder: (_) {

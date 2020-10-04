@@ -7,12 +7,13 @@ import 'package:cocode/features/Login/LoginPage.dart';
 import 'package:cocode/features/Login/ForgotPassword.dart';
 import 'package:cocode/features/registertion/RegisterPage.dart';
 import 'package:cocode/buttons/RoundeButton.dart';
+import 'package:kf_drawer/kf_drawer.dart';
 
 class CommonThings {
   static Size size;
 }
 
-class VerifyEmail extends StatefulWidget {
+class VerifyEmail extends KFDrawerContent {
   @override
   _VerifyEmailState createState() => _VerifyEmailState();
 }

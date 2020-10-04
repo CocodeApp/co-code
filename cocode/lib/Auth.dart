@@ -1,14 +1,16 @@
 import 'dart:io';
 
+import 'package:cocode/features/homePage/homePageView.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:kf_drawer/kf_drawer.dart';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cocode/features/verifyEmail/VerifyEmail.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'features/Login/ForgotPassword.dart';
-import 'features/homePage/homePage.dart';
+import 'features/homePage/homePageView.dart';
 import 'features/Login/LoginPage.dart';
 import 'package:cocode/features/welcomePage/WelcomeScreen.dart';
 
@@ -47,6 +49,8 @@ import 'package:cocode/features/welcomePage/WelcomeScreen.dart';
 //https://stackoverflow.com/questions/55360628/create-async-validator-in-flutter
 //https://stackoverflow.com/questions/55328838/flutter-firestore-add-new-document-with-custom-id
 //https://firebase.flutter.dev/docs/firestore/usage/
+//https://mightytechno.com/style-tabs-in-flutter-app/
+//https://help.syncfusion.com/flutter/cartesian-charts/chart-types
 
 enum authProblems { UserNotFound, PasswordNotValid, NetworkError }
 
@@ -113,7 +117,7 @@ class Auth {
       builder: (BuildContext context, snapshot) {
         if (snapshot.hasData) {
           if (Auth.isVerified()) {
-            return homePage();
+            return homePageView();
           } else {
             return new VerifyEmail();
           }

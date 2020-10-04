@@ -1,7 +1,6 @@
-import 'package:cocode/features/homePage/homePage.dart';
+import 'package:cocode/features/homePage/homePageView.dart';
 import 'package:cocode/features/viewProject/skills.dart';
 import 'package:flutter/material.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'teamMembersData.dart';
 import 'teamMembers.dart';
@@ -38,7 +37,7 @@ class _viewProjectState extends State<viewProject> {
                     Navigator.push(
                         context,
                         new MaterialPageRoute(
-                          builder: (context) => homePage(),
+                          builder: (context) => homePageView(),
                         )).then((value) {});
                   },
                 ),

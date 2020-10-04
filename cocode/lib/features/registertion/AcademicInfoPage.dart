@@ -5,7 +5,7 @@ import 'package:cocode/features/Login/ForgotPassword.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:cocode/Auth.dart';
-import 'package:cocode/features/homePage/homePage.dart';
+import 'package:cocode/features/homePage/homePageView.dart';
 import 'RegisterPage.dart';
 import 'package:cocode/features/verifyEmail/VerifyEmail.dart';
 import 'package:cocode/buttons/RoundeButton.dart';
@@ -203,7 +203,7 @@ class _AcademicInfoPageState extends State<AcademicInfoPage> {
                                         if (Auth.isVerified()) {
                                           Navigator.push(context,
                                               MaterialPageRoute(builder: (_) {
-                                            return new homePage();
+                                            return new homePageView();
                                           }));
                                         } else {
                                           Navigator.push(context,
@@ -224,7 +224,7 @@ class _AcademicInfoPageState extends State<AcademicInfoPage> {
                                         if (Auth.isVerified()) {
                                           Navigator.push(context,
                                               MaterialPageRoute(builder: (_) {
-                                            return new homePage();
+                                            return new homePageView();
                                           }));
                                         } else {
                                           Navigator.push(context,

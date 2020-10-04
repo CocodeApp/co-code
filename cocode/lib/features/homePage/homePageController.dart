@@ -6,12 +6,12 @@ import 'package:cocode/features/notifications/notification.dart';
 import 'package:animations/animations.dart';
 import 'package:kf_drawer/kf_drawer.dart';
 
-class homePage extends KFDrawerContent {
+class homePageController extends KFDrawerContent {
   @override
-  _homePageState createState() => _homePageState();
+  _homePageControllerState createState() => _homePageControllerState();
 }
 
-class _homePageState extends State<homePage> {
+class _homePageControllerState extends State<homePageController> {
   @override
   int _currentIndex = 0;
 

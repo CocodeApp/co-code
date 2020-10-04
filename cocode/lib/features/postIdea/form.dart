@@ -1,7 +1,8 @@
 //form.dart
+import 'package:cocode/features/homePage/homePageView.dart';
 import 'package:flutter/services.dart';
 import 'package:cocode/buttons/postbutton.dart';
-import 'package:cocode/features/homePage/homePage.dart';
+import 'package:cocode/features/homePage/homePageView.dart';
 import 'package:cocode/services/database.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -306,7 +307,7 @@ class _State extends State<form> {
 
                             Navigator.push(context,
                                 MaterialPageRoute(builder: (_) {
-                              return homePage();
+                              return homePageView();
                             }));
                           }
                         },
