@@ -8,7 +8,6 @@ import 'package:cocode/features/userProjects/myProjectsPage.dart';
 import 'EditProfilePage.dart';
 import 'package:percent_indicator/percent_indicator.dart';
 import 'package:kf_drawer/kf_drawer.dart';
-import 'userData.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class profilePage extends KFDrawerContent {
