@@ -164,14 +164,14 @@ class RegisterPage extends StatelessWidget {
                     // Hide the progress dialog
                     Navigator.of(context).pop();
                     Fluttertoast.showToast(
-                        msg: "An error accured",
+                        msg: "An error occurred",
                         toastLength: Toast.LENGTH_LONG,
                         gravity: ToastGravity.CENTER,
                         timeInSecForIosWeb: 1,
                         backgroundColor: Colors.blueAccent,
                         textColor: Colors.white,
                         fontSize: 16.0);
-                    // Show snackbar with the error
+                    // Show snack bar with the error
                   },
                   child: DecoratedBox(
                     decoration: BoxDecoration(
@@ -359,7 +359,7 @@ class RegisterPage extends StatelessWidget {
                                           height:
                                               CommonThings.size.height * 0.003),
                                       RoundedButton(
-                                        text: "Already have account?",
+                                        text: "Already have an account?",
                                         color: Colors.blue[100],
                                         textColor: Colors.black,
                                         press: () async {
