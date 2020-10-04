@@ -47,8 +47,8 @@ class _needTeamMemberState extends State<needTeamMember> {
             }
           }
           return ListView.builder(
-              physics: const AlwaysScrollableScrollPhysics(),
-              scrollDirection: Axis.horizontal,
+             physics: const AlwaysScrollableScrollPhysics(),
+              scrollDirection: Axis.vertical,
               itemCount: needMembers.length, //the length of our collection
               itemBuilder: (context, index) {
                 DocumentSnapshot Projectdata = snapshot.data.docs[index];
@@ -118,7 +118,7 @@ class _needSupervisorState extends State<needSupervisor> {
 
         return ListView.builder(
             physics: const AlwaysScrollableScrollPhysics(),
-            scrollDirection: Axis.horizontal,
+            scrollDirection: Axis.vertical,
             itemCount: needSupervisor.length, //the length of our collection
             itemBuilder: (context, index) {
               DocumentSnapshot Projectdata = snapshot.data.docs[index];

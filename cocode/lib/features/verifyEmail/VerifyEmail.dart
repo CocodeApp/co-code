@@ -59,10 +59,12 @@ class _VerifyEmailState extends State<VerifyEmail> {
                                 child: Center(
                                     child: Column(
                                   children: <Widget>[
+                                    SizedBox(height: 20,),
                                     Icon(
                                       Icons.lock,
                                       color: Colors.green,
                                     ),
+                                    SizedBox(height: 8,),
                                     Container(
                                       child: Text(
                                         'Verify your email',
@@ -79,6 +81,7 @@ class _VerifyEmailState extends State<VerifyEmail> {
                                           fontWeight: FontWeight.bold,
                                           fontSize: 15),
                                     ),
+                                    SizedBox(height: 20,),
                                     RoundedButton(
                                       text: "Send Again",
                                       color: Colors.deepOrangeAccent,

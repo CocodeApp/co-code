@@ -300,7 +300,7 @@ class LoginPage extends StatelessWidget {
                                           height:
                                               CommonThings.size.height * 0.003),
                                       RoundedButton(
-                                        text: "don't have an Account?",
+                                        text: "don't have Account?",
                                         color: Colors.blue[100],
                                         textColor: Colors.black,
                                         press: () async {

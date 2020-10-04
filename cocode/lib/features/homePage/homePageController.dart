@@ -31,18 +31,18 @@ class _homePageControllerState extends State<homePageController> {
     return Scaffold(
         appBar: AppBar(
           elevation: 0.0,
-          backgroundColor: Colors.white,
+          backgroundColor: Colors.indigo,
           title: Text(
             _currentIndex == 0
                 ? 'Explore'
                 : _currentIndex == 1 ? 'Notifications' : '',
-            style: TextStyle(color: Colors.black),
+            style: TextStyle(color: Colors.white),
           ),
           centerTitle: true,
           leading: IconButton(
             icon: Icon(
               Icons.menu,
-              color: Colors.black,
+              color: Colors.deepOrangeAccent,
             ),
             onPressed: widget.onMenuPressed,
           ),
