@@ -26,20 +26,29 @@ class _ProjectScreenState extends State<ProjectScreen> {
           preferredSize: Size.fromHeight(50.0),
           child: AppBar(
             elevation: 0.0,
-            backgroundColor: Colors.white,
+            backgroundColor: Colors.indigo,
             bottom: TabBar(
-              indicatorColor: Color(0xffF57862),
-              tabs: [
-                Tab(
-                  child: Text("need team member",
-                      style: TextStyle(color: Color(0xff2A4793))),
-                  // text: "need team member",
-                ),
-                Tab(
-                  child: Text("need supervisor",
-                      style: TextStyle(color: Color(0xff2A4793))),
-                )
-              ],
+                labelColor: Colors.deepOrangeAccent,
+                unselectedLabelColor: Colors.white,
+                indicatorSize: TabBarIndicatorSize.label,
+                indicator: BoxDecoration(
+                    borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(10),
+                        topRight: Radius.circular(10)),
+                    color: Colors.white),
+                tabs: [
+                  Tab(
+                    child: Align(
+                      alignment: Alignment.center,
+                      child: Text("Need Team Member"),
+                    ),
+                  ), Tab(
+                    child: Align(
+                      alignment: Alignment.center,
+                      child: Text("Need Supervisor"),
+                    ),
+                  ),
+                ]
             ),
           ),
         ),
@@ -50,3 +59,5 @@ class _ProjectScreenState extends State<ProjectScreen> {
     );
   }
 }
+
+// leading: Container(), no need for container here
