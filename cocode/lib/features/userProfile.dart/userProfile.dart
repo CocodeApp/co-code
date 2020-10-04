@@ -138,7 +138,9 @@ class _profilePageState extends State<profilePage> {
                                       /// max length must be 43
                                       child: Expanded(
                                         child: Text(
-                                          data['bio'],
+                                          data['bio'] == null
+                                              ? ''
+                                              : data['bio'],
                                           style: TextStyle(
                                             fontSize: 16,
                                             color: Colors.black,

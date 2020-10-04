@@ -8,8 +8,6 @@ import 'package:cocode/features/userProjects/myProjectsPage.dart';
 
 import 'package:cocode/Auth.dart';
 import 'package:cocode/features/Login/LoginPage.dart';
-import 'package:cocode/features/userProfile.dart/userData.dart';
-import 'package:cocode/features/userProfile.dart/userModel.dart';
 import 'package:kf_drawer/kf_drawer.dart';
 
 class ProjectScreen extends KFDrawerContent {
