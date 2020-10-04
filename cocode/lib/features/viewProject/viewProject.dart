@@ -367,7 +367,7 @@ class ProjectDetails extends StatelessWidget {
                                       color: Colors.blueGrey[200],
                                       textColor: Colors.grey[700],
                                       onPressed: NotApply,
-                                      child: Text('applid'),
+                                      child: Text('Unjoin'),
                                     );
                             },
                             valueListenable: wantToApply,

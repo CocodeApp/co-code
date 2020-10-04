@@ -35,7 +35,7 @@ class _skillsState extends State<skills> {
           ),
           child: ListTile(
             //this widget contain the project details
-
+            //trying
             title: Center(
                 child: Text(skills[index],
                     style: new TextStyle(fontWeight: FontWeight.bold))),

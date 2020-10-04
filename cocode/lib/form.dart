@@ -21,21 +21,21 @@ String projectDescription = "";
 DateTime startdate = null;
 DateTime deadline = null;
 final ValueNotifier<String> _dateErorrmsg = ValueNotifier<String>("");
-final ValueNotifier<List<String>> skillsNotifier =
-    ValueNotifier<List<String>>([]);
-String memberNum = "";
 
+String memberNum = "";
 final format = DateFormat("yyyy-MM-dd");
 
 //https://medium.com/@mahmudahsan/how-to-create-validate-and-save-form-in-flutter-e80b4d2a70a4
 class _State extends State<form> {
+  final ValueNotifier<List<String>> skillsNotifier =
+      ValueNotifier<List<String>>([]);
   TextEditingController eCtrl = new TextEditingController();
   TextEditingController membersCtrl = new TextEditingController();
-
   @override
   Widget build(BuildContext context) {
-    final _formKey = GlobalKey<FormState>();
+    setState(() {});
 
+    final _formKey = GlobalKey<FormState>();
     return Container(
       child: Form(
         key: _formKey,
@@ -321,7 +321,7 @@ class _State extends State<form> {
                                     print("project Added to the user"))
                                 .catchError((error) =>
                                     print("Failed to add project: $error"));
-
+                            setState(() {});
                             Navigator.push(context,
                                 MaterialPageRoute(builder: (_) {
                               return homePage();
