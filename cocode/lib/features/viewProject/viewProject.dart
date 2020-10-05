@@ -90,7 +90,7 @@ class ProjectDetails extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    String deadline;
+   String deadline;
     data['deadline'] == ''
         ? deadline = 'not assigned yet'
         : deadline = data['deadline'].toString();
@@ -135,7 +135,7 @@ class ProjectDetails extends StatelessWidget {
                     padding: const EdgeInsets.all(8.0),
                     child: Center(
                       child: Text(
-                          'project descripion: ' + data['projectDescripion'],
+                          'project description: ' + data['projectDescripion'],
                           textAlign: TextAlign.center,
                           style: TextStyle(fontWeight: FontWeight.bold)),
                     ),
