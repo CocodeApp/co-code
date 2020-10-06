@@ -1,8 +1,8 @@
-import 'package:cocode/LoginPage.dart';
-import 'package:cocode/RegisterPage.dart';
+import 'package:cocode/features/Login/LoginPage.dart';
+import 'package:cocode/features/registertion/RegisterPage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/material.dart';
-import 'package:cocode/Background.dart';
+import 'Background.dart';
 import 'package:cocode/buttons/RoundeButton.dart';
 
 class CommonThings {
@@ -28,13 +28,13 @@ class body extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            SizedBox(height: CommonThings.size.height * 0.1),
+            SizedBox(height: CommonThings.size.height * 0.01),
             Text(
               "Co-Code",
               textAlign: TextAlign.center,
               style: TextStyle(fontSize: 40.0, fontWeight: FontWeight.bold),
             ),
-            SizedBox(height: CommonThings.size.height * 0.5),
+            SizedBox(height: CommonThings.size.height * 0.46),
             RoundedButton(
               //login button
               text: "LOGIN",

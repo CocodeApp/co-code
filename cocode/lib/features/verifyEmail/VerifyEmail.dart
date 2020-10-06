@@ -2,17 +2,18 @@ import 'dart:io';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'Auth.dart';
-import 'ForgotPassword.dart';
-import 'LoginPage.dart';
-import 'RegisterPage.dart';
-import 'buttons/RoundeButton.dart';
+import 'package:cocode/Auth.dart';
+import 'package:cocode/features/Login/LoginPage.dart';
+import 'package:cocode/features/Login/ForgotPassword.dart';
+import 'package:cocode/features/registertion/RegisterPage.dart';
+import 'package:cocode/buttons/RoundeButton.dart';
+import 'package:kf_drawer/kf_drawer.dart';
 
 class CommonThings {
   static Size size;
 }
 
-class VerifyEmail extends StatefulWidget {
+class VerifyEmail extends KFDrawerContent {
   @override
   _VerifyEmailState createState() => _VerifyEmailState();
 }
@@ -58,10 +59,12 @@ class _VerifyEmailState extends State<VerifyEmail> {
                                 child: Center(
                                     child: Column(
                                   children: <Widget>[
+                                    SizedBox(height: 20,),
                                     Icon(
                                       Icons.lock,
                                       color: Colors.green,
                                     ),
+                                    SizedBox(height: 8,),
                                     Container(
                                       child: Text(
                                         'Verify your email',
@@ -78,6 +81,7 @@ class _VerifyEmailState extends State<VerifyEmail> {
                                           fontWeight: FontWeight.bold,
                                           fontSize: 15),
                                     ),
+                                    SizedBox(height: 20,),
                                     RoundedButton(
                                       text: "Send Again",
                                       color: Colors.deepOrangeAccent,

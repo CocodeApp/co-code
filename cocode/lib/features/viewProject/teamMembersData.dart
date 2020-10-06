@@ -1,4 +1,4 @@
-import 'package:cocode/features/homePage/homePage.dart';
+import 'package:cocode/features/homePage/homePageView.dart';
 import 'package:cocode/features/userProfile.dart/userProfile.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';

@@ -1,7 +1,7 @@
 import 'package:cocode/features/userProfile.dart/userProfile.dart';
+import 'package:cocode/features/homePage/homePageView.dart';
 import 'package:cocode/features/viewProject/skills.dart';
 import 'package:flutter/material.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import '../../Auth.dart';
 import 'teamMembersData.dart';
@@ -35,14 +35,21 @@ class _viewProjectState extends State<viewProject> {
           return DefaultTabController(
             length: 3,
             child: Scaffold(
+              backgroundColor: Colors.white,
               appBar: AppBar(
+                elevation: 0,
                 leading: BackButton(
-                  color: Colors.white,
+                  color: Colors.indigo,
                   onPressed: () => (Navigator.pop(context)),
                 ),
-                backgroundColor: Color(0xff2A4793),
-                title: Text(data['projectName']),
+                backgroundColor: Colors.white,
+                title: Text(
+                  data['projectName'],
+                  style: TextStyle(color: Colors.indigo),
+                ),
                 bottom: TabBar(
+                  indicatorColor: Colors.deepOrangeAccent,
+                  labelColor: Colors.indigo,
                   tabs: [
                     Tab(
                       text: "project details",
@@ -336,10 +343,10 @@ class ProjectDetails extends StatelessWidget {
                                   ),
                                 ),
                                 onPressed: () {
-                                  Navigator.push(context,
-                                      MaterialPageRoute(builder: (_) {
-                                    return profilePage(); //update
-                                  }));
+                                  // Navigator.push(context,
+                                  //     MaterialPageRoute(builder: (_) {
+                                  //   return profilePage(); //update
+                                  // }));
                                 },
                                 shape: const StadiumBorder(),
                               ),

@@ -16,32 +16,40 @@ class _skillsState extends State<skills> {
     print(skills[0]);
 
     return ListView.builder(
-      itemCount: skills.length, //here
-      itemBuilder: (context, index) {
-        return Container(
-          height: 50.0,
-          margin: new EdgeInsets.all(10.0),
-          decoration: new BoxDecoration(
-            color: new Color(0xFFD1DDED),
-            shape: BoxShape.rectangle,
-            borderRadius: new BorderRadius.circular(8.0),
-            boxShadow: <BoxShadow>[
-              new BoxShadow(
-                color: Colors.black12,
-                blurRadius: 10.0,
-                offset: new Offset(0.0, 10.0),
+        itemCount: skills.length, //here
+        itemBuilder: (context, index) {
+          return SizedBox(
+            width: 100,
+            child: Card(
+              elevation: 0,
+              child: ClipPath(
+                child: Container(
+                  width: 100,
+                  child: Padding(
+                    padding: const EdgeInsets.fromLTRB(8.0, 15, 0, 0),
+                    child: Text(
+                      skills[index],
+                      textAlign: TextAlign.left,
+                      style: TextStyle(
+                        fontSize: 16,
+                      ),
+                    ),
+                  ),
+                  height: 60,
+                  decoration: BoxDecoration(
+                      border: Border(
+                          left: BorderSide(
+                              color: index % 2 == 0
+                                  ? Colors.indigo
+                                  : Colors.deepOrangeAccent,
+                              width: 5))),
+                ),
+                clipper: ShapeBorderClipper(
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(3))),
               ),
-            ],
-          ),
-          child: ListTile(
-            //this widget contain the project details
-            //trying
-            title: Center(
-                child: Text(skills[index],
-                    style: new TextStyle(fontWeight: FontWeight.bold))),
-          ),
-        );
-      },
-    );
+            ),
+          );
+        });
   }
 }
