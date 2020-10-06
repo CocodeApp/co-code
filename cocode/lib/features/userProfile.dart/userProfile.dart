@@ -1,4 +1,5 @@
 import 'package:cocode/buttons/indicator.dart';
+import 'package:cocode/features/viewProject/viewProject.dart';
 import 'package:flutter/material.dart';
 import 'package:cocode/Auth.dart';
 import 'package:cocode/features/Login/LoginPage.dart';
@@ -21,6 +22,7 @@ class profilePage extends KFDrawerContent {
 class _profilePageState extends State<profilePage> {
   String currentName = Auth.getCurrentUsername();
   String email = Auth.getCurrentUserEmail();
+  String id = Auth.getCurrentUserID();
 
   @override
   Widget build(BuildContext context) {
@@ -28,6 +30,7 @@ class _profilePageState extends State<profilePage> {
 
     return FutureBuilder<DocumentSnapshot>(
         future: users.doc(Auth.getCurrentUserID()).get(),
+        // ignore: missing_return
         builder: (context, snapshot) {
           if (snapshot.data == null) return indicator();
 
@@ -37,13 +40,17 @@ class _profilePageState extends State<profilePage> {
           if (snapshot.connectionState == ConnectionState.done) {
             if (snapshot.data.data() == null) return indicator();
             Map<String, dynamic> data = snapshot.data.data();
+            CollectionReference userProjects = FirebaseFirestore.instance
+                .collection('User')
+                .doc(id)
+                .collection('myProjects');
             return Scaffold(
                 backgroundColor: Color(0xffF8F8FA),
                 appBar: AppBar(
                   leading: IconButton(
                     icon: Icon(
                       Icons.menu,
-                      color: Colors.black,
+                      color: Colors.deepOrangeAccent,
                     ),
                     onPressed: widget.onMenuPressed,
                   ),
@@ -53,6 +60,25 @@ class _profilePageState extends State<profilePage> {
                     '@' + currentName, // user name at top of the page
                     textAlign: TextAlign.center,
                   ),
+                  actions: <Widget>[
+                    IconButton(
+                      icon: Icon(
+                        Icons.edit,
+                        color: Colors.deepOrangeAccent,
+                      ),
+                      tooltip: 'Edit Profile',
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) {
+                              return new EditProfilePage();
+                            },
+                          ),
+                        );
+                      },
+                    ),
+                  ],
                 ),
                 body: SafeArea(
                   child: Stack(
@@ -60,7 +86,7 @@ class _profilePageState extends State<profilePage> {
                     children: <Widget>[
                       Container(
                         //first part the blue one
-                        color: Colors.blue[200],
+                        color: Color(0xffD1DDED),
                         height: 0.38 * MediaQuery.of(context).size.height,
                         child: Padding(
                             padding: EdgeInsets.only(
@@ -128,62 +154,66 @@ class _profilePageState extends State<profilePage> {
                                   ],
                                 ),
                                 Row(
-                                  // here is the bio
+                                  // here is the bio MUST BE 140 LETTER
                                   children: <Widget>[
                                     Container(
-                                      margin: const EdgeInsets.all(10.0),
+                                      width: MediaQuery.of(context).size.width *
+                                          0.8,
                                       padding: const EdgeInsets.all(10.0),
                                       alignment: Alignment.center,
 
                                       /// max length must be 43
-                                      child: Expanded(
-                                        child: Text(
-                                          data['bio'] == null
-                                              ? ''
-                                              : data['bio'],
-                                          style: TextStyle(
-                                            fontSize: 16,
-                                            color: Colors.black,
+                                      child: new Column(
+                                        children: <Widget>[
+                                          new Text(
+                                            data['bio'] == null
+                                                ? ''
+                                                : data['bio'],
+                                            textAlign: TextAlign.center,
+                                            style: TextStyle(
+                                              fontSize: 16,
+                                              color: Colors.black,
+                                            ),
                                           ),
-                                        ),
+                                        ],
                                       ),
                                     ),
                                   ],
                                 ),
                                 Row(
-                                    //here is profile edit it must be for loged in user only
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: <Widget>[
-                                      RaisedButton(
-                                        onPressed: () {
-                                          // go to edite profile
-                                          Navigator.push(
-                                            context,
-                                            MaterialPageRoute(
-                                              builder: (context) {
-                                                return new EditProfilePage();
-                                              },
-                                            ),
-                                          );
-                                        },
-                                        color: Colors.deepOrangeAccent,
-                                        shape: RoundedRectangleBorder(
-                                            borderRadius:
-                                                new BorderRadius.circular(
-                                                    30.0)),
-                                        child: Padding(
-                                          padding: const EdgeInsets.all(0.1),
-
-                                          ///borderRadius: BorderRadius.circular(20.0),
-                                          child: Text(
-                                            "Edit Profile",
-                                            style: TextStyle(
-                                                color: Colors.white,
-                                                fontSize: 15),
+                                  children: [
+                                    SizedBox(width: 15),
+                                    Text(
+                                      data['major'] == null
+                                          ? ''
+                                          : 'Major: ' + data['major'],
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                        fontSize: 16,
+                                        color: Colors.black,
+                                      ),
+                                    ),
+                                    Row(
+                                      children: [
+                                        SizedBox(
+                                          width: 125,
+                                          height: 10,
+                                        ),
+                                        Text(
+                                          data['university'] == null
+                                              ? ''
+                                              : 'University: ' +
+                                                  data['university'],
+                                          textAlign: TextAlign.center,
+                                          style: TextStyle(
+                                            fontSize: 16,
+                                            color: Colors.black,
                                           ),
                                         ),
-                                      ),
-                                    ])
+                                      ],
+                                    )
+                                  ],
+                                ),
                               ],
                             )),
                       ),
@@ -203,8 +233,7 @@ class _profilePageState extends State<profilePage> {
                             child: Column(
                               children: <Widget>[
                                 Padding(
-                                  padding: EdgeInsets.only(
-                                      left: 30.0, top: 25, bottom: 20),
+                                  padding: EdgeInsets.only(top: 25, bottom: 20),
                                   child: Text(
                                     "My Projects",
                                     style: TextStyle(
@@ -223,70 +252,93 @@ class _profilePageState extends State<profilePage> {
                                     //list of projects
                                     scrollDirection: Axis.horizontal,
                                     children: <Widget>[
-                                      SizedBox(width: 20),
+                                      SizedBox(width: 8),
+
                                       Material(
-                                          // this part will be showing for each project
-                                          color: Colors.white70,
-                                          child: InkWell(
-                                              onTap: () {
-                                                Navigator.push(
-                                                  context,
-                                                  MaterialPageRoute(
-                                                    builder: (context) {
-                                                      return new ProjectScreen(); // this must lead to the projects that user in
+// this part will be showing for each project
+                                        color: Colors.white70,
+                                        child: StreamBuilder<QuerySnapshot>(
+                                          stream: userProjects.snapshots(),
+// ignore: missing_return
+                                          builder: (BuildContext context,
+                                              AsyncSnapshot<QuerySnapshot>
+                                                  snapshot) {
+                                            if (snapshot.data == null)
+                                              return Container(//// latefa
+                                                child: Text(
+                                                  currentName +
+                                                      "did not join any projects yet !", // this massage must be static
+                                                  style: TextStyle(
+                                                      color: Colors.redAccent,//// latefa
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                      fontSize: 15),
+                                                  textAlign: TextAlign.center,
+                                                ),
+                                              );
+                                            if (snapshot.hasData) {
+                                              var doc = snapshot.data.docs;
+                                              return ListView.builder(
+                                                itemCount: doc.length,
+                                                itemBuilder: (context, index) {
+                                                  Map data = doc[index].data();
+                                                  return InkWell(
+//stream list v
+                                                    onTap: () {
+                                                      Navigator.push(
+                                                        context,
+                                                        MaterialPageRoute(
+                                                          builder: (context) {
+                                                            return new viewProject(
+                                                                id: ""); //// latefa     // this must lead to the projects that user in
+                                                          },
+                                                        ),
+                                                      );
                                                     },
-                                                  ),
-                                                );
-                                              },
-                                              child: Stack(
-                                                // list of projects from data base
-                                                alignment:
-                                                    const Alignment(0, 0),
-                                                children: [
-                                                  Container(
-                                                    //project logo from database
-                                                    height: 0.30 *
-                                                        MediaQuery.of(context)
-                                                            .size
-                                                            .height,
-                                                    width: 0.350 *
-                                                        MediaQuery.of(context)
-                                                            .size
-                                                            .width,
-                                                    child: ClipRRect(
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              20.0),
-                                                      child: Image.asset(
-                                                        'imeges/logo-2.png', //project logo
-                                                      ),
+                                                    child: Column(
+// list of projects from data base
+                                                      children: [
+                                                        Container(
+//project logo from database
+                                                          height: 0.12 *
+                                                              MediaQuery.of(
+                                                                      context)
+                                                                  .size
+                                                                  .height,
+                                                          width: 0.350 *
+                                                              MediaQuery.of(
+                                                                      context)
+                                                                  .size
+                                                                  .width,
+                                                          child: ClipRRect(
+                                                            borderRadius:
+                                                                BorderRadius
+                                                                    .circular(
+                                                                        20.0),
+                                                            child: Image.asset(
+                                                              'imeges/logo-2.png', //project logo
+                                                            ),
+                                                          ),
+                                                        ),
+                                                        Text(
+                                                          data['projectName'],
+                                                          style: TextStyle(
+                                                            fontWeight:
+                                                                FontWeight.bold,
+                                                            fontSize: 17,
+                                                            color: Colors
+                                                                .deepOrangeAccent,
+                                                          ),
+                                                        )
+                                                      ],
                                                     ),
-                                                  ),
-                                                  Container(
-                                                    // project name from database
-                                                    padding:
-                                                        const EdgeInsets.all(
-                                                            9.0),
-                                                    decoration:
-                                                        new BoxDecoration(
-                                                            color: new Color
-                                                                    .fromARGB(
-                                                                120,
-                                                                71,
-                                                                150,
-                                                                236)),
-                                                    child: new Text(
-                                                        'project name ', // project name
-                                                        maxLines: 1,
-                                                        style: new TextStyle(
-                                                          fontSize: 20.0,
-                                                          fontWeight:
-                                                              FontWeight.bold,
-                                                          color: Colors.white,
-                                                        )),
-                                                  ),
-                                                ],
-                                              ))),
+                                                  );
+                                                },
+                                              );
+                                            }
+                                          },
+                                        ),
+                                      ),
                                       SizedBox(width: 10),
                                     ],
                                   ),
@@ -300,7 +352,7 @@ class _profilePageState extends State<profilePage> {
                                   child: Row(
                                     children: <Widget>[
                                       Text(
-                                        "Skills and Skills Levels ",
+                                        "Skills and Levels ",
                                         style: TextStyle(
                                             color: Color(0xff2A4793),
                                             fontWeight: FontWeight.bold,
@@ -329,21 +381,18 @@ class _profilePageState extends State<profilePage> {
                                   ),
                                 ),
                                 SizedBox(height: 20),
-                                Container(
-                                  height: 120,
-                                  // here must tbe skills and level Must be tacking from edit skills page
-                                  child: ListView(
-                                    scrollDirection: Axis.vertical,
-                                    children: <Widget>[
-                                      skillAndLevel("CSS", "90"),
-                                      skillAndLevel("Javascript", "20"),
-                                      skillAndLevel("Dart", "50"),
-                                      skillAndLevel("Illustrator", "70"),
-                                      SizedBox(
-                                        width: 10,
-                                      )
-                                    ],
-                                  ),
+                                Column(
+                                  children: [
+                                    // here must tbe skills and level Must be tacking from edit skills page
+
+                                    skillAndLevel("CSS", "90"),
+                                    skillAndLevel("Javascript", "20"),
+                                    skillAndLevel("Dart", "50"),
+                                    skillAndLevel("Illustrator", "70"),
+                                    SizedBox(
+                                      width: 10,
+                                    )
+                                  ],
                                 ),
                                 SizedBox(width: 10)
                               ],
@@ -368,13 +417,28 @@ class _profilePageState extends State<profilePage> {
           Padding(
             padding: EdgeInsets.all(15.0),
             child: new LinearPercentIndicator(
-              width: MediaQuery.of(context).size.width - 150,
+              width: MediaQuery.of(context).size.width - 75,
               animation: true,
-              lineHeight: 20.0,
-              leading: new Text(skillName + '   '),
+              lineHeight: 25.0,
               animationDuration: 2000,
               percent: percent,
-              center: Text(level + "%"),
+              trailing: Row(
+                children: [
+                  SizedBox(
+                    width: 8,
+                  ),
+                  Text(
+                    level + '%',
+                    style: TextStyle(
+                      color: Colors.indigo,
+                    ),
+                  ),
+                ],
+              ),
+              center: Text(
+                skillName,
+                style: TextStyle(fontWeight: FontWeight.bold),
+              ),
               linearStrokeCap: LinearStrokeCap.roundAll,
               progressColor: Colors.blue[200],
             ),
@@ -384,137 +448,3 @@ class _profilePageState extends State<profilePage> {
     );
   }
 }
-
-/*these methods are in hamePageData files
-      floatingActionButton: FloatingActionButton(
-        //for adding new Idea
-        onPressed: () async {
-          await Auth.logout();
-
-          Navigator.push(context, MaterialPageRoute(builder: (_) {
-            return LoginPage();
-          }));
-        },
-        child: Text('logout'),
-        backgroundColor: Color(0xffF57862),
-      ),
-    );
-  }
-}
-
-     */
-
-// class userProfile extends StatelessWidget {
-//   @override
-//   Widget build(BuildContext context) {
-//     return MaterialApp(
-//       home: Scaffold(
-//         appBar: AppBar(
-//             leading: Icon(Icons.arrow_back),
-//             title: Center(child: Text('Project Title')),
-//             backgroundColor: Color(0xff2A4793)),
-//         body: Column(
-//           children: [bio(), major(), interests(), Projects(), topSkills()],
-//         ),
-//       ),
-//     );
-//   }
-// }
-
-// class bio extends StatelessWidget {
-//   // this widget for the user bio
-//   @override
-//   Widget build(BuildContext context) {
-//     return Card(
-//       child: Column(
-//         children: [
-//           CircleAvatar(
-//             radius: 50,
-//           ), //user avatar
-//           Text("the user bio should goes here"),
-//         ],
-//       ),
-//       clipBehavior: Clip.antiAlias,
-//     );
-//   }
-// }
-
-// class major extends StatelessWidget {
-//   @override
-//   Widget build(BuildContext context) {
-//     return Card(
-//       child: Row(
-//         children: [
-//           Icon(Icons.school),
-//           Column(
-//             children: [
-//               //column for the major and uni
-//               Text("the Uni goes here"),
-//               Text('the najor goes her')
-//             ],
-//           )
-//         ],
-//       ),
-//     );
-//   }
-// }
-
-// class interests extends StatelessWidget {
-//   //user interst goes here
-//   @override
-//   Widget build(BuildContext context) {
-//     return Card(
-//       child: Row(
-//         children: [
-//           Icon(
-//             Icons.favorite,
-//             color: Colors.red,
-//           ),
-//           Text("a list of interests should be here")
-//         ],
-//       ),
-//     );
-//   }
-// }
-
-// class Projects extends StatelessWidget {
-//   // user Previous Projects
-//   @override
-//   Widget build(BuildContext context) {
-//     return Card(
-//       child: Column(
-//         children: [
-//           Text("Previous Projects"),
-//           Row(
-//             children: [
-//               CircleAvatar(
-//                 radius: 20,
-//               ),
-//               Text('Project name')
-//             ],
-//           )
-//         ],
-//       ),
-//     );
-//   }
-// }
-
-// class topSkills extends StatelessWidget {
-//   @override
-//   Widget build(BuildContext context) {
-//     return Card(
-//         child: Column(
-//       children: [
-//         Text("Top skills"),
-//         Row(
-//           children: [
-//             CircleAvatar(
-//               radius: 20,
-//             ),
-//             Text('Project name')
-//           ],
-//         )
-//       ],
-//     ));
-//   }
-// }
