@@ -44,6 +44,7 @@ class _profilePageState extends State<profilePage> {
                 .collection('User')
                 .doc(id)
                 .collection('myProjects');
+            List<dynamic> skills = data['skills'];
             return Scaffold(
                 backgroundColor: Color(0xffF8F8FA),
                 appBar: AppBar(
@@ -253,7 +254,6 @@ class _profilePageState extends State<profilePage> {
                                     scrollDirection: Axis.horizontal,
                                     children: <Widget>[
                                       SizedBox(width: 8),
-
                                       Material(
 // this part will be showing for each project
                                         color: Colors.white70,
@@ -264,12 +264,14 @@ class _profilePageState extends State<profilePage> {
                                               AsyncSnapshot<QuerySnapshot>
                                                   snapshot) {
                                             if (snapshot.data == null)
-                                              return Container(//// latefa
+                                              return Container(
+                                                //// latefa
                                                 child: Text(
                                                   currentName +
                                                       "did not join any projects yet !", // this massage must be static
                                                   style: TextStyle(
-                                                      color: Colors.redAccent,//// latefa
+                                                      color: Colors
+                                                          .redAccent, //// latefa
                                                       fontWeight:
                                                           FontWeight.bold,
                                                       fontSize: 15),
@@ -290,7 +292,8 @@ class _profilePageState extends State<profilePage> {
                                                         MaterialPageRoute(
                                                           builder: (context) {
                                                             return new viewProject(
-                                                                id: ""); //// latefa     // this must lead to the projects that user in
+                                                                id: doc[
+                                                                    index]); //// latefa     // this must lead to the projects that user in
                                                           },
                                                         ),
                                                       );
@@ -381,14 +384,22 @@ class _profilePageState extends State<profilePage> {
                                   ),
                                 ),
                                 SizedBox(height: 20),
+                                // ListView.builder(
+                                //     itemCount: skills.length,
+                                //     itemBuilder: (context, index) {
+                                //       return (skillAndLevel(
+                                //           skills[index]['name'],
+                                //           skills[index]['value']));
+                                //     }),
                                 Column(
                                   children: [
+                                    skillsList(skills),
                                     // here must tbe skills and level Must be tacking from edit skills page
 
-                                    skillAndLevel("CSS", "90"),
-                                    skillAndLevel("Javascript", "20"),
-                                    skillAndLevel("Dart", "50"),
-                                    skillAndLevel("Illustrator", "70"),
+                                    // skillAndLevel("CSS", "90"),
+                                    // skillAndLevel("Javascript", "20"),
+                                    // skillAndLevel("Dart", "50"),
+                                    // skillAndLevel("Illustrator", "70"),
                                     SizedBox(
                                       width: 10,
                                     )
@@ -446,5 +457,14 @@ class _profilePageState extends State<profilePage> {
         ],
       ),
     );
+  }
+
+  Widget skillsList(List skills) {
+    print('hhheeee');
+    print(skills[0]);
+    for (int i = 0; i < skills.length; i++) {
+      Map<String, dynamic> skill = skills[i];
+      return skillAndLevel(skill['name'], skill['value']);
+    }
   }
 }
