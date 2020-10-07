@@ -1,10 +1,9 @@
 //name form
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:cocode/LoginPage.dart';
+import 'package:cocode/features/Login/LoginPage.dart';
 import 'package:cocode/features/accountSettings/changeName.dart';
 import 'package:flutter/material.dart';
 import '../../Auth.dart';
-import '../../VerifyEmail.dart';
 import 'AccountInfo.dart';
 import 'package:cocode/buttons/RoundeButton.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
