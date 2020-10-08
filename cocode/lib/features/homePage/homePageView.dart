@@ -29,7 +29,7 @@ class _homePageViewState extends State<homePageView> {
         KFDrawerItem.initWithPage(
           text: Text('My profile', style: TextStyle(color: Colors.white)),
           icon: Icon(Icons.person, color: Colors.white),
-          page: profilePage(),
+          page: profilePage(userId: Auth.getCurrentUserID()),
         ),
         KFDrawerItem.initWithPage(
           text: Text('My projects', style: TextStyle(color: Colors.white)),

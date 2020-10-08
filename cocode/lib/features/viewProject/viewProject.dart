@@ -175,6 +175,5 @@ class ProjectDetails extends StatelessWidget {
         ),
       ],
     ));
-    ;
   }
 } // there is some missing details , see our class diagram for more info
