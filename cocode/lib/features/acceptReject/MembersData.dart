@@ -1,5 +1,6 @@
 import 'package:cocode/features/homePage/homePageView.dart';
 import 'package:cocode/features/userProfile.dart/userProfile.dart';
+import 'package:cocode/features/viewProject/viewProject.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -14,7 +15,8 @@ class MembersList extends StatefulWidget {
 }
 
 class _MembersListState extends State<MembersList> {
-  List<String> tempMember;
+  ValueNotifier<List<String>> tempMember = ValueNotifier<List<String>>([]);
+  String role;
   @override
   Widget build(BuildContext context) {
     Future<void> getTempList() async {
@@ -26,8 +28,9 @@ class _MembersListState extends State<MembersList> {
           .get();
       await leaderRef.then((value) {
         var data = value.data();
-        tempMember = data["tempList"];
-        print(tempMember.length);
+        role = data['role'];
+        tempMember.value = data["tempList"];
+        print(tempMember.value.length);
       }).catchError((e) {
         print(e.toString());
       });
@@ -35,8 +38,8 @@ class _MembersListState extends State<MembersList> {
 
     getTempList();
 
-    print(tempMember.length);
-    Widget getuserwidget(String id) {
+    print(tempMember.value.length);
+    Widget getuserwidget(int index, String id) {
       return FutureBuilder<DocumentSnapshot>(
           future: FirebaseFirestore.instance.collection("User").doc(id).get(),
           builder:
@@ -106,12 +109,84 @@ class _MembersListState extends State<MembersList> {
                             IconButton(
                               icon: Icon(Icons.check_circle),
                               color: Colors.green,
-                              onPressed: () {},
+                              onPressed: () {
+                                if (role == "Idea Owner") {
+                                  //add the supervisor
+                                  FirebaseFirestore.instance
+                                      .runTransaction((transaction) async {
+                                    DocumentSnapshot freshsnap =
+                                        await transaction.get(FirebaseFirestore
+                                            .instance
+                                            .collection('projects')
+                                            .doc(widget.projectId));
+                                    transaction.update(freshsnap.reference, {
+                                      'supervisor': id,
+                                    });
+                                  });
+                                  //clean the list "not important"
+                                  //nav to project page and remove applicants button
+                                  Navigator.push(context,
+                                      MaterialPageRoute(builder: (_) {
+                                    return viewProject(
+                                      id: widget.projectId,
+                                      tab: "member",
+                                    );
+                                  }));
+                                } else {
+                                  //add team member
+                                  FirebaseFirestore.instance
+                                      .runTransaction((transaction) async {
+                                    DocumentSnapshot freshsnap =
+                                        await transaction.get(FirebaseFirestore
+                                            .instance
+                                            .collection('projects')
+                                            .doc(widget.projectId));
+                                    List l = [id];
+                                    transaction.update(freshsnap.reference, {
+                                      'teamMembers': FieldValue.arrayUnion(l)
+                                    });
+                                  });
+                                  //remove it from the temp list
+                                  FirebaseFirestore.instance
+                                      .runTransaction((transaction) async {
+                                    DocumentSnapshot freshsnap =
+                                        await transaction.get(FirebaseFirestore
+                                            .instance
+                                            .collection('User')
+                                            .doc(widget.leader)
+                                            .collection('myProjects')
+                                            .doc(widget.projectId));
+                                    transaction.update(freshsnap.reference, {
+                                      'tempList': FieldValue.arrayRemove([id])
+                                    });
+                                  });
+                                  //remove it from tempmember
+                                  tempMember.value.removeAt(index);
+                                  tempMember.notifyListeners();
+                                }
+                              },
                             ),
                             IconButton(
                               icon: Icon(Icons.cancel),
                               color: Colors.red,
-                              onPressed: () {},
+                              onPressed: () {
+                                //remove from list builder
+                                tempMember.value.removeAt(index);
+                                tempMember.notifyListeners();
+                                //remove it from database
+                                FirebaseFirestore.instance
+                                    .runTransaction((transaction) async {
+                                  DocumentSnapshot freshsnap = await transaction
+                                      .get(FirebaseFirestore.instance
+                                          .collection('User')
+                                          .doc(widget.leader)
+                                          .collection('myProjects')
+                                          .doc(widget.projectId));
+                                  transaction.update(freshsnap.reference, {
+                                    'tempList': FieldValue.arrayRemove([id])
+                                  });
+                                });
+                              },
                             ),
                           ],
                         ),
@@ -124,9 +199,9 @@ class _MembersListState extends State<MembersList> {
     }
 
     return ListView.builder(
-      itemCount: tempMember.length, //here
+      itemCount: tempMember.value.length, //here
       itemBuilder: (context, index) {
-        return getuserwidget(tempMember[index]);
+        return getuserwidget(index, tempMember.value[index]);
       },
     );
   }

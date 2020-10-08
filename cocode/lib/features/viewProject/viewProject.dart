@@ -327,7 +327,9 @@ class ProjectDetails extends StatelessWidget {
                           String listofwhat = "";
                           if (currentSuper.compareTo(user) == 0)
                             listofwhat = "Team Members Applicants";
-                          if (currentOwner.compareTo(user) == 0)
+                          if (currentOwner.compareTo(user) == 0 &&
+                              currentSuper ==
+                                  "") //if they already have supervisor
                             listofwhat = "Supervisors Applicants";
                           if (listofmembers.contains(Auth.getCurrentUserID()) ||
                               currentSuper.compareTo(user) == 0 ||
