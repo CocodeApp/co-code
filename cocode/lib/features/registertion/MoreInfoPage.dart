@@ -1,18 +1,16 @@
 import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:cocode/Background.dart';
-import 'package:cocode/ForgotPassword.dart';
+import 'package:cocode/features/welcomePage/Background.dart';
+import 'package:cocode/features/Login/ForgotPassword.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'AcademicInfoPage.dart';
-import 'Auth.dart';
-
+import 'package:cocode/Auth.dart';
 import 'RegisterPage.dart';
-import 'VerifyEmail.dart';
-import 'buttons/RoundeButton.dart';
-import 'services/database.dart';
+import 'package:cocode/features/verifyEmail/VerifyEmail.dart';
+import 'package:cocode/buttons/RoundeButton.dart';
+import 'package:cocode/services/database.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'Background.dart';
 
 class CommonThings {
   static Size size;

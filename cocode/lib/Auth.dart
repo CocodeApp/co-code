@@ -1,16 +1,14 @@
 import 'dart:io';
 
+import 'package:cocode/features/homePage/homePageView.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:cocode/VerifyEmail.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'ForgotPassword.dart';
-import 'features/homePage/homePage.dart';
-import 'LoginPage.dart';
-import 'WelcomeScreen.dart';
+import 'features/verifyEmail/VerifyEmail.dart';
+import 'features/welcomePage/WelcomeScreen.dart';
 
 //sources
 //https://firebase.flutter.dev/docs/auth/usage/
@@ -47,12 +45,16 @@ import 'WelcomeScreen.dart';
 //https://stackoverflow.com/questions/55360628/create-async-validator-in-flutter
 //https://stackoverflow.com/questions/55328838/flutter-firestore-add-new-document-with-custom-id
 //https://firebase.flutter.dev/docs/firestore/usage/
+//https://stackoverflow.com/questions/59654736/trying-to-implement-loading-spinner-while-loading-data-from-firestore-with-flutt
 
 enum authProblems { UserNotFound, PasswordNotValid, NetworkError }
 
 //This class is responsible for all operations related to authorization
 class Auth {
   static final auth = FirebaseAuth.instance;
+  static final store = FirebaseFirestore.instance;
+  static CollectionReference users =
+      FirebaseFirestore.instance.collection('User');
 
   //is user currently logged In?
   static bool isLoggedIn() {
@@ -106,6 +108,15 @@ class Auth {
     return auth.currentUser.email;
   }
 
+  //get current user email
+  static Future<String> getCurrentFirstname() async {
+    DocumentSnapshot result = await users.doc(getCurrentUserID()).get();
+    String x = result.data()['firstName'];
+    return x;
+  }
+
+  //get current user email
+
   //method to direct either to login page or home page based on login status
   static Future<Widget> directoryPage() async {
     return StreamBuilder<User>(
@@ -113,7 +124,7 @@ class Auth {
       builder: (BuildContext context, snapshot) {
         if (snapshot.hasData) {
           if (Auth.isVerified()) {
-            return homePage();
+            return homePageView();
           } else {
             return new VerifyEmail();
           }
@@ -284,20 +295,30 @@ class Auth {
   }
 
   static Future<bool> checkUsernameAvailability(String val) async {
-    final result = await FirebaseFirestore.instance
-        .collection("User")
-        .where('userName', isEqualTo: val)
-        .get();
+    final result =
+        await store.collection("User").where('userName', isEqualTo: val).get();
 
     return result.docs.isEmpty;
   }
 
   static Future<bool> checkemailAvailability(String val) async {
-    final result = await FirebaseFirestore.instance
-        .collection("User")
-        .where('email', isEqualTo: val)
-        .get();
+    final result =
+        await store.collection("User").where('email', isEqualTo: val).get();
 
     return result.docs.isEmpty;
+  }
+
+  static Future<String> updateEmail(String newEmail) async {
+    try {
+      await auth.currentUser.updateEmail(newEmail);
+    } catch (e) {
+      return AuthErrorMessage(e);
+    }
+
+    return null;
+  }
+
+  static Future<DocumentSnapshot> getcurrentUserInfo() async {
+    return await users.doc(Auth.getCurrentUserID()).get();
   }
 }

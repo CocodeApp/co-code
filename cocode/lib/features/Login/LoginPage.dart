@@ -1,57 +1,41 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:cocode/features/Login/ForgotPassword.dart';
+import 'package:cocode/features/homePage/homePageView.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_form_bloc/flutter_form_bloc.dart';
 import 'package:form_bloc/form_bloc.dart';
 import 'dart:async';
 import 'dart:io';
-
 import 'package:flutter_form_bloc/flutter_form_bloc.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:form_bloc/form_bloc.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:flutter/material.dart';
-import 'Auth.dart';
-import 'features/homePage/projectScreen.dart';
+import 'package:cocode/Auth.dart';
 import 'LoginPage.dart';
-import 'MoreInfoPage.dart';
-import 'VerifyEmail.dart';
-import 'buttons/RoundeButton.dart';
+
+import 'package:cocode/features/registertion/MoreInfoPage.dart';
+import 'package:cocode/features/registertion/RegisterPage.dart';
+import 'package:cocode/features/verifyEmail/VerifyEmail.dart';
+import 'package:cocode/buttons/RoundeButton.dart';
 
 class CommonThings {
   static Size size;
 }
 
-class RegisterFormBloc extends FormBloc<String, String> {
-  final _usernameFieldBloc =
-      TextFieldBloc(asyncValidatorDebounceTime: Duration(milliseconds: 300));
+class LoginFormBloc extends FormBloc<String, String> {
   final _emailFieldBloc =
       TextFieldBloc(asyncValidatorDebounceTime: Duration(milliseconds: 300));
   final _passwordFieldBloc =
       TextFieldBloc(asyncValidatorDebounceTime: Duration(milliseconds: 300));
 
   @override
-  List<FieldBloc> get fieldBlocs =>
-      [_usernameFieldBloc, _emailFieldBloc, _passwordFieldBloc];
+  List<FieldBloc> get fieldBlocs => [_emailFieldBloc, _passwordFieldBloc];
 
-  RegisterFormBloc() {
-    _usernameFieldBloc.addAsyncValidators([_validateusername]);
+  LoginFormBloc() {
     _emailFieldBloc.addAsyncValidators([_validateemail]);
     _passwordFieldBloc.addAsyncValidators([_validatepassword]);
-  }
-
-  Future<String> _validateusername(String tusername) async {
-    // validate if username exists
-    await Future<void>.delayed(Duration(milliseconds: 200));
-    if (!await Auth.checkUsernameAvailability(tusername)) {
-      return "Username already taken";
-    }
-
-    if (tusername.length < 3) {
-      return "too short username";
-    }
-
-    return null;
   }
 
   Future<String> _validateemail(String temail) async {
@@ -61,23 +45,24 @@ class RegisterFormBloc extends FormBloc<String, String> {
       return isValid;
     }
     await Future<void>.delayed(Duration(milliseconds: 200));
-    if (!await Auth.checkemailAvailability(temail)) {
-      return "Email already exists";
+    if (await Auth.checkemailAvailability(temail)) {
+      return "Email doesn't exists";
     }
 
     return null;
   }
 
   Future<String> _validatepassword(String tpass) async {
-    // validate if username exists
-    return Auth.validatePassword(tpass);
+    if (tpass == null || tpass.isEmpty) {
+      return "Password can\'t be empty";
+    }
+    return null;
   }
 
   StreamSubscription<TextFieldBlocState> _textFieldBlocSubscription;
 
   @override
   void dispose() {
-    _usernameFieldBloc.dispose();
     _emailFieldBloc.dispose();
     _passwordFieldBloc.dispose();
     _textFieldBlocSubscription.cancel();
@@ -87,29 +72,19 @@ class RegisterFormBloc extends FormBloc<String, String> {
   @override
   Stream<FormBlocState<String, String>> onSubmitting() async* {
     try {
-      await Auth.registerUser(_emailFieldBloc.value, _passwordFieldBloc.value,
-          _usernameFieldBloc.value);
-      String uID = Auth.getCurrentUserID();
-      DocumentReference reference =
-          FirebaseFirestore.instance.doc('User/' + uID);
-      reference.set({
-        'email': _emailFieldBloc.value,
-        'userName': _usernameFieldBloc.value,
-      });
+      await Auth.loginUser(_emailFieldBloc.value, _passwordFieldBloc.value);
 
       yield currentState.toSuccess();
     } catch (e) {
-      yield currentState.toFailure(e);
+      String err = Auth.AuthErrorMessage(e);
+      yield currentState.toFailure(err);
     }
   }
 }
 
-class RegisterPage extends StatelessWidget {
-  String displayName;
+class LoginPage extends StatelessWidget {
   String email;
   String password;
-  File _image;
-  final picker = ImagePicker();
 
   bool isLoading = false;
 
@@ -117,15 +92,14 @@ class RegisterPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return new WillPopScope(
         onWillPop: () async => false,
-        child: BlocProvider<RegisterFormBloc>(
-          builder: (context) => RegisterFormBloc(),
+        child: BlocProvider<LoginFormBloc>(
+          builder: (context) => LoginFormBloc(),
           child: Builder(
             builder: (context) {
-              final _registerFormBloc =
-                  BlocProvider.of<RegisterFormBloc>(context);
+              final _LoginFormBloc = BlocProvider.of<LoginFormBloc>(context);
               CommonThings.size = MediaQuery.of(context).size;
               return Scaffold(
-                body: FormBlocListener<RegisterFormBloc, String, String>(
+                body: FormBlocListener<LoginFormBloc, String, String>(
                   onSubmitting: (context, state) {
                     // Show the progress dialog
                     showDialog(
@@ -150,7 +124,7 @@ class RegisterPage extends StatelessWidget {
                     // Hide the progress dialog
                     Navigator.of(context).pop();
                     Fluttertoast.showToast(
-                        msg: "Signed Up Successfully",
+                        msg: "Logged In Successfully",
                         toastLength: Toast.LENGTH_LONG,
                         gravity: ToastGravity.CENTER,
                         timeInSecForIosWeb: 1,
@@ -158,14 +132,24 @@ class RegisterPage extends StatelessWidget {
                         textColor: Colors.white,
                         fontSize: 16.0);
                     // Navigate to success screen
-                    Navigator.of(context).pushReplacement(
-                        MaterialPageRoute(builder: (_) => MoreInfoPage()));
+
+                    if (Auth.isLoggedIn()) {
+                      if (Auth.isVerified()) {
+                        Navigator.push(context, MaterialPageRoute(builder: (_) {
+                          return new homePageView();
+                        }));
+                      } else {
+                        Navigator.push(context, MaterialPageRoute(builder: (_) {
+                          return new VerifyEmail();
+                        }));
+                      }
+                    }
                   },
                   onFailure: (context, state) {
                     // Hide the progress dialog
                     Navigator.of(context).pop();
                     Fluttertoast.showToast(
-                        msg: "An error accured",
+                        msg: state.failureResponse,
                         toastLength: Toast.LENGTH_LONG,
                         gravity: ToastGravity.CENTER,
                         timeInSecForIosWeb: 1,
@@ -207,7 +191,7 @@ class RegisterPage extends StatelessWidget {
                                           height:
                                               CommonThings.size.height * 0.03),
                                       Text(
-                                        'New Account',
+                                        'Login',
                                         style: TextStyle(
                                             color: Colors.grey[800],
                                             fontWeight: FontWeight.bold,
@@ -216,56 +200,12 @@ class RegisterPage extends StatelessWidget {
                                       ),
                                       SizedBox(
                                           height:
-                                              CommonThings.size.height * 0.03),
-                                      Container(
-                                        width: 250.0,
-                                        child: TextFieldBlocBuilder(
-                                          textFieldBloc: _registerFormBloc
-                                              ._usernameFieldBloc,
-                                          suffixButton: SuffixButton
-                                              .circularIndicatorWhenIsAsyncValidating,
-                                          //
-                                          decoration: new InputDecoration(
-                                            border: UnderlineInputBorder(
-                                                borderSide: BorderSide(
-                                                    color: Colors.red)),
-                                            focusedBorder: UnderlineInputBorder(
-                                              borderSide: BorderSide(
-                                                  color: Colors.indigo,
-                                                  width: 2.0),
-                                            ),
-                                            enabledBorder: UnderlineInputBorder(
-                                              borderSide: BorderSide(
-                                                  color: Colors.indigo),
-                                            ),
-                                            disabledBorder:
-                                                UnderlineInputBorder(
-                                                    borderSide: BorderSide(
-                                                        color: Colors.red)),
-                                            errorBorder: UnderlineInputBorder(
-                                                borderSide: BorderSide(
-                                                    color: Colors.red)),
-                                            contentPadding: EdgeInsets.only(
-                                                left: 15,
-                                                bottom: 11,
-                                                top: 11,
-                                                right: 15),
-                                            hintText: "username",
-                                            prefixIcon: const Icon(
-                                              Icons.person,
-                                              color: Colors.green,
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                      SizedBox(
-                                          height:
                                               CommonThings.size.height * 0.01),
                                       Container(
                                         width: 250.0,
                                         child: TextFieldBlocBuilder(
                                           textFieldBloc:
-                                              _registerFormBloc._emailFieldBloc,
+                                              _LoginFormBloc._emailFieldBloc,
                                           suffixButton: SuffixButton
                                               .circularIndicatorWhenIsAsyncValidating,
                                           //
@@ -308,8 +248,8 @@ class RegisterPage extends StatelessWidget {
                                       Container(
                                         width: 250.0,
                                         child: TextFieldBlocBuilder(
-                                          textFieldBloc: _registerFormBloc
-                                              ._passwordFieldBloc,
+                                          textFieldBloc:
+                                              _LoginFormBloc._passwordFieldBloc,
 
                                           suffixButton:
                                               SuffixButton.obscureText,
@@ -351,16 +291,16 @@ class RegisterPage extends StatelessWidget {
                                           height:
                                               CommonThings.size.height * 0.035),
                                       RoundedButton(
-                                        text: "Register",
+                                        text: "Login",
                                         color: Colors.indigo,
                                         textColor: Colors.white,
-                                        press: _registerFormBloc.submit,
+                                        press: _LoginFormBloc.submit,
                                       ),
                                       SizedBox(
                                           height:
                                               CommonThings.size.height * 0.003),
                                       RoundedButton(
-                                        text: "Already have account?",
+                                        text: "Don't have an account?",
                                         color: Colors.blue[100],
                                         textColor: Colors.black,
                                         press: () async {
@@ -368,7 +308,23 @@ class RegisterPage extends StatelessWidget {
 
                                           Navigator.push(context,
                                               MaterialPageRoute(builder: (_) {
-                                            return LoginPage();
+                                            return RegisterPage();
+                                          }));
+                                        },
+                                      ),
+                                      SizedBox(
+                                          height:
+                                              CommonThings.size.height * 0.003),
+                                      RoundedButton(
+                                        text: "Forgot password?",
+                                        color: Colors.blue[100],
+                                        textColor: Colors.black,
+                                        press: () {
+                                          // call login
+
+                                          Navigator.push(context,
+                                              MaterialPageRoute(builder: (_) {
+                                            return ForgotPassword();
                                           }));
                                         },
                                       ),

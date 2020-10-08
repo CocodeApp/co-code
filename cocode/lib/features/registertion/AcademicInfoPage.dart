@@ -1,17 +1,17 @@
 import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:cocode/Background.dart';
-import 'package:cocode/ForgotPassword.dart';
+import 'package:cocode/features/welcomePage/Background.dart';
+import 'package:cocode/features/Login/ForgotPassword.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'Auth.dart';
-import 'features/homePage/homePage.dart';
+import 'package:cocode/Auth.dart';
+import 'package:cocode/features/homePage/homePageView.dart';
 import 'RegisterPage.dart';
-import 'VerifyEmail.dart';
-import 'buttons/RoundeButton.dart';
-import 'services/database.dart';
+import 'package:cocode/features/verifyEmail/VerifyEmail.dart';
+import 'package:cocode/buttons/RoundeButton.dart';
+import 'package:cocode/services/database.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'Background.dart';
+import 'package:cocode/features/welcomePage/Background.dart';
 
 class CommonThings {
   static Size size;
@@ -203,7 +203,7 @@ class _AcademicInfoPageState extends State<AcademicInfoPage> {
                                         if (Auth.isVerified()) {
                                           Navigator.push(context,
                                               MaterialPageRoute(builder: (_) {
-                                            return new homePage();
+                                            return new homePageView();
                                           }));
                                         } else {
                                           Navigator.push(context,
@@ -224,7 +224,7 @@ class _AcademicInfoPageState extends State<AcademicInfoPage> {
                                         if (Auth.isVerified()) {
                                           Navigator.push(context,
                                               MaterialPageRoute(builder: (_) {
-                                            return new homePage();
+                                            return new homePageView();
                                           }));
                                         } else {
                                           Navigator.push(context,
