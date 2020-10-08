@@ -345,7 +345,7 @@ class ProjectDetails extends StatelessWidget {
                                         horizontal: 50.0,
                                       ),
                                       child: Text(
-                                        "Posts   gg",
+                                        "Posts",
                                         style: TextStyle(
                                             color: Colors.white,
                                             fontSize: 20.0),
@@ -383,8 +383,7 @@ class ProjectDetails extends StatelessWidget {
                                                 MaterialPageRoute(builder: (_) {
                                               return Members(
                                                   projectId: id,
-                                                  leader:
-                                                      user); //to list of applicants
+                                                  leader: user); //update
                                             }));
                                           },
                                           shape: const StadiumBorder(),
