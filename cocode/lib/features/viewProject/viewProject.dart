@@ -1,3 +1,4 @@
+import 'package:cocode/features/acceptReject/Members.dart';
 import 'package:cocode/features/userProfile.dart/userProfile.dart';
 import 'package:cocode/features/homePage/homePageView.dart';
 import 'package:cocode/features/viewProject/skills.dart';
@@ -344,7 +345,7 @@ class ProjectDetails extends StatelessWidget {
                                         horizontal: 50.0,
                                       ),
                                       child: Text(
-                                        "Posts",
+                                        "Posts   gg",
                                         style: TextStyle(
                                             color: Colors.white,
                                             fontSize: 20.0),
@@ -360,7 +361,7 @@ class ProjectDetails extends StatelessWidget {
                                   ),
                                 ),
                                 Center(
-                                  child: listofwhat == ""
+                                  child: listofwhat != ""
                                       ? RawMaterialButton(
                                           elevation: 80.0,
                                           fillColor: const Color(0XFF2A4793),
@@ -380,7 +381,10 @@ class ProjectDetails extends StatelessWidget {
                                           onPressed: () {
                                             Navigator.push(context,
                                                 MaterialPageRoute(builder: (_) {
-                                              return profilePage(); //to list of applicants
+                                              return Members(
+                                                  projectId: id,
+                                                  leader:
+                                                      user); //to list of applicants
                                             }));
                                           },
                                           shape: const StadiumBorder(),
