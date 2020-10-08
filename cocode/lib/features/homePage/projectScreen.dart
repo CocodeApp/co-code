@@ -16,6 +16,7 @@ class ProjectScreen extends KFDrawerContent {
 }
 
 class _ProjectScreenState extends State<ProjectScreen> {
+  List<Widget> screens = [needTeamMember(), needSupervisor()];
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
@@ -42,18 +43,18 @@ class _ProjectScreenState extends State<ProjectScreen> {
                       alignment: Alignment.center,
                       child: Text("Need Team Member"),
                     ),
-                  ), Tab(
+                  ),
+                  Tab(
                     child: Align(
                       alignment: Alignment.center,
                       child: Text("Need Supervisor"),
                     ),
                   ),
-                ]
-            ),
+                ]),
           ),
         ),
         body: TabBarView(
-          children: [needTeamMember(), needSupervisor()],
+          children: screens,
         ),
       ),
     );

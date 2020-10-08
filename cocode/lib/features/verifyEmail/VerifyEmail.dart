@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:cocode/features/homePage/homePageView.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -42,7 +43,7 @@ class _VerifyEmailState extends State<VerifyEmail> {
                         key: _formKey,
                         child: Center(
                             child: new Container(
-                                height: 300.0,
+                                height: 400.0,
                                 width: 300,
                                 decoration: new BoxDecoration(
                                   color: Colors.white,
@@ -59,21 +60,27 @@ class _VerifyEmailState extends State<VerifyEmail> {
                                 child: Center(
                                     child: Column(
                                   children: <Widget>[
-                                    SizedBox(height: 20,),
+                                    SizedBox(
+                                      height: 20,
+                                    ),
                                     Icon(
                                       Icons.lock,
                                       color: Colors.green,
+                                      size: 50.0,
                                     ),
-                                    SizedBox(height: 8,),
+                                    SizedBox(
+                                      height: 8,
+                                    ),
                                     Container(
                                       child: Text(
                                         'Verify your email',
                                         style: TextStyle(
                                             color: Colors.grey[800],
                                             fontWeight: FontWeight.bold,
-                                            fontSize: 15),
+                                            fontSize: 20),
                                       ),
                                     ),
+                                    SizedBox(height: 10),
                                     Text(
                                       email,
                                       style: TextStyle(
@@ -81,7 +88,43 @@ class _VerifyEmailState extends State<VerifyEmail> {
                                           fontWeight: FontWeight.bold,
                                           fontSize: 15),
                                     ),
-                                    SizedBox(height: 20,),
+                                    SizedBox(height: 10),
+                                    RoundedButton(
+                                      text: "Done",
+                                      color: Colors.indigo,
+                                      textColor: Colors.white,
+                                      press: () async {
+                                        if (_formKey.currentState.validate()) {
+                                          // call login
+                                          Auth.auth.currentUser
+                                              .reload()
+                                              .then((void nothing) {
+                                            if (Auth.auth.currentUser
+                                                .emailVerified) {
+                                              Navigator.push(context,
+                                                  MaterialPageRoute(
+                                                      builder: (_) {
+                                                return new homePageView();
+                                              }));
+                                            } else {
+                                              Fluttertoast.showToast(
+                                                  msg: "Email not verified yet",
+                                                  toastLength:
+                                                      Toast.LENGTH_LONG,
+                                                  gravity: ToastGravity.TOP,
+                                                  timeInSecForIosWeb: 1,
+                                                  backgroundColor:
+                                                      Colors.blueAccent,
+                                                  textColor: Colors.white,
+                                                  fontSize: 16.0);
+                                            }
+                                          });
+                                        }
+                                      },
+                                    ),
+                                    SizedBox(
+                                      height: 20,
+                                    ),
                                     RoundedButton(
                                       text: "Send Again",
                                       color: Colors.deepOrangeAccent,
@@ -104,7 +147,7 @@ class _VerifyEmailState extends State<VerifyEmail> {
                                                   msg: "Email Sent",
                                                   toastLength:
                                                       Toast.LENGTH_LONG,
-                                                  gravity: ToastGravity.CENTER,
+                                                  gravity: ToastGravity.TOP,
                                                   timeInSecForIosWeb: 1,
                                                   backgroundColor:
                                                       Colors.blueAccent,
@@ -115,7 +158,7 @@ class _VerifyEmailState extends State<VerifyEmail> {
                                             Fluttertoast.showToast(
                                                 msg: "${e.message}",
                                                 toastLength: Toast.LENGTH_LONG,
-                                                gravity: ToastGravity.CENTER,
+                                                gravity: ToastGravity.TOP,
                                                 timeInSecForIosWeb: 1,
                                                 backgroundColor:
                                                     Colors.blueAccent,

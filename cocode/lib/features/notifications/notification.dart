@@ -11,15 +11,6 @@ class notification extends KFDrawerContent {
 class _notificationState extends State<notification> {
   @override
   Widget build(BuildContext context) {
-    String email = Auth.getCurrentUserEmail();
-    String userName = Auth.getCurrentUsername();
-    String ID = Auth.getCurrentUserID();
-    String firstName = '';
-    String lastName = '';
-    String major = '';
-    String university = '';
-    CollectionReference users = FirebaseFirestore.instance.collection('User');
-
     return Container();
   }
 }
