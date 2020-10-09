@@ -204,7 +204,7 @@ class ProjectDetails extends StatelessWidget {
         : startdate = data['startdate'];
 
     return SingleChildScrollView(
-        child: Column(
+        child: ListView(
       children: [
         SizedBox(
           height: 30,
