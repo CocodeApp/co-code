@@ -39,9 +39,16 @@ class _settingsPageState extends State<settingsPage> {
   }
 
   Widget build(BuildContext context) {
-    return new WillPopScope(
-      onWillPop: () async => false,
-      child: FutureBuilder<DocumentSnapshot>(
+    return new Scaffold(
+      appBar: AppBar(
+        centerTitle: true,
+        backgroundColor: Colors.blue,
+        title: Text(
+          "Edit Account",
+          textAlign: TextAlign.center,
+        ),
+      ),
+      body: FutureBuilder<DocumentSnapshot>(
         future: Auth.getcurrentUserInfo(),
         builder: (context, AsyncSnapshot<DocumentSnapshot> snapshot) {
           if (snapshot.hasData) {
@@ -56,10 +63,6 @@ class _settingsPageState extends State<settingsPage> {
                     padding: const EdgeInsets.all(10.0),
                     child: ListView(
                       children: <Widget>[
-                        Padding(
-                            padding: const EdgeInsets.all(10.0),
-                            child: Text('Account Settings',
-                                style: TextStyle(fontSize: 20))),
                         Card(
                           child: ListTile(
                               leading: GestureDetector(
@@ -341,4 +344,3 @@ class _settingsPageState extends State<settingsPage> {
     );
   }
 }
-//
