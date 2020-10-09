@@ -17,6 +17,7 @@ class MembersList extends StatefulWidget {
 class _MembersListState extends State<MembersList> {
   ValueNotifier<List> tempMember = ValueNotifier<List>([]);
   String role;
+  String projectName;
   @override
   Widget build(BuildContext context) {
     Future<void> getTempList() async {
@@ -29,6 +30,7 @@ class _MembersListState extends State<MembersList> {
       await leaderRef.then((value) {
         var data = value.data();
         role = data['role'];
+        projectName = data['projectName'];
         tempMember.value = data["tempList"];
         print(widget.projectId);
         print(tempMember.value.length);
@@ -129,7 +131,8 @@ class _MembersListState extends State<MembersList> {
                                     .collection('myProjects')
                                     .doc(widget.projectId)
                                     .set({
-                                      'projectName': "", //to fill later
+                                      'projectName':
+                                          projectName, //to fill later
                                       'role': "supervisor",
                                       'tempList': [],
                                     })
@@ -190,7 +193,8 @@ class _MembersListState extends State<MembersList> {
                                     .collection('myProjects')
                                     .doc(widget.projectId)
                                     .set({
-                                      'projectName': "", //to fill later
+                                      'projectName':
+                                          projectName, //to fill later
                                       'role': "team member",
                                     })
                                     .then((value) =>
