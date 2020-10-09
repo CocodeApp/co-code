@@ -323,6 +323,7 @@ class ProjectDetails extends StatelessWidget {
                           List listofmembers = data['teamMembers'];
                           String currentSuper = data['supervisor'];
                           String currentOwner = data['ideaOwner'];
+                          String project = data['projectName'];
                           String user = Auth.getCurrentUserID();
                           String listofwhat = "";
                           if (currentSuper.compareTo(user) == 0)
@@ -384,8 +385,11 @@ class ProjectDetails extends StatelessWidget {
                                             Navigator.push(context,
                                                 MaterialPageRoute(builder: (_) {
                                               return Members(
-                                                  projectId: id,
-                                                  leader: user); //update
+                                                projectId: id,
+                                                leader: user,
+                                                header:
+                                                    "Applicants in " + project,
+                                              );
                                             }));
                                           },
                                           shape: const StadiumBorder(),
