@@ -20,8 +20,8 @@ class profilePage extends KFDrawerContent {
 }
 
 class _profilePageState extends State<profilePage> {
-  String currentName = Auth.getCurrentUsername();
-  String email = Auth.getCurrentUserEmail();
+  String currentName = "";
+  String email = '';
   String id = Auth.getCurrentUserID();
 
   @override
@@ -44,6 +44,10 @@ class _profilePageState extends State<profilePage> {
                 .doc(id)
                 .collection('myProjects');
             List<dynamic> skills = data['skills'];
+
+            currentName = data['firstName'] + " " + data['lastName'];
+            email = data[email];
+
             return Scaffold(
                 backgroundColor: Colors.white,
                 appBar: AppBar(
@@ -62,7 +66,7 @@ class _profilePageState extends State<profilePage> {
                   centerTitle: true,
                   backgroundColor: Colors.white,
                   title: Text(
-                    '@' + currentName, // user name at top of the page
+                    '@' + data['userName'], // user name at top of the page
                     textAlign: TextAlign.center,
                     style: TextStyle(color: Color(0xff2A4793)),
                   ),
@@ -199,7 +203,7 @@ class _profilePageState extends State<profilePage> {
             // );
           },
           child: Text(
-            "Edit Skills",
+            "", //edit skills
             style: TextStyle(color: Colors.grey, fontSize: 17),
           ),
         )
@@ -336,7 +340,7 @@ class _profilePageState extends State<profilePage> {
                       Row(
                         children: <Widget>[
                           Text(
-                            '📧 ' + email,
+                            '📧 ' + data['email'],
                             style: TextStyle(
                                 color: Color(0xff2A4793),
                                 fontSize:
@@ -446,15 +450,6 @@ class _profilePageState extends State<profilePage> {
           ),
         ],
       ),
-    );
-  }
-
-  Widget skillsList(List skills) {
-    return ListView.builder(
-      itemCount: skills.length,
-      itemBuilder: (context, index) {
-        return skillAndLevel(skills[index]['name'], skills[index]['value']);
-      },
     );
   }
 }

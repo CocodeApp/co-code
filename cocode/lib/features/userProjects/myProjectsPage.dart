@@ -48,6 +48,7 @@ class _userProjectsState extends State<userProjects> {
               itemCount: doc.length,
               itemBuilder: (context, index) {
                 Map data = doc[index].data();
+                print(data['projectName']);
                 return Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: Card(
@@ -63,7 +64,7 @@ class _userProjectsState extends State<userProjects> {
                                   data['projectName'],
                                   textAlign: TextAlign.left,
                                   style: TextStyle(
-                                    fontSize: 16,
+                                    fontSize: 10,
                                   ),
                                 ),
                               ),

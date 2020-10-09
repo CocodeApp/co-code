@@ -16,9 +16,13 @@ class ProjectScreen extends KFDrawerContent {
 }
 
 class _ProjectScreenState extends State<ProjectScreen> {
-  List<Widget> screens = [needTeamMember(), needSupervisor()];
+  List<Widget> screens;
+
   @override
   Widget build(BuildContext context) {
+    setState(() {
+      screens = [needTeamMember(), needSupervisor()];
+    });
     return DefaultTabController(
       length: 2, //our tabs
       child: Scaffold(

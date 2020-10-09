@@ -75,26 +75,20 @@ class _teamMembersListState extends State<teamMembersList> {
                       ),
                     ],
                   ),
-                  child: InkWell(
-                    //A rectangular area of a Material that responds to touch.
-                    splashColor: Colors.blue.withAlpha(30),
-                    onTap: () {
-                      //view Profile goes here
-                    },
-                    child: Padding(
-                      padding: const EdgeInsets.only(left: 40.0),
-                      child: ListTile(
-                        //this widget contain the project details
+                  child: Padding(
+                    padding: const EdgeInsets.only(left: 40.0),
+                    child: ListTile(
+                      //this widget contain the project details
 
-                        title: getuserFullNamewidget(allmembers[index]["Id"]),
-                        subtitle: Text(allmembers[index]["Role"]),
-                        onTap: () {
-                          Navigator.push(context,
-                              MaterialPageRoute(builder: (_) {
-                            return profilePage(); //sa
-                          }));
-                        },
-                      ),
+                      title: getuserFullNamewidget(allmembers[index]["Id"]),
+                      subtitle: Text(allmembers[index]["Role"]),
+                      onTap: () {
+                        Navigator.push(context, MaterialPageRoute(builder: (_) {
+                          return profilePage(
+                            userId: allmembers[index]["Id"],
+                          ); //sa
+                        }));
+                      },
                     ),
                   ),
                 ),

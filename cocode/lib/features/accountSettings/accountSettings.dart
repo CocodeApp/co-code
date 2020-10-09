@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_form_bloc/flutter_form_bloc.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:form_bloc/form_bloc.dart';
+import 'package:kf_drawer/kf_drawer.dart';
 import 'dart:async';
 
 import '../../Auth.dart';
@@ -18,7 +19,7 @@ class CommonThings {
 }
 
 //Storing Account Info
-class settingsPage extends StatefulWidget {
+class settingsPage extends KFDrawerContent {
   @override
   _settingsPageState createState() => _settingsPageState();
 }
@@ -52,21 +53,31 @@ class _settingsPageState extends State<settingsPage> {
             AccountInfo.lastname = this.lastname = data['lastName'];
 
             return Scaffold(
+                backgroundColor: Colors.white,
+                appBar: AppBar(
+                  title: Text('Account Settings',
+                      style: TextStyle(fontSize: 20, color: Colors.indigo)),
+                  elevation: 0,
+                  backgroundColor: Colors.white,
+                  leading: IconButton(
+                    icon: Icon(
+                      Icons.menu,
+                      color: Colors.deepOrangeAccent,
+                    ),
+                    onPressed: widget.onMenuPressed,
+                  ),
+                ),
                 body: Padding(
                     padding: const EdgeInsets.all(10.0),
                     child: ListView(
                       children: <Widget>[
-                        Padding(
-                            padding: const EdgeInsets.all(10.0),
-                            child: Text('Account Settings',
-                                style: TextStyle(fontSize: 20))),
                         Card(
                           child: ListTile(
                               leading: GestureDetector(
                                 child: Hero(
                                     tag: 'username',
                                     child: CircleAvatar(
-                                      backgroundColor: Colors.blue,
+                                      backgroundColor: Colors.indigo,
                                       foregroundColor: Colors.white,
                                       radius: 20,
                                       child: Icon(
@@ -109,7 +120,7 @@ class _settingsPageState extends State<settingsPage> {
                               child: Hero(
                                 tag: 'name',
                                 child: CircleAvatar(
-                                  backgroundColor: Colors.blue,
+                                  backgroundColor: Colors.indigo,
                                   child: Icon(
                                     Icons.face,
                                     color: Colors.white,
@@ -153,7 +164,7 @@ class _settingsPageState extends State<settingsPage> {
                               child: Hero(
                                   tag: 'email',
                                   child: CircleAvatar(
-                                    backgroundColor: Colors.blue,
+                                    backgroundColor: Colors.indigo,
                                     child: Icon(
                                       Icons.mail_outline,
                                       color: Colors.white,
@@ -189,7 +200,7 @@ class _settingsPageState extends State<settingsPage> {
                               child: Hero(
                                   tag: 'password',
                                   child: CircleAvatar(
-                                    backgroundColor: Colors.blue,
+                                    backgroundColor: Colors.indigo,
                                     child: Icon(
                                       Icons.vpn_key,
                                       color: Colors.white,
@@ -251,7 +262,7 @@ class _settingsPageState extends State<settingsPage> {
                                                                 Icon(
                                                                   Icons.vpn_key,
                                                                   color: Colors
-                                                                      .blue,
+                                                                      .indigo,
                                                                   size: 50.0,
                                                                 ),
                                                                 SizedBox(
@@ -280,7 +291,7 @@ class _settingsPageState extends State<settingsPage> {
                                                                             child: Column(children: <Widget>[
                                                                       OutlineButton(
                                                                         textColor:
-                                                                            Colors.blue,
+                                                                            Colors.indigo,
                                                                         highlightedBorderColor: Colors
                                                                             .black
                                                                             .withOpacity(0.12),
@@ -301,7 +312,7 @@ class _settingsPageState extends State<settingsPage> {
                                     toastLength: Toast.LENGTH_LONG,
                                     gravity: ToastGravity.TOP,
                                     timeInSecForIosWeb: 1,
-                                    backgroundColor: Colors.blueAccent,
+                                    backgroundColor: Colors.indigo,
                                     textColor: Colors.white,
                                     fontSize: 16.0);
 

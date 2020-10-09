@@ -1,3 +1,4 @@
+import 'package:cocode/features/accountSettings/accountSettings.dart';
 import 'package:flutter/material.dart';
 import 'package:cocode/features/userProjects/myProjectsPage.dart';
 import 'package:cocode/features/userProfile.dart/userProfile.dart';
@@ -36,6 +37,11 @@ class _homePageViewState extends State<homePageView> {
           icon: Icon(Icons.work, color: Colors.white),
           page: userProjects(),
         ),
+        KFDrawerItem.initWithPage(
+          text: Text('settings', style: TextStyle(color: Colors.white)),
+          icon: Icon(Icons.settings, color: Colors.white),
+          page: settingsPage(),
+        ),
       ],
       initialPage: homePageController(),
     );
@@ -63,6 +69,13 @@ class _homePageViewState extends State<homePageView> {
                       backgroundImage: AssetImage("imeges/man.png"),
                       radius: 40,
                     ),
+                    onTap: () {
+                      Navigator.push(context, MaterialPageRoute(builder: (_) {
+                        return profilePage(
+                          userId: Auth.getCurrentUserID(),
+                        ); //sa
+                      }));
+                    },
                   ),
                   SizedBox(
                     height: 20,

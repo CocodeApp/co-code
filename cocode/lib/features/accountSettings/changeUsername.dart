@@ -126,7 +126,7 @@ class _ChangeUsernameState extends State<ChangeUsername> {
                       toastLength: Toast.LENGTH_LONG,
                       gravity: ToastGravity.TOP,
                       timeInSecForIosWeb: 1,
-                      backgroundColor: Colors.blueAccent,
+                      backgroundColor: Color(0xff2A4793),
                       textColor: Colors.white,
                       fontSize: 16.0);
                   // Navigate to success screen
@@ -140,20 +140,22 @@ class _ChangeUsernameState extends State<ChangeUsername> {
                       toastLength: Toast.LENGTH_LONG,
                       gravity: ToastGravity.TOP,
                       timeInSecForIosWeb: 1,
-                      backgroundColor: Colors.blueAccent,
+                      backgroundColor: Color(0xff2A4793),
                       textColor: Colors.white,
                       fontSize: 16.0);
                   // Show snackbar with the error
                 },
                 child: Scaffold(
                   appBar: AppBar(
+                    elevation: 0,
                     leading: Container(),
                     centerTitle: true,
-                    backgroundColor: Color(0xff2A4793),
-                    title: Text(
-                      "Change Username",
-                      textAlign: TextAlign.center,
-                    ),
+                    backgroundColor: Colors.white,
+                    title: Text("Change Username",
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          color: Color(0xff2A4793),
+                        )),
                   ),
                   body: Center(
                       child: SingleChildScrollView(
@@ -166,7 +168,7 @@ class _ChangeUsernameState extends State<ChangeUsername> {
                               child: Hero(
                                 tag: 'username',
                                 child: CircleAvatar(
-                                  backgroundColor: Colors.blue,
+                                  backgroundColor: Color(0xff2A4793),
                                   foregroundColor: Colors.white,
                                   radius: 40,
                                   child: Icon(

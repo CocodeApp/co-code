@@ -40,7 +40,9 @@ class _viewProjectState extends State<viewProject> {
                 elevation: 0,
                 leading: BackButton(
                   color: Colors.indigo,
-                  onPressed: () => (Navigator.pop(context)),
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
                 ),
                 backgroundColor: Colors.white,
                 title: Text(
