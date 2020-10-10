@@ -43,7 +43,10 @@ class _viewProjectState extends State<viewProject> {
                 elevation: 0,
                 leading: BackButton(
                   color: Colors.indigo,
-                  onPressed: () => (Navigator.pop(context)),
+                  onPressed: () { Navigator.push(context,
+                    MaterialPageRoute(builder: (_) {
+                      return homePageView();
+                    }));}
                 ),
                 backgroundColor: Colors.white,
                 title: Text(
@@ -220,7 +223,6 @@ class ProjectDetails extends StatelessWidget {
         ),
         SizedBox(
           width: 350,
-          height: 350,
           child: Card(
             color: new Color(0xFFdfe7f2),
             shape: RoundedRectangleBorder(
@@ -337,71 +339,78 @@ class ProjectDetails extends StatelessWidget {
                           if (listofmembers.contains(Auth.getCurrentUserID()) ||
                               currentSuper.compareTo(user) == 0 ||
                               currentOwner.compareTo(user) == 0) {
-                            return Column(
-                              children: <Widget>[
-                                Center(
-                                  child: RawMaterialButton(
-                                    elevation: 80.0,
-                                    fillColor: const Color(0XFF2A4793),
-                                    splashColor: const Color(0xff2980b9),
-                                    child: Padding(
-                                      padding: const EdgeInsets.symmetric(
-                                        vertical: 10.0,
-                                        horizontal: 50.0,
-                                      ),
-                                      child: Text(
-                                        "Posts",
-                                        style: TextStyle(
-                                            color: Colors.white,
-                                            fontSize: 20.0),
-                                      ),
-                                    ),
-                                    onPressed: () {
-                                      Navigator.push(context,
-                                          MaterialPageRoute(builder: (_) {
-                                        return profilePage(); //update
-                                      }));
-                                    },
-                                    shape: const StadiumBorder(),
-                                  ),
-                                ),
-                                Center(
-                                  child: listofwhat != ""
-                                      ? RawMaterialButton(
-                                          elevation: 80.0,
-                                          fillColor: const Color(0XFF2A4793),
-                                          splashColor: const Color(0xff2980b9),
-                                          child: Padding(
-                                            padding: const EdgeInsets.symmetric(
-                                              vertical: 10.0,
-                                              horizontal: 50.0,
-                                            ),
-                                            child: Text(
-                                              listofwhat,
-                                              style: TextStyle(
-                                                  color: Colors.white,
-                                                  fontSize: 20.0),
-                                            ),
-                                          ),
-                                          onPressed: () {
-                                            Navigator.push(context,
-                                                MaterialPageRoute(builder: (_) {
-                                              return Members(
-                                                projectId: id,
-                                                leader: user,
-                                                header:
-                                                    "Applicants in " + project,
-                                              );
-                                            }));
-                                          },
-                                          shape: const StadiumBorder(),
-                                        )
-                                      : SizedBox(
-                                          width: 3.0,
-                                          height: 3.0,
+                            return Padding(
+                              padding: const EdgeInsets.all(20.0),
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                children: <Widget>[
+                                  Center(
+                                    child: RawMaterialButton(
+                                      elevation: 80.0,
+                                      fillColor: const Color(0XFF2A4793),
+                                      splashColor: const Color(0xff2980b9),
+                                      child: Padding(
+                                        padding: const EdgeInsets.symmetric(
+                                          vertical: 10.0,
+                                          horizontal: 35.0,
                                         ),
-                                ),
-                              ],
+                                        child: Text(
+                                          "View Project Posts",
+                                          style: TextStyle(
+                                              color: Colors.white,
+                                              fontSize: 20.0),
+                                        ),
+                                      ),
+                                      onPressed: () {
+                                        Navigator.push(context,
+                                            MaterialPageRoute(builder: (_) {
+                                          return profilePage(); //update
+                                        }));
+                                      },
+                                      shape: const StadiumBorder(),
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    height: 5.0,
+                                  ),
+                                  Center(
+                                    child: listofwhat != ""
+                                        ? RawMaterialButton(
+                                            elevation: 80.0,
+                                            fillColor: const Color(0XFF2A4793),
+                                            splashColor: const Color(0xff2980b9),
+                                            child: Padding(
+                                              padding: const EdgeInsets.symmetric(
+                                                vertical: 10.0,
+                                                horizontal: 20.0,
+                                              ),
+                                              child: Text(
+                                                listofwhat,
+                                                style: TextStyle(
+                                                    color: Colors.white,
+                                                    fontSize: 20.0),
+                                              ),
+                                            ),
+                                            onPressed: () {
+                                              Navigator.push(context,
+                                                  MaterialPageRoute(builder: (_) {
+                                                return Members(
+                                                  projectId: id,
+                                                  leader: user,
+                                                  header:
+                                                      "Applicants in " + project,
+                                                );
+                                              }));
+                                            },
+                                            shape: const StadiumBorder(),
+                                          )
+                                        : SizedBox(
+                                            width: 3.0,
+                                            height: 3.0,
+                                          ),
+                                  ),
+                                ],
+                              ),
                             );
                           }
                         }
