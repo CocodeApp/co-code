@@ -15,7 +15,7 @@ class viewProject extends KFDrawerContent {
   var id;
 
   String tab;
-  viewProject({Key key, @required this.id, this.tab});
+  viewProject({Key key, @required this.id, @required this.tab});
   @override
   _viewProjectState createState() => _viewProjectState();
 }
@@ -46,10 +46,9 @@ class _viewProjectState extends State<viewProject> {
                 leading: BackButton(
                   color: Colors.indigo,
                   onPressed: () {
-                    Navigator.pop(context,
-                        MaterialPageRoute(builder: (_) {
-                          return homePageView();
-                        }));
+                    Navigator.pop(context, MaterialPageRoute(builder: (_) {
+                      return homePageView();
+                    }));
                   },
                 ),
                 backgroundColor: Colors.white,
@@ -346,7 +345,8 @@ class ProjectDetails extends StatelessWidget {
                             return Padding(
                               padding: const EdgeInsets.all(20.0),
                               child: Column(
-                                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceAround,
                                 children: <Widget>[
                                   Center(
                                     child: RawMaterialButton(
@@ -382,9 +382,11 @@ class ProjectDetails extends StatelessWidget {
                                         ? RawMaterialButton(
                                             elevation: 80.0,
                                             fillColor: const Color(0XFF2A4793),
-                                            splashColor: const Color(0xff2980b9),
+                                            splashColor:
+                                                const Color(0xff2980b9),
                                             child: Padding(
-                                              padding: const EdgeInsets.symmetric(
+                                              padding:
+                                                  const EdgeInsets.symmetric(
                                                 vertical: 10.0,
                                                 horizontal: 20.0,
                                               ),
@@ -397,12 +399,13 @@ class ProjectDetails extends StatelessWidget {
                                             ),
                                             onPressed: () {
                                               Navigator.push(context,
-                                                  MaterialPageRoute(builder: (_) {
+                                                  MaterialPageRoute(
+                                                      builder: (_) {
                                                 return Members(
                                                   projectId: id,
                                                   leader: user,
-                                                  header:
-                                                      "Applicants in " + project,
+                                                  header: "Applicants in " +
+                                                      project,
                                                 );
                                               }));
                                             },

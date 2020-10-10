@@ -57,8 +57,9 @@ class _userProjectsState extends State<userProjects> {
                       MaterialPageRoute(
                         builder: (context) {
                           return new viewProject(
-                              id: doc[index]
-                                  .id); //// latefa     // this must lead to the projects that user in
+                              id: doc[index].id,
+                              tab:
+                                  "member"); //// latefa     // this must lead to the projects that user in
                         },
                       ),
                     );
