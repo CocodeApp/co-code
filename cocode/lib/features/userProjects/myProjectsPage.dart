@@ -49,7 +49,7 @@ class _userProjectsState extends State<userProjects> {
               itemCount: doc.length,
               itemBuilder: (context, index) {
                 Map data = doc[index].data();
-                print(data['projectName']);
+
                 return InkWell(
                   onTap: () {
                     Navigator.push(
@@ -79,7 +79,7 @@ class _userProjectsState extends State<userProjects> {
                                     data['projectName'],
                                     textAlign: TextAlign.left,
                                     style: TextStyle(
-                                      fontSize: 10,
+                                      fontSize: 16,
                                     ),
                                   ),
                                 ),

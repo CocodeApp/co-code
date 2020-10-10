@@ -18,12 +18,13 @@ class _MembersState extends State<Members> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Color(0XFF2A4793),
+        elevation: 0,
+        backgroundColor: Colors.white,
         leading: BackButton(
-          color: Colors.indigo,
+          color: Colors.deepOrangeAccent,
           onPressed: () => (Navigator.pop(context)),
         ),
-        title: Text(widget.header),
+        title: Text(widget.header, style: TextStyle(color: Colors.indigo)),
       ),
       body: MembersList(
         projectId: widget.projectId,

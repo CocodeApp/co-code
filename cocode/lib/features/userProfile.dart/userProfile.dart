@@ -1,13 +1,8 @@
 import 'package:cocode/buttons/indicator.dart';
-import 'package:cocode/features/viewProject/teamMembersData.dart';
 import 'package:cocode/features/viewProject/viewProject.dart';
 import 'package:dots_indicator/dots_indicator.dart';
 import 'package:flutter/material.dart';
 import 'package:cocode/Auth.dart';
-import 'package:cocode/features/Login/LoginPage.dart';
-import 'package:cocode/features/registertion/MoreInfoPage.dart';
-import 'package:cocode/features/homePage/projectScreen.dart';
-import 'package:cocode/features/userProjects/myProjectsPage.dart';
 import 'EditProfilePage.dart';
 import 'package:percent_indicator/percent_indicator.dart';
 import 'package:kf_drawer/kf_drawer.dart';
@@ -173,13 +168,14 @@ class _profilePageState extends State<profilePage> {
         ),
       );
     }
-    return ListView.builder(
-      scrollDirection: Axis.vertical,
-      shrinkWrap: true,
-      itemCount: skills.length,
-      itemBuilder: (context, index) {
-        return skillAndLevel(skills[index]['name'], skills[index]['value']);
-      },
+    return Container(
+      constraints: BoxConstraints(minHeight: 150.0, maxHeight: 150),
+      child: ListView.builder(
+        itemCount: skills.length,
+        itemBuilder: (context, index) {
+          return skillAndLevel(skills[index]['name'], skills[index]['value']);
+        },
+      ),
     );
   }
 
