@@ -1,4 +1,5 @@
 import 'package:cocode/buttons/indicator.dart';
+import 'package:cocode/features/viewProject/teamMembersData.dart';
 import 'package:cocode/features/viewProject/viewProject.dart';
 import 'package:dots_indicator/dots_indicator.dart';
 import 'package:flutter/material.dart';
@@ -14,7 +15,9 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 class profilePage extends KFDrawerContent {
   var userId;
-  profilePage({Key key, @required this.userId});
+  Widget
+      previousPage; //I need to know what previous is it to detrmine dispplay arrow back button or menu button on appbar
+  profilePage({Key key, @required this.userId, this.previousPage});
   @override
   _profilePageState createState() => _profilePageState();
 }
@@ -27,7 +30,7 @@ class _profilePageState extends State<profilePage> {
   @override
   Widget build(BuildContext context) {
     CollectionReference users = FirebaseFirestore.instance.collection('User');
-
+    print(widget.previousPage);
     return FutureBuilder<DocumentSnapshot>(
         future: users.doc(widget.userId).get(),
         // ignore: missing_return
@@ -52,16 +55,16 @@ class _profilePageState extends State<profilePage> {
                 backgroundColor: Colors.white,
                 appBar: AppBar(
                   elevation: 0,
-                  leading: id == widget.userId
-                      ? IconButton(
+                  leading: widget.previousPage != null || id != widget.userId
+                      ? BackButton(
+                          color: Colors.deepOrangeAccent,
+                        )
+                      : IconButton(
                           icon: Icon(
                             Icons.menu,
                             color: Colors.deepOrangeAccent,
                           ),
                           onPressed: widget.onMenuPressed,
-                        )
-                      : BackButton(
-                          color: Colors.deepOrangeAccent,
                         ),
                   centerTitle: true,
                   backgroundColor: Colors.white,
@@ -100,7 +103,7 @@ class _profilePageState extends State<profilePage> {
                       //second part the white one
                       Padding(
                         padding: EdgeInsets.only(
-                          top: 230,
+                          top: 260,
                         ),
                         child: Container(
                           padding: EdgeInsets.only(bottom: 20),
@@ -116,14 +119,17 @@ class _profilePageState extends State<profilePage> {
                               child: Column(
                                 children: <Widget>[
                                   Padding(
-                                    padding:
-                                        EdgeInsets.only(top: 25, bottom: 20),
-                                    child: Text(
-                                      "My Projects",
-                                      style: TextStyle(
-                                          color: Color(0xff2A4793),
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 20),
+                                    padding: EdgeInsets.only(
+                                        top: 25, bottom: 20, left: 27),
+                                    child: Align(
+                                      alignment: Alignment.centerLeft,
+                                      child: Text(
+                                        "My Projects",
+                                        style: TextStyle(
+                                            color: Color(0xff2A4793),
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 16),
+                                      ),
                                     ),
                                   ),
                                   SizedBox(height: 3),
@@ -185,7 +191,7 @@ class _profilePageState extends State<profilePage> {
           style: TextStyle(
               color: Color(0xff2A4793),
               fontWeight: FontWeight.bold,
-              fontSize: 20),
+              fontSize: 16),
         ),
         SizedBox(
           width: 230,
@@ -252,8 +258,8 @@ class _profilePageState extends State<profilePage> {
                     MaterialPageRoute(
                       builder: (context) {
                         return new viewProject(
-                            id: doc[
-                                index]); //// latefa     // this must lead to the projects that user in
+                            id: doc[index]
+                                .id); //// latefa     // this must lead to the projects that user in
                       },
                     ),
                   );
@@ -263,8 +269,8 @@ class _profilePageState extends State<profilePage> {
                   children: [
                     Container(
 //project logo from database
-                      height: 0.12 * MediaQuery.of(context).size.height,
-                      width: 0.350 * MediaQuery.of(context).size.width,
+                      height: 0.10 * MediaQuery.of(context).size.height,
+                      width: 0.300 * MediaQuery.of(context).size.width,
                       child: ClipRRect(
                         borderRadius: BorderRadius.circular(20.0),
                         child: Image.asset(
@@ -299,8 +305,8 @@ class _profilePageState extends State<profilePage> {
       child: Padding(
           padding: EdgeInsets.only(
             // image position
-            left: 30.0,
-            right: 30.0,
+            left: 20.0,
+            // right: 30.0,
             top: 0.03 * MediaQuery.of(context).size.height,
           ),
           child: Column(
@@ -333,7 +339,7 @@ class _profilePageState extends State<profilePage> {
                         style: TextStyle(
                             color: Colors.black,
                             fontSize:
-                                0.093 * MediaQuery.of(context).size.width * 0.8,
+                                0.083 * MediaQuery.of(context).size.width * 0.8,
                             fontWeight: FontWeight.bold),
                       ),
                       SizedBox(height: 10),
@@ -357,7 +363,7 @@ class _profilePageState extends State<profilePage> {
                 children: <Widget>[
                   Container(
                     width: MediaQuery.of(context).size.width * 0.8,
-                    padding: const EdgeInsets.all(10.0),
+                    padding: const EdgeInsets.all(3.0),
                     alignment: Alignment.center,
 
                     /// max length must be 43
@@ -376,34 +382,33 @@ class _profilePageState extends State<profilePage> {
                   ),
                 ],
               ),
-              Row(
+              Column(
                 children: [
-                  SizedBox(width: 15),
-                  Text(
-                    data['major'] == null ? '' : 'Major: ' + data['major'],
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      fontSize: 16,
-                      color: Colors.black,
+                  SizedBox(width: 9),
+                  Align(
+                    alignment: Alignment.topLeft,
+                    child: Text(
+                      data['major'] == null ? '' : 'Major: ' + data['major'],
+                      style: TextStyle(
+                        fontSize: 16,
+                        color: Colors.black,
+                      ),
                     ),
                   ),
-                  Row(
-                    children: [
-                      SizedBox(
-                        width: 125,
-                        height: 10,
+                  SizedBox(
+                    height: 8,
+                  ),
+                  Align(
+                    alignment: Alignment.centerLeft,
+                    child: Text(
+                      data['university'] == null
+                          ? ''
+                          : 'University: ' + data['university'],
+                      style: TextStyle(
+                        fontSize: 16,
+                        color: Colors.black,
                       ),
-                      Text(
-                        data['university'] == null
-                            ? ''
-                            : 'University: ' + data['university'],
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                          fontSize: 16,
-                          color: Colors.black,
-                        ),
-                      ),
-                    ],
+                    ),
                   )
                 ],
               ),

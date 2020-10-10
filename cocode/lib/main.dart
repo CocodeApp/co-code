@@ -8,6 +8,7 @@ Future<void> main() async {
   await Firebase.initializeApp();
 
   runApp(MaterialApp(
+    theme: ThemeData(fontFamily: 'Open Sans'),
     home: await Auth.directoryPage(),
   ));
 }

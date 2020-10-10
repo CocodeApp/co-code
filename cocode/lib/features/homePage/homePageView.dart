@@ -69,13 +69,6 @@ class _homePageViewState extends State<homePageView> {
                       backgroundImage: AssetImage("imeges/man.png"),
                       radius: 40,
                     ),
-                    onTap: () {
-                      Navigator.push(context, MaterialPageRoute(builder: (_) {
-                        return profilePage(
-                          userId: Auth.getCurrentUserID(),
-                        ); //sa
-                      }));
-                    },
                   ),
                   SizedBox(
                     height: 20,

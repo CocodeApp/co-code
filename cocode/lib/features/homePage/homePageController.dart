@@ -31,12 +31,12 @@ class _homePageControllerState extends State<homePageController> {
     return Scaffold(
         appBar: AppBar(
           elevation: 0.0,
-          backgroundColor: Colors.indigo,
+          backgroundColor: Colors.white,
           title: Text(
             _currentIndex == 0
                 ? 'Explore'
                 : _currentIndex == 1 ? 'Notifications' : '',
-            style: TextStyle(color: Colors.white),
+            style: TextStyle(color: Colors.indigo),
           ),
           centerTitle: true,
           leading: IconButton(
@@ -50,7 +50,7 @@ class _homePageControllerState extends State<homePageController> {
         floatingActionButton: OpenContainer(
           closedShape: RoundedRectangleBorder(
               borderRadius: BorderRadius.all(Radius.circular(27.0))),
-          transitionDuration: Duration(milliseconds: 800),
+          transitionDuration: Duration(milliseconds: 600),
           closedBuilder: (context, action) {
             return FloatingActionButton(
               //for adding new Idea

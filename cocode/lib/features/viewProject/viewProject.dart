@@ -1,18 +1,20 @@
+import 'package:cocode/features/posts/posts.dart';
 import 'package:cocode/features/userProfile.dart/userProfile.dart';
 import 'package:cocode/features/homePage/homePageView.dart';
 import 'package:cocode/features/viewProject/skills.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:kf_drawer/kf_drawer.dart';
 import '../../Auth.dart';
 import 'teamMembersData.dart';
 import 'teamMembers.dart';
 import 'skills.dart';
 
-class viewProject extends StatefulWidget {
+class viewProject extends KFDrawerContent {
   var id;
 
   String tab;
-  viewProject({Key key, @required this.id, this.tab}) : super(key: key);
+  viewProject({Key key, @required this.id, this.tab});
   @override
   _viewProjectState createState() => _viewProjectState();
 }
@@ -345,10 +347,10 @@ class ProjectDetails extends StatelessWidget {
                                   ),
                                 ),
                                 onPressed: () {
-                                  // Navigator.push(context,
-                                  //     MaterialPageRoute(builder: (_) {
-                                  //   return profilePage(); //update
-                                  // }));
+                                  Navigator.push(context,
+                                      MaterialPageRoute(builder: (_) {
+                                    return posts(); //update
+                                  }));
                                 },
                                 shape: const StadiumBorder(),
                               ),

@@ -22,22 +22,14 @@ class _MyHomePageState extends State<PostIdeaFormPage> {
     //
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Color(0XFF2A4793),
-        leading: Builder(
-          builder: (BuildContext context) {
-            return IconButton(
-              color: Color(0XFF000000),
-              icon: const Icon(Icons.arrow_back_ios),
-              onPressed: () {
-                Navigator.push(context, MaterialPageRoute(builder: (_) {
-                  return homePageView();
-                })); //check
-              },
-              tooltip: MaterialLocalizations.of(context).openAppDrawerTooltip,
-            );
-          },
+        backgroundColor: Colors.white,
+        leading: BackButton(
+          color: Colors.deepOrangeAccent,
         ),
-        title: Text(widget.title),
+        title: Text(
+          widget.title,
+          style: TextStyle(color: Color(0XFF2A4793)),
+        ),
         elevation: 0,
       ),
       body: Center(child: form()),

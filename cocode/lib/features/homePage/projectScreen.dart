@@ -31,16 +31,16 @@ class _ProjectScreenState extends State<ProjectScreen> {
           preferredSize: Size.fromHeight(50.0),
           child: AppBar(
             elevation: 0.0,
-            backgroundColor: Colors.indigo,
+            backgroundColor: Colors.white,
             bottom: TabBar(
-                labelColor: Colors.deepOrangeAccent,
-                unselectedLabelColor: Colors.white,
+                labelColor: Colors.white,
+                unselectedLabelColor: Colors.indigo,
                 indicatorSize: TabBarIndicatorSize.label,
                 indicator: BoxDecoration(
                     borderRadius: BorderRadius.only(
                         topLeft: Radius.circular(10),
                         topRight: Radius.circular(10)),
-                    color: Colors.white),
+                    color: Colors.indigo),
                 tabs: [
                   Tab(
                     child: Align(
