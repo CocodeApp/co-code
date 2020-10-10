@@ -33,6 +33,8 @@ class _viewProjectState extends State<viewProject> {
         }
         if (snapshot.connectionState == ConnectionState.done) {
           Map<String, dynamic> data = snapshot.data.data();
+          String whatTab =
+              data['supervisor'] == "" ? "ideaOwner" : "supervisor";
           return DefaultTabController(
             length: 3,
             child: Scaffold(
@@ -66,7 +68,7 @@ class _viewProjectState extends State<viewProject> {
               ),
               body: TabBarView(
                 children: [
-                  ProjectDetails(widget.id, data, widget.tab),
+                  ProjectDetails(widget.id, data, whatTab),
                   teamMembersList(
                     projectData: data,
                   ),
@@ -114,7 +116,6 @@ class ProjectDetails extends StatelessWidget {
     /*2 */
     //if they clicked applied, will execute Notapply "means bool = false"
     //remove their id from the list and update the firestore
-    String leaderRole = (tab == "member") ? 'supervisor' : 'ideaOwner';
 
     final ValueNotifier<bool> wantToApply = ValueNotifier<bool>(true);
     final ValueNotifier<bool> show = ValueNotifier<bool>(true);
@@ -141,7 +142,7 @@ class ProjectDetails extends StatelessWidget {
     Future<void> checkApplying() async {
       CollectionReference leaderprofile = FirebaseFirestore.instance
           .collection('User')
-          .doc(data[leaderRole])
+          .doc(data[tab])
           .collection('myProjects');
 
       await leaderprofile.doc(id).get().then((value) {
@@ -160,10 +161,11 @@ class ProjectDetails extends StatelessWidget {
     void apply() {
       //add the user to the list
       FirebaseFirestore.instance.runTransaction((transaction) async {
+        print(tab);
         DocumentSnapshot freshsnap = await transaction.get(FirebaseFirestore
             .instance
             .collection('User')
-            .doc(data[leaderRole])
+            .doc(data[tab])
             .collection('myProjects')
             .doc(id));
         List l = [Auth.getCurrentUserID()];
@@ -182,7 +184,7 @@ class ProjectDetails extends StatelessWidget {
         DocumentSnapshot freshsnap = await transaction.get(FirebaseFirestore
             .instance
             .collection('User')
-            .doc(data[leaderRole])
+            .doc(data[tab])
             .collection('myProjects')
             .doc(id));
         await transaction.update(freshsnap.reference, {
@@ -204,7 +206,7 @@ class ProjectDetails extends StatelessWidget {
         : startdate = data['startdate'];
 
     return SingleChildScrollView(
-        child: ListView(
+        child: Column(
       children: [
         SizedBox(
           height: 30,
