@@ -1,4 +1,5 @@
 import 'package:cocode/features/posts/posts.dart';
+import 'package:cocode/features/acceptReject/Members.dart';
 import 'package:cocode/features/userProfile.dart/userProfile.dart';
 import 'package:cocode/features/homePage/homePageView.dart';
 import 'package:cocode/features/viewProject/skills.dart';
@@ -242,7 +243,7 @@ class ProjectDetails extends StatelessWidget {
                             fontWeight: FontWeight.w900,
                             fontStyle: FontStyle.italic,
                             fontFamily: 'Open Sans',
-                            fontSize: 30),
+                            fontSize: 20),
                       ),
                     ),
                   ),
@@ -255,7 +256,7 @@ class ProjectDetails extends StatelessWidget {
                         style: TextStyle(
                             color: Colors.grey[800],
                             fontFamily: 'Open Sans',
-                            fontSize: 20),
+                            fontSize: 15),
                       ),
                     ),
                   ),
@@ -326,34 +327,83 @@ class ProjectDetails extends StatelessWidget {
                           List listofmembers = data['teamMembers'];
                           String currentSuper = data['supervisor'];
                           String currentOwner = data['ideaOwner'];
+                          String project = data['projectName'];
                           String user = Auth.getCurrentUserID();
+                          String listofwhat = "";
+                          if (currentSuper.compareTo(user) == 0)
+                            listofwhat = "Team Members Applicants";
+                          if (currentOwner.compareTo(user) == 0 &&
+                              currentSuper ==
+                                  "") //if they already have supervisor
+                            listofwhat = "Supervisors Applicants";
                           if (listofmembers.contains(Auth.getCurrentUserID()) ||
                               currentSuper.compareTo(user) == 0 ||
                               currentOwner.compareTo(user) == 0) {
-                            return Center(
-                              child: RawMaterialButton(
-                                elevation: 80.0,
-                                fillColor: const Color(0XFF2A4793),
-                                splashColor: const Color(0xff2980b9),
-                                child: Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                    vertical: 10.0,
-                                    horizontal: 50.0,
-                                  ),
-                                  child: Text(
-                                    "posts",
-                                    style: TextStyle(
-                                        color: Colors.white, fontSize: 20.0),
+                            return Column(
+                              children: <Widget>[
+                                Center(
+                                  child: RawMaterialButton(
+                                    elevation: 80.0,
+                                    fillColor: const Color(0XFF2A4793),
+                                    splashColor: const Color(0xff2980b9),
+                                    child: Padding(
+                                      padding: const EdgeInsets.symmetric(
+                                        vertical: 10.0,
+                                        horizontal: 50.0,
+                                      ),
+                                      child: Text(
+                                        "Posts",
+                                        style: TextStyle(
+                                            color: Colors.white,
+                                            fontSize: 20.0),
+                                      ),
+                                    ),
+                                    onPressed: () {
+                                      Navigator.push(context,
+                                          MaterialPageRoute(builder: (_) {
+                                        return posts(); //update
+                                      }));
+                                    },
+                                    shape: const StadiumBorder(),
                                   ),
                                 ),
-                                onPressed: () {
-                                  Navigator.push(context,
-                                      MaterialPageRoute(builder: (_) {
-                                    return posts(); //update
-                                  }));
-                                },
-                                shape: const StadiumBorder(),
-                              ),
+                                Center(
+                                  child: listofwhat != ""
+                                      ? RawMaterialButton(
+                                          elevation: 80.0,
+                                          fillColor: const Color(0XFF2A4793),
+                                          splashColor: const Color(0xff2980b9),
+                                          child: Padding(
+                                            padding: const EdgeInsets.symmetric(
+                                              vertical: 10.0,
+                                              horizontal: 50.0,
+                                            ),
+                                            child: Text(
+                                              listofwhat,
+                                              style: TextStyle(
+                                                  color: Colors.white,
+                                                  fontSize: 20.0),
+                                            ),
+                                          ),
+                                          onPressed: () {
+                                            Navigator.push(context,
+                                                MaterialPageRoute(builder: (_) {
+                                              return Members(
+                                                projectId: id,
+                                                leader: user,
+                                                header:
+                                                    "Applicants in " + project,
+                                              );
+                                            }));
+                                          },
+                                          shape: const StadiumBorder(),
+                                        )
+                                      : SizedBox(
+                                          width: 3.0,
+                                          height: 3.0,
+                                        ),
+                                ),
+                              ],
                             );
                           }
                         }

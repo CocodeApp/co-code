@@ -244,52 +244,54 @@ class _profilePageState extends State<profilePage> {
         }
 
         if (snapshot.hasData) {
-          return ListView.builder(
-            scrollDirection: Axis.vertical,
-            shrinkWrap: true,
-            itemCount: doc.length,
-            itemBuilder: (context, index) {
-              Map data = doc[index].data();
-              return InkWell(
+          return Container(
+            constraints: BoxConstraints(minHeight: 10.0, maxHeight: 100),
+            child: ListView.builder(
+              scrollDirection: Axis.horizontal,
+              itemCount: doc.length,
+              itemBuilder: (context, index) {
+                Map data = doc[index].data();
+                return InkWell(
 //stream list v
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) {
-                        return new viewProject(
-                            id: doc[index]
-                                .id); //// latefa     // this must lead to the projects that user in
-                      },
-                    ),
-                  );
-                },
-                child: Column(
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) {
+                          return new viewProject(
+                              id: doc[index]
+                                  .id); //// latefa     // this must lead to the projects that user in
+                        },
+                      ),
+                    );
+                  },
+                  child: Column(
 // list of projects from data base
-                  children: [
-                    Container(
+                    children: [
+                      Container(
 //project logo from database
-                      height: 0.10 * MediaQuery.of(context).size.height,
-                      width: 0.300 * MediaQuery.of(context).size.width,
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.circular(20.0),
-                        child: Image.asset(
-                          'imeges/logo-2.png', //project logo
+                        height: 0.10 * MediaQuery.of(context).size.height,
+                        width: 0.300 * MediaQuery.of(context).size.width,
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(20.0),
+                          child: Image.asset(
+                            'imeges/logo-2.png', //project logo
+                          ),
                         ),
                       ),
-                    ),
-                    Text(
-                      data['projectName'],
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 17,
-                        color: Colors.deepOrangeAccent,
+                      Text(
+                        data['projectName'],
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 17,
+                          color: Colors.deepOrangeAccent,
+                        ),
                       ),
-                    )
-                  ],
-                ),
-              );
-            },
+                    ],
+                  ),
+                );
+              },
+            ),
           );
         }
       },

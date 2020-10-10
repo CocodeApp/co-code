@@ -13,7 +13,7 @@ class _skillsState extends State<skills> {
   @override
   Widget build(BuildContext context) {
     List skills = widget.projectData['requiredSkills'];
-    print(skills[0]);
+    if (skills.isEmpty) return Container();
 
     return ListView.builder(
         itemCount: skills.length, //here
