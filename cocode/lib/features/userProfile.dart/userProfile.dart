@@ -255,8 +255,9 @@ class _profilePageState extends State<profilePage> {
                       MaterialPageRoute(
                         builder: (context) {
                           return new viewProject(
-                              id: doc[index]
-                                  .id); //// latefa     // this must lead to the projects that user in
+                            id: doc[index].id,
+                            tab: "ideaOwner",
+                          ); //// latefa     // this must lead to the projects that user in
                         },
                       ),
                     );

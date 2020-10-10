@@ -87,7 +87,9 @@ class _teamMembersListState extends State<teamMembersList> {
                         Navigator.push(context, MaterialPageRoute(builder: (_) {
                           return profilePage(
                             userId: allmembers[index]["Id"],
-                            previousPage: teamMembersList(),
+                            previousPage: teamMembersList(
+                              projectData: widget.projectData,
+                            ),
                           ); //sa
                         }));
                       },

@@ -40,7 +40,10 @@ Widget bottomCardWidget(String description, String ID, BuildContext context) {
                 Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => viewProject(id: ID),
+                      builder: (context) => viewProject(
+                        id: ID,
+                        tab: "ideaOwner",
+                      ),
                     ));
               },
               shape: RoundedRectangleBorder(
