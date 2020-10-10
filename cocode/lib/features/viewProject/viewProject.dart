@@ -15,7 +15,7 @@ class viewProject extends KFDrawerContent {
   var id;
 
   String tab;
-  viewProject({Key key, @required this.id, this.tab});
+  viewProject({Key key, @required this.id, @required this.tab});
   @override
   _viewProjectState createState() => _viewProjectState();
 }
@@ -44,12 +44,13 @@ class _viewProjectState extends State<viewProject> {
               appBar: AppBar(
                 elevation: 0,
                 leading: BackButton(
-                    color: Colors.indigo,
-                    onPressed: () {
-                      Navigator.push(context, MaterialPageRoute(builder: (_) {
-                        return homePageView();
-                      }));
-                    }),
+                  color: Colors.indigo,
+                  onPressed: () {
+                    Navigator.pop(context, MaterialPageRoute(builder: (_) {
+                      return homePageView();
+                    }));
+                  },
+                ),
                 backgroundColor: Colors.white,
                 title: Text(
                   data['projectName'],
