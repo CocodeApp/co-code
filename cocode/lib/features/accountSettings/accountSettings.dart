@@ -40,9 +40,16 @@ class _settingsPageState extends State<settingsPage> {
   }
 
   Widget build(BuildContext context) {
-    return new WillPopScope(
-      onWillPop: () async => false,
-      child: FutureBuilder<DocumentSnapshot>(
+    return new Scaffold(
+      appBar: AppBar(
+        centerTitle: true,
+        backgroundColor: Colors.blue,
+        title: Text(
+          "Edit Account",
+          textAlign: TextAlign.center,
+        ),
+      ),
+      body: FutureBuilder<DocumentSnapshot>(
         future: Auth.getcurrentUserInfo(),
         builder: (context, AsyncSnapshot<DocumentSnapshot> snapshot) {
           if (snapshot.hasData) {
@@ -352,4 +359,3 @@ class _settingsPageState extends State<settingsPage> {
     );
   }
 }
-//
