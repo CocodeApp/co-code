@@ -85,16 +85,12 @@ class _teamMembersListState extends State<teamMembersList> {
                       subtitle: Text(allmembers[index]["Role"]),
                       onTap: () {
                         Navigator.push(context, MaterialPageRoute(builder: (_) {
-<<<<<<< HEAD
-                          return profilePage(); //sa
-=======
                           return profilePage(
                             userId: allmembers[index]["Id"],
                             previousPage: teamMembersList(
                               projectData: widget.projectData,
                             ),
                           ); //sa
->>>>>>> userProfile
                         }));
                       },
                     ),
