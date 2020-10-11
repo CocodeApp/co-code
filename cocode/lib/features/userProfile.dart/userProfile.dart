@@ -49,7 +49,6 @@ class _profilePageState extends State<profilePage> {
             return Scaffold(
                 backgroundColor: Colors.white,
                 appBar: AppBar(
-                  elevation: 0,
                   leading: widget.previousPage != null || id != widget.userId
                       ? BackButton(
                           color: Colors.deepOrangeAccent,

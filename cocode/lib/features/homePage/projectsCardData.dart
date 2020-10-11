@@ -14,7 +14,10 @@ class _needTeamMemberState extends State<needTeamMember> {
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<QuerySnapshot>(
-        stream: Firestore.instance.collection('projects').snapshots(),
+        stream: Firestore.instance
+            .collection('projects')
+            .orderBy('projectName', descending: true)
+            .snapshots(),
         builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
           if (snapshot.data == null) {
             return Center(
@@ -95,6 +98,7 @@ class _needSupervisorState extends State<needSupervisor> {
       //becuase firestore return data in a stream we need a stream builder to read this data
       stream: Firestore.instance
           .collection('projects')
+          .orderBy('projectName', descending: true)
           .snapshots(), //our collection
       builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
         if (snapshot.data == null) {
