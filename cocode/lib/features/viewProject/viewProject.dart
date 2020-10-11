@@ -46,9 +46,7 @@ class _viewProjectState extends State<viewProject> {
                 leading: BackButton(
                   color: Colors.indigo,
                   onPressed: () {
-                    Navigator.pop(context, MaterialPageRoute(builder: (_) {
-                      return homePageView();
-                    }));
+                    Navigator.pop(context);
                   },
                 ),
                 backgroundColor: Colors.white,
