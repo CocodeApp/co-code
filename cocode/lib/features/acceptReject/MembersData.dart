@@ -87,7 +87,9 @@ class _MembersListState extends State<MembersList> {
                             Navigator.push(context,
                                 MaterialPageRoute(builder: (_) {
                               return profilePage(
-                                  userId: id); //go to the users page
+                                userId: id,
+                                previousPage: MembersList(),
+                              ); //go to the users page
                             }));
                           },
                         ),
