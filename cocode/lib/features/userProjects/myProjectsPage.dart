@@ -1,4 +1,5 @@
 import 'package:cocode/buttons/indicator.dart';
+import 'package:cocode/features/viewProject/viewProject.dart';
 import 'package:flutter/material.dart';
 import 'package:kf_drawer/kf_drawer.dart';
 import 'package:cocode/Auth.dart';
@@ -48,49 +49,67 @@ class _userProjectsState extends State<userProjects> {
               itemCount: doc.length,
               itemBuilder: (context, index) {
                 Map data = doc[index].data();
-                return Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Card(
-                      elevation: 2,
-                      child: ClipPath(
-                        child: Container(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Padding(
-                                padding: const EdgeInsets.fromLTRB(25, 5, 0, 5),
-                                child: Text(
-                                  data['projectName'],
-                                  textAlign: TextAlign.left,
-                                  style: TextStyle(
-                                    fontSize: 16,
-                                  ),
-                                ),
-                              ),
-                              Padding(
-                                padding: const EdgeInsets.fromLTRB(25, 5, 0, 5),
-                                child: Text(data['role'],
+
+                return InkWell(
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) {
+                          return new viewProject(
+                              id: doc[index].id,
+                              tab:
+                                  "member"); //// latefa     // this must lead to the projects that user in
+                        },
+                      ),
+                    );
+                  },
+                  child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Card(
+                        elevation: 2,
+                        child: ClipPath(
+                          child: Container(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Padding(
+                                  padding:
+                                      const EdgeInsets.fromLTRB(25, 5, 0, 5),
+                                  child: Text(
+                                    data['projectName'],
                                     textAlign: TextAlign.left,
                                     style: TextStyle(
-                                      fontSize: 12,
-                                    )),
-                              )
-                            ],
+                                      fontSize: 16,
+                                    ),
+                                  ),
+                                ),
+                                Padding(
+                                  padding:
+                                      const EdgeInsets.fromLTRB(25, 5, 0, 5),
+                                  child: Text(data['role'],
+                                      textAlign: TextAlign.left,
+                                      style: TextStyle(
+                                        fontSize: 12,
+                                      )),
+                                )
+                              ],
+                            ),
+                            height: 60,
+                            decoration: BoxDecoration(
+                                border: Border(
+                                    left: BorderSide(
+                                        color: index % 2 == 0
+                                            ? Colors.indigo
+                                            : Colors.deepOrangeAccent,
+                                        width: 5))),
                           ),
-                          height: 60,
-                          decoration: BoxDecoration(
-                              border: Border(
-                                  left: BorderSide(
-                                      color: index % 2 == 0
-                                          ? Colors.indigo
-                                          : Colors.deepOrangeAccent,
-                                      width: 5))),
+                          clipper: ShapeBorderClipper(
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(3))),
                         ),
-                        clipper: ShapeBorderClipper(
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(3))),
-                      ),
-                    ));
+                      )),
+                );
               },
             );
           }

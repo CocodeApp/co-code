@@ -8,16 +8,18 @@ class EditProfilePage extends StatefulWidget {
 class EditProfile extends State<EditProfilePage> {
   @override
   Widget build(BuildContext context) {
-    return DefaultTabController(
-      child: Scaffold(
-        appBar: AppBar(
-          // leading: Container(), no need for container here
-          centerTitle: true,
-          backgroundColor: Color(0xff2A4793),
-          title: Text(
-            "Edit Profile",
-            textAlign: TextAlign.center,
-          ),
+    return Scaffold(
+      appBar: AppBar(
+        elevation: 0,
+        leading: BackButton(
+          color: Colors.deepOrangeAccent,
+        ),
+        centerTitle: true,
+        backgroundColor: Colors.white,
+        title: Text(
+          "Edit Profile",
+          textAlign: TextAlign.center,
+          style: TextStyle(color: Color(0xff2A4793)),
         ),
       ),
     );

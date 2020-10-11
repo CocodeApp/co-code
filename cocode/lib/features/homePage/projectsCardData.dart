@@ -10,10 +10,14 @@ class needTeamMember extends StatefulWidget {
 }
 
 class _needTeamMemberState extends State<needTeamMember> {
+  SlimyCard slimy;
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<QuerySnapshot>(
-        stream: Firestore.instance.collection('projects').snapshots(),
+        stream: Firestore.instance
+            .collection('projects')
+            .orderBy('projectName', descending: true)
+            .snapshots(),
         builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
           if (snapshot.data == null) {
             return Center(
@@ -47,7 +51,7 @@ class _needTeamMemberState extends State<needTeamMember> {
             }
           }
           return ListView.builder(
-             physics: const AlwaysScrollableScrollPhysics(),
+              physics: const AlwaysScrollableScrollPhysics(),
               scrollDirection: Axis.vertical,
               itemCount: needMembers.length, //the length of our collection
               itemBuilder: (context, index) {
@@ -57,7 +61,7 @@ class _needTeamMemberState extends State<needTeamMember> {
 
                 return Padding(
                   padding: const EdgeInsets.all(12.0),
-                  child: new SlimyCard(
+                  child: SlimyCard(
                     color: Color(0xFFD1DDED),
                     width: 300,
                     topCardHeight: 250,
@@ -81,6 +85,8 @@ class _needTeamMemberState extends State<needTeamMember> {
 }
 
 class needSupervisor extends StatefulWidget {
+  Widget bottom;
+  Widget top;
   @override
   _needSupervisorState createState() => _needSupervisorState();
 }
@@ -92,6 +98,7 @@ class _needSupervisorState extends State<needSupervisor> {
       //becuase firestore return data in a stream we need a stream builder to read this data
       stream: Firestore.instance
           .collection('projects')
+          .orderBy('projectName', descending: true)
           .snapshots(), //our collection
       builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
         if (snapshot.data == null) {

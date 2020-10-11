@@ -31,49 +31,26 @@ Widget bottomCardWidget(String description, String ID, BuildContext context) {
       children: [
         Text(description, style: TextStyle(color: Colors.white, fontSize: 16)),
         Align(
-            alignment: Alignment.centerLeft,
-            child: SpringButton(
-              SpringButtonType.OnlyScale,
-              row(
-                "view details",
-                Color(0xffF57862),
-              ),
-              onTap: () {
+            alignment: Alignment.center,
+            child: OutlineButton(
+              borderSide: BorderSide(color: Colors.deepOrangeAccent),
+              child: Text('view details',
+                  style: TextStyle(color: Colors.deepOrangeAccent)),
+              onPressed: () {
                 Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => viewProject(id: ID),
+                      builder: (context) => viewProject(
+                        id: ID,
+                        tab: "ideaOwner",
+                      ),
                     ));
               },
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(18.0),
+                  side: BorderSide(color: Colors.deepOrangeAccent)),
             ))
       ],
     ),
   );
-}
-
-Widget row(String text, Color color) {
-  //styling the botton
-  return Padding(
-      padding: EdgeInsets.all(12.5),
-      child: Container(
-        height: 30,
-        width: 90,
-        child: Center(
-          child: Text(
-            'view details',
-            style: TextStyle(fontSize: 12, color: Colors.white),
-          ),
-        ),
-        decoration: BoxDecoration(
-          color: Color(0xffF57862),
-          borderRadius: BorderRadius.circular(15),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withOpacity(0.15),
-              blurRadius: 20,
-              spreadRadius: 1,
-            ),
-          ],
-        ),
-      ));
 }

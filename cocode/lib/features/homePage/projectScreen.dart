@@ -16,9 +16,13 @@ class ProjectScreen extends KFDrawerContent {
 }
 
 class _ProjectScreenState extends State<ProjectScreen> {
-  List<Widget> screens = [needTeamMember(), needSupervisor()];
+  List<Widget> screens;
+
   @override
   Widget build(BuildContext context) {
+    setState(() {
+      screens = [needTeamMember(), needSupervisor()];
+    });
     return DefaultTabController(
       length: 2, //our tabs
       child: Scaffold(
@@ -27,16 +31,16 @@ class _ProjectScreenState extends State<ProjectScreen> {
           preferredSize: Size.fromHeight(50.0),
           child: AppBar(
             elevation: 0.0,
-            backgroundColor: Colors.indigo,
+            backgroundColor: Colors.white,
             bottom: TabBar(
-                labelColor: Colors.deepOrangeAccent,
-                unselectedLabelColor: Colors.white,
+                labelColor: Colors.white,
+                unselectedLabelColor: Colors.indigo,
                 indicatorSize: TabBarIndicatorSize.label,
                 indicator: BoxDecoration(
                     borderRadius: BorderRadius.only(
                         topLeft: Radius.circular(10),
                         topRight: Radius.circular(10)),
-                    color: Colors.white),
+                    color: Colors.indigo),
                 tabs: [
                   Tab(
                     child: Align(

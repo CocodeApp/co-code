@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:kf_drawer/kf_drawer.dart';
 import 'teamMembersData.dart';
 import 'viewProject.dart';
 
-class teamMembers extends StatefulWidget {
+class teamMembers extends KFDrawerContent {
   Map<String, dynamic> projectData;
-  teamMembers({Key key, @required this.projectData}) : super(key: key);
+  teamMembers({Key key, @required this.projectData});
   @override
   _teamMembersState createState() => _teamMembersState();
 }

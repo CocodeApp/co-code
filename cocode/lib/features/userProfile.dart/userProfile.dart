@@ -1,352 +1,146 @@
 import 'package:cocode/buttons/indicator.dart';
+import 'package:cocode/features/viewProject/viewProject.dart';
+import 'package:dots_indicator/dots_indicator.dart';
 import 'package:flutter/material.dart';
 import 'package:cocode/Auth.dart';
-import 'package:cocode/features/Login/LoginPage.dart';
-import 'package:cocode/features/registertion/MoreInfoPage.dart';
-import 'package:cocode/features/homePage/projectScreen.dart';
-import 'package:cocode/features/userProjects/myProjectsPage.dart';
 import 'EditProfilePage.dart';
 import 'package:percent_indicator/percent_indicator.dart';
 import 'package:kf_drawer/kf_drawer.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class profilePage extends KFDrawerContent {
-  final String userId;
+  var userId;
+  Widget
+      previousPage; //I need to know what previous is it to detrmine dispplay arrow back button or menu button on appbar
+  profilePage({Key key, @required this.userId, this.previousPage});
   @override
-  profilePage({this.userId});
-
   _profilePageState createState() => _profilePageState();
 }
 
 class _profilePageState extends State<profilePage> {
-  String currentName = Auth.getCurrentUsername();
-  String email = Auth.getCurrentUserEmail();
+  String currentName = "";
+  String email = '';
+  String id = Auth.getCurrentUserID();
 
   @override
   Widget build(BuildContext context) {
     CollectionReference users = FirebaseFirestore.instance.collection('User');
-
+    print(widget.previousPage);
     return FutureBuilder<DocumentSnapshot>(
-        future: users.doc(Auth.getCurrentUserID()).get(),
+        future: users.doc(widget.userId).get(),
+        // ignore: missing_return
         builder: (context, snapshot) {
-          if (snapshot.data == null) return indicator();
+          if (snapshot == null) return indicator();
 
           if (snapshot.hasError) {
             return Text("Something went wrong");
           }
           if (snapshot.connectionState == ConnectionState.done) {
-            if (snapshot.data.data() == null) return indicator();
             Map<String, dynamic> data = snapshot.data.data();
+            CollectionReference userProjects = FirebaseFirestore.instance
+                .collection('User')
+                .doc(id)
+                .collection('myProjects');
+            List<dynamic> skills = data['skills'];
+
+            currentName = data['firstName'] + " " + data['lastName'];
+            email = data[email];
+
             return Scaffold(
-                backgroundColor: Color(0xffF8F8FA),
+                backgroundColor: Colors.white,
                 appBar: AppBar(
-                  leading: IconButton(
-                    icon: Icon(
-                      Icons.menu,
-                      color: Colors.black,
-                    ),
-                    onPressed: widget.onMenuPressed,
-                  ),
+                  leading: widget.previousPage != null || id != widget.userId
+                      ? BackButton(
+                          color: Colors.deepOrangeAccent,
+                        )
+                      : IconButton(
+                          icon: Icon(
+                            Icons.menu,
+                            color: Colors.deepOrangeAccent,
+                          ),
+                          onPressed: widget.onMenuPressed,
+                        ),
                   centerTitle: true,
-                  backgroundColor: Color(0xff2A4793),
+                  backgroundColor: Colors.white,
                   title: Text(
-                    '@' + currentName, // user name at top of the page
+                    '@' + data['userName'], // user name at top of the page
                     textAlign: TextAlign.center,
+                    style: TextStyle(color: Color(0xff2A4793)),
                   ),
+                  actions: <Widget>[
+                    id == widget.userId
+                        ? IconButton(
+                            icon: Icon(
+                              Icons.edit,
+                              color: Colors.deepOrangeAccent,
+                            ),
+                            tooltip: 'Edit Profile',
+                            onPressed: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) {
+                                    return new EditProfilePage();
+                                  },
+                                ),
+                              );
+                            },
+                          )
+                        : Container(),
+                  ],
                 ),
                 body: SafeArea(
                   child: Stack(
                     overflow: Overflow.visible,
                     children: <Widget>[
-                      Container(
-                        //first part the blue one
-                        color: Colors.blue[200],
-                        height: 0.38 * MediaQuery.of(context).size.height,
-                        child: Padding(
-                            padding: EdgeInsets.only(
-                              // image position
-                              left: 30.0,
-                              right: 30.0,
-                              top: 0.03 * MediaQuery.of(context).size.height,
-                            ),
-                            child: Column(
-                              children: <Widget>[
-                                Row(
-                                  children: <Widget>[
-                                    Container(
-                                      //// profile imeag size
-                                      height: 0.13 *
-                                          MediaQuery.of(context).size.height,
-                                      width: 0.22 *
-                                          MediaQuery.of(context).size.width,
-                                      decoration: BoxDecoration(
-                                          shape: BoxShape.circle,
-                                          image: DecorationImage(
-                                              fit: BoxFit.cover,
-                                              image: AssetImage(
-                                                  "imeges/man.png")) //// profile imeag MUST be from database
-                                          ),
-                                    ),
-                                    SizedBox(
-                                      width: 0.04 *
-                                          MediaQuery.of(context).size.width,
-                                    ),
-                                    Column(
-                                      //user F L name
-                                      children: <Widget>[
-                                        Text(
-                                          data['firstName'] +
-                                              " " +
-                                              data[
-                                                  'lastName'] // must be from database
-                                          ,
-                                          style: TextStyle(
-                                              color: Colors.black,
-                                              fontSize: 0.093 *
-                                                  MediaQuery.of(context)
-                                                      .size
-                                                      .width *
-                                                  0.8,
-                                              fontWeight: FontWeight.bold),
-                                        ),
-                                        SizedBox(height: 10),
-                                        Row(
-                                          children: <Widget>[
-                                            Text(
-                                              '📧 ' + email,
-                                              style: TextStyle(
-                                                  color: Color(0xff2A4793),
-                                                  fontSize: 0.02 *
-                                                      MediaQuery.of(context)
-                                                          .size
-                                                          .height),
-                                            ),
-                                          ],
-                                        ),
-                                      ],
-                                    )
-                                  ],
-                                ),
-                                Row(
-                                  // here is the bio
-                                  children: <Widget>[
-                                    Container(
-                                      margin: const EdgeInsets.all(10.0),
-                                      padding: const EdgeInsets.all(10.0),
-                                      alignment: Alignment.center,
-
-                                      /// max length must be 43
-                                      child: Expanded(
-                                        child: Text(
-                                          data['bio'] == null
-                                              ? ''
-                                              : data['bio'],
-                                          style: TextStyle(
-                                            fontSize: 16,
-                                            color: Colors.black,
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                                Row(
-                                    //here is profile edit it must be for loged in user only
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: <Widget>[
-                                      RaisedButton(
-                                        onPressed: () {
-                                          // go to edite profile
-                                          Navigator.push(
-                                            context,
-                                            MaterialPageRoute(
-                                              builder: (context) {
-                                                return new EditProfilePage();
-                                              },
-                                            ),
-                                          );
-                                        },
-                                        color: Colors.deepOrangeAccent,
-                                        shape: RoundedRectangleBorder(
-                                            borderRadius:
-                                                new BorderRadius.circular(
-                                                    30.0)),
-                                        child: Padding(
-                                          padding: const EdgeInsets.all(0.1),
-
-                                          ///borderRadius: BorderRadius.circular(20.0),
-                                          child: Text(
-                                            "Edit Profile",
-                                            style: TextStyle(
-                                                color: Colors.white,
-                                                fontSize: 15),
-                                          ),
-                                        ),
-                                      ),
-                                    ])
-                              ],
-                            )),
-                      ),
+                      blueArea(context, data),
                       //second part the white one
                       Padding(
-                        padding: EdgeInsets.only(top: 230),
+                        padding: EdgeInsets.only(
+                          top: 260,
+                        ),
                         child: Container(
+                          padding: EdgeInsets.only(bottom: 20),
                           width: MediaQuery.of(context).size.width,
                           decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.only(
-                              topRight: Radius.circular(30.0),
-                              topLeft: Radius.circular(30.0),
+                            color: Color(0xffD1DDED),
+                            borderRadius: BorderRadius.all(
+                              Radius.circular(30.0),
                             ),
                           ),
-                          child: SingleChildScrollView(
-                            child: Column(
-                              children: <Widget>[
-                                Padding(
-                                  padding: EdgeInsets.only(
-                                      left: 30.0, top: 25, bottom: 20),
-                                  child: Text(
-                                    "My Projects",
-                                    style: TextStyle(
-                                        color: Color(0xff2A4793),
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 20),
-                                  ),
-                                ),
-                                SizedBox(height: 3),
-                                Container(
-                                  height: 0.18 *
-                                      MediaQuery.of(context)
-                                          .size
-                                          .height, //size of project image
-                                  child: ListView(
-                                    //list of projects
-                                    scrollDirection: Axis.horizontal,
-                                    children: <Widget>[
-                                      SizedBox(width: 20),
-                                      Material(
-                                          // this part will be showing for each project
-                                          color: Colors.white70,
-                                          child: InkWell(
-                                              onTap: () {
-                                                Navigator.push(
-                                                  context,
-                                                  MaterialPageRoute(
-                                                    builder: (context) {
-                                                      return new ProjectScreen(); // this must lead to the projects that user in
-                                                    },
-                                                  ),
-                                                );
-                                              },
-                                              child: Stack(
-                                                // list of projects from data base
-                                                alignment:
-                                                    const Alignment(0, 0),
-                                                children: [
-                                                  Container(
-                                                    //project logo from database
-                                                    height: 0.30 *
-                                                        MediaQuery.of(context)
-                                                            .size
-                                                            .height,
-                                                    width: 0.350 *
-                                                        MediaQuery.of(context)
-                                                            .size
-                                                            .width,
-                                                    child: ClipRRect(
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              20.0),
-                                                      child: Image.asset(
-                                                        'imeges/logo-2.png', //project logo
-                                                      ),
-                                                    ),
-                                                  ),
-                                                  Container(
-                                                    // project name from database
-                                                    padding:
-                                                        const EdgeInsets.all(
-                                                            9.0),
-                                                    decoration:
-                                                        new BoxDecoration(
-                                                            color: new Color
-                                                                    .fromARGB(
-                                                                120,
-                                                                71,
-                                                                150,
-                                                                236)),
-                                                    child: new Text(
-                                                        'project name ', // project name
-                                                        maxLines: 1,
-                                                        style: new TextStyle(
-                                                          fontSize: 20.0,
-                                                          fontWeight:
-                                                              FontWeight.bold,
-                                                          color: Colors.white,
-                                                        )),
-                                                  ),
-                                                ],
-                                              ))),
-                                      SizedBox(width: 10),
-                                    ],
-                                  ),
-                                ),
-                                SizedBox(height: 20),
-                                Padding(
-                                  // Skills and Skills Levels
-                                  padding:
-                                      EdgeInsets.only(left: 27.0, right: 22.0),
-                                  // space betwen skils and view
-                                  child: Row(
-                                    children: <Widget>[
-                                      Text(
-                                        "Skills and Skills Levels ",
+                          child: Scrollbar(
+                            child: SingleChildScrollView(
+                              child: Column(
+                                children: <Widget>[
+                                  Padding(
+                                    padding: EdgeInsets.only(
+                                        top: 25, bottom: 20, left: 27),
+                                    child: Align(
+                                      alignment: Alignment.centerLeft,
+                                      child: Text(
+                                        "My Projects",
                                         style: TextStyle(
                                             color: Color(0xff2A4793),
                                             fontWeight: FontWeight.bold,
-                                            fontSize: 20),
+                                            fontSize: 16),
                                       ),
-                                      Spacer(),
-                                      GestureDetector(
-                                        // for Edit Skills
-                                        onTap: () {
-                                          Navigator.push(
-                                            context,
-                                            MaterialPageRoute(
-                                              builder: (context) {
-                                                return new ProjectScreen(); // this must lead to the edit char page
-                                              },
-                                            ),
-                                          );
-                                        },
-                                        child: Text(
-                                          "Edit Skills",
-                                          style: TextStyle(
-                                              color: Colors.grey, fontSize: 17),
-                                        ),
-                                      )
-                                    ],
+                                    ),
                                   ),
-                                ),
-                                SizedBox(height: 20),
-                                Container(
-                                  height: 120,
-                                  // here must tbe skills and level Must be tacking from edit skills page
-                                  child: ListView(
-                                    scrollDirection: Axis.vertical,
-                                    children: <Widget>[
-                                      skillAndLevel("CSS", "90"),
-                                      skillAndLevel("Javascript", "20"),
-                                      skillAndLevel("Dart", "50"),
-                                      skillAndLevel("Illustrator", "70"),
-                                      SizedBox(
-                                        width: 10,
-                                      )
-                                    ],
+                                  SizedBox(height: 3),
+                                  projects(context, userProjects),
+                                  SizedBox(height: 20),
+                                  Padding(
+                                    // Skills and Skills Levels
+                                    padding: EdgeInsets.only(
+                                        left: 27.0, right: 22.0),
+                                    // space betwen skils and view
+                                    child: skillsWidget(context),
                                   ),
-                                ),
-                                SizedBox(width: 10)
-                              ],
+                                  SizedBox(height: 20),
+                                  skillsListView(skills),
+                                  SizedBox(width: 10)
+                                ],
+                              ),
                             ),
                           ),
                         ),
@@ -355,7 +149,270 @@ class _profilePageState extends State<profilePage> {
                   ),
                 ));
           }
+          return indicator();
         });
+  }
+
+  Widget skillsListView(List skills) {
+    if (skills == null) {
+      return Container(
+        child: Text(
+          currentName +
+              " did not add any skill yet !", // this massage must be static
+          style: TextStyle(
+              color: Colors.redAccent, //// latefa
+              fontWeight: FontWeight.bold,
+              fontSize: 15),
+          textAlign: TextAlign.center,
+        ),
+      );
+    }
+    return Container(
+      constraints: BoxConstraints(minHeight: 150.0, maxHeight: 150),
+      child: ListView.builder(
+        itemCount: skills.length,
+        itemBuilder: (context, index) {
+          return skillAndLevel(skills[index]['name'], skills[index]['value']);
+        },
+      ),
+    );
+  }
+
+  Row skillsWidget(BuildContext context) {
+    return Row(
+      children: <Widget>[
+        Text(
+          "Skills",
+          style: TextStyle(
+              color: Color(0xff2A4793),
+              fontWeight: FontWeight.bold,
+              fontSize: 16),
+        ),
+        SizedBox(
+          width: 230,
+        ),
+        GestureDetector(
+          // for Edit Skills
+          onTap: () {
+            // Navigator.push(
+            //   context,
+            //   MaterialPageRoute(
+            //     builder: (context) {
+            //       return new ProjectScreen(); // this must lead to the edit char page
+            //     },
+            //   ),
+            // );
+          },
+          child: Text(
+            "", //edit skills
+            style: TextStyle(color: Colors.grey, fontSize: 17),
+          ),
+        )
+      ],
+    );
+  }
+
+  Widget projects(BuildContext context, CollectionReference userProjects) {
+    return StreamBuilder<QuerySnapshot>(
+      stream: userProjects.snapshots(),
+// ignore: missing_return
+      builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
+        if (snapshot.data == null) {
+          return DotsIndicator(
+            dotsCount: 5,
+          );
+        }
+        var doc = snapshot.data.docs;
+
+        if (doc.length == 0) {
+          return Container(
+            child: Text(
+              currentName +
+                  " did not join any projects yet !", // this massage must be static
+              style: TextStyle(
+                  color: Colors.redAccent, //// latefa
+                  fontWeight: FontWeight.bold,
+                  fontSize: 15),
+              textAlign: TextAlign.center,
+            ),
+          );
+        }
+
+        if (snapshot.hasData) {
+          return Container(
+            constraints: BoxConstraints(minHeight: 10.0, maxHeight: 100),
+            child: ListView.builder(
+              scrollDirection: Axis.horizontal,
+              itemCount: doc.length,
+              itemBuilder: (context, index) {
+                Map data = doc[index].data();
+                return InkWell(
+//stream list v
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) {
+                          return new viewProject(
+                            id: doc[index].id,
+                            tab: "ideaOwner",
+                          ); //// latefa     // this must lead to the projects that user in
+                        },
+                      ),
+                    );
+                  },
+                  child: Column(
+// list of projects from data base
+                    children: [
+                      Container(
+//project logo from database
+                        height: 0.10 * MediaQuery.of(context).size.height,
+                        width: 0.300 * MediaQuery.of(context).size.width,
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(20.0),
+                          child: Image.asset(
+                            'imeges/logo-2.png', //project logo
+                          ),
+                        ),
+                      ),
+                      Text(
+                        data['projectName'],
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 17,
+                          color: Colors.deepOrangeAccent,
+                        ),
+                      ),
+                    ],
+                  ),
+                );
+              },
+            ),
+          );
+        }
+      },
+    );
+  }
+
+  Container blueArea(BuildContext context, Map<String, dynamic> data) {
+    if (data == null) return Container();
+    return Container(
+      //first part the blue one
+      color: Colors.white,
+      height: 0.38 * MediaQuery.of(context).size.height,
+      child: Padding(
+          padding: EdgeInsets.only(
+            // image position
+            left: 20.0,
+            // right: 30.0,
+            top: 0.03 * MediaQuery.of(context).size.height,
+          ),
+          child: Column(
+            children: <Widget>[
+              Row(
+                children: <Widget>[
+                  Container(
+                    //// profile imeag size
+                    height: 0.13 * MediaQuery.of(context).size.height,
+                    width: 0.22 * MediaQuery.of(context).size.width,
+                    decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        image: DecorationImage(
+                            fit: BoxFit.cover,
+                            image: AssetImage(
+                                "imeges/man.png")) //// profile imeag MUST be from database
+                        ),
+                  ),
+                  SizedBox(
+                    width: 0.04 * MediaQuery.of(context).size.width,
+                  ),
+                  Column(
+                    //user F L name
+                    children: <Widget>[
+                      Text(
+                        data['firstName'] +
+                            " " +
+                            data['lastName'] // must be from database
+                        ,
+                        style: TextStyle(
+                            color: Colors.black,
+                            fontSize:
+                                0.083 * MediaQuery.of(context).size.width * 0.8,
+                            fontWeight: FontWeight.bold),
+                      ),
+                      SizedBox(height: 10),
+                      Row(
+                        children: <Widget>[
+                          Text(
+                            '📧 ' + data['email'],
+                            style: TextStyle(
+                                color: Color(0xff2A4793),
+                                fontSize:
+                                    0.02 * MediaQuery.of(context).size.height),
+                          ),
+                        ],
+                      ),
+                    ],
+                  )
+                ],
+              ),
+              Row(
+                // here is the bio MUST BE 140 LETTER
+                children: <Widget>[
+                  Container(
+                    width: MediaQuery.of(context).size.width * 0.8,
+                    padding: const EdgeInsets.all(3.0),
+                    alignment: Alignment.center,
+
+                    /// max length must be 43
+                    child: new Column(
+                      children: <Widget>[
+                        new Text(
+                          data['bio'] == null ? '' : data['bio'],
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            fontSize: 16,
+                            color: Color(0xff2A4793),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+              Column(
+                children: [
+                  SizedBox(width: 9),
+                  Align(
+                    alignment: Alignment.topLeft,
+                    child: Text(
+                      data['major'] == null ? '' : 'Major: ' + data['major'],
+                      style: TextStyle(
+                        fontSize: 16,
+                        color: Colors.black,
+                      ),
+                    ),
+                  ),
+                  SizedBox(
+                    height: 8,
+                  ),
+                  Align(
+                    alignment: Alignment.centerLeft,
+                    child: Text(
+                      data['university'] == null
+                          ? ''
+                          : 'University: ' + data['university'],
+                      style: TextStyle(
+                        fontSize: 16,
+                        color: Colors.black,
+                      ),
+                    ),
+                  )
+                ],
+              ),
+            ],
+          )),
+    );
   }
 
   skillAndLevel(String skillName, String level) {
@@ -368,13 +425,28 @@ class _profilePageState extends State<profilePage> {
           Padding(
             padding: EdgeInsets.all(15.0),
             child: new LinearPercentIndicator(
-              width: MediaQuery.of(context).size.width - 150,
+              width: MediaQuery.of(context).size.width - 75,
               animation: true,
-              lineHeight: 20.0,
-              leading: new Text(skillName + '   '),
+              lineHeight: 25.0,
               animationDuration: 2000,
               percent: percent,
-              center: Text(level + "%"),
+              trailing: Row(
+                children: [
+                  SizedBox(
+                    width: 8,
+                  ),
+                  Text(
+                    level + '%',
+                    style: TextStyle(
+                      color: Colors.indigo,
+                    ),
+                  ),
+                ],
+              ),
+              center: Text(
+                skillName,
+                style: TextStyle(fontWeight: FontWeight.bold),
+              ),
               linearStrokeCap: LinearStrokeCap.roundAll,
               progressColor: Colors.blue[200],
             ),
@@ -384,137 +456,3 @@ class _profilePageState extends State<profilePage> {
     );
   }
 }
-
-/*these methods are in hamePageData files
-      floatingActionButton: FloatingActionButton(
-        //for adding new Idea
-        onPressed: () async {
-          await Auth.logout();
-
-          Navigator.push(context, MaterialPageRoute(builder: (_) {
-            return LoginPage();
-          }));
-        },
-        child: Text('logout'),
-        backgroundColor: Color(0xffF57862),
-      ),
-    );
-  }
-}
-
-     */
-
-// class userProfile extends StatelessWidget {
-//   @override
-//   Widget build(BuildContext context) {
-//     return MaterialApp(
-//       home: Scaffold(
-//         appBar: AppBar(
-//             leading: Icon(Icons.arrow_back),
-//             title: Center(child: Text('Project Title')),
-//             backgroundColor: Color(0xff2A4793)),
-//         body: Column(
-//           children: [bio(), major(), interests(), Projects(), topSkills()],
-//         ),
-//       ),
-//     );
-//   }
-// }
-
-// class bio extends StatelessWidget {
-//   // this widget for the user bio
-//   @override
-//   Widget build(BuildContext context) {
-//     return Card(
-//       child: Column(
-//         children: [
-//           CircleAvatar(
-//             radius: 50,
-//           ), //user avatar
-//           Text("the user bio should goes here"),
-//         ],
-//       ),
-//       clipBehavior: Clip.antiAlias,
-//     );
-//   }
-// }
-
-// class major extends StatelessWidget {
-//   @override
-//   Widget build(BuildContext context) {
-//     return Card(
-//       child: Row(
-//         children: [
-//           Icon(Icons.school),
-//           Column(
-//             children: [
-//               //column for the major and uni
-//               Text("the Uni goes here"),
-//               Text('the najor goes her')
-//             ],
-//           )
-//         ],
-//       ),
-//     );
-//   }
-// }
-
-// class interests extends StatelessWidget {
-//   //user interst goes here
-//   @override
-//   Widget build(BuildContext context) {
-//     return Card(
-//       child: Row(
-//         children: [
-//           Icon(
-//             Icons.favorite,
-//             color: Colors.red,
-//           ),
-//           Text("a list of interests should be here")
-//         ],
-//       ),
-//     );
-//   }
-// }
-
-// class Projects extends StatelessWidget {
-//   // user Previous Projects
-//   @override
-//   Widget build(BuildContext context) {
-//     return Card(
-//       child: Column(
-//         children: [
-//           Text("Previous Projects"),
-//           Row(
-//             children: [
-//               CircleAvatar(
-//                 radius: 20,
-//               ),
-//               Text('Project name')
-//             ],
-//           )
-//         ],
-//       ),
-//     );
-//   }
-// }
-
-// class topSkills extends StatelessWidget {
-//   @override
-//   Widget build(BuildContext context) {
-//     return Card(
-//         child: Column(
-//       children: [
-//         Text("Top skills"),
-//         Row(
-//           children: [
-//             CircleAvatar(
-//               radius: 20,
-//             ),
-//             Text('Project name')
-//           ],
-//         )
-//       ],
-//     ));
-//   }
-// }

@@ -3,10 +3,11 @@ import 'package:cocode/features/userProfile.dart/userProfile.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:kf_drawer/kf_drawer.dart';
 
-class teamMembersList extends StatefulWidget {
+class teamMembersList extends KFDrawerContent {
   Map<String, dynamic> projectData;
-  teamMembersList({Key key, @required this.projectData}) : super(key: key);
+  teamMembersList({Key key, @required this.projectData});
   @override
   _teamMembersListState createState() => _teamMembersListState();
 }
@@ -84,7 +85,16 @@ class _teamMembersListState extends State<teamMembersList> {
                       subtitle: Text(allmembers[index]["Role"]),
                       onTap: () {
                         Navigator.push(context, MaterialPageRoute(builder: (_) {
+<<<<<<< HEAD
                           return profilePage(); //sa
+=======
+                          return profilePage(
+                            userId: allmembers[index]["Id"],
+                            previousPage: teamMembersList(
+                              projectData: widget.projectData,
+                            ),
+                          ); //sa
+>>>>>>> userProfile
                         }));
                       },
                     ),

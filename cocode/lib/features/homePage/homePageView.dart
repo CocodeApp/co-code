@@ -1,3 +1,4 @@
+import 'package:cocode/features/accountSettings/accountSettings.dart';
 import 'package:flutter/material.dart';
 import 'package:cocode/features/userProjects/myProjectsPage.dart';
 import 'package:cocode/features/userProfile.dart/userProfile.dart';
@@ -29,12 +30,17 @@ class _homePageViewState extends State<homePageView> {
         KFDrawerItem.initWithPage(
           text: Text('My profile', style: TextStyle(color: Colors.white)),
           icon: Icon(Icons.person, color: Colors.white),
-          page: profilePage(),
+          page: profilePage(userId: Auth.getCurrentUserID()),
         ),
         KFDrawerItem.initWithPage(
           text: Text('My projects', style: TextStyle(color: Colors.white)),
           icon: Icon(Icons.work, color: Colors.white),
           page: userProjects(),
+        ),
+        KFDrawerItem.initWithPage(
+          text: Text('settings', style: TextStyle(color: Colors.white)),
+          icon: Icon(Icons.settings, color: Colors.white),
+          page: settingsPage(),
         ),
       ],
       initialPage: homePageController(),

@@ -208,7 +208,7 @@ class _ChangeEmailState extends State<ChangeEmail> {
                                                     gravity: ToastGravity.TOP,
                                                     timeInSecForIosWeb: 1,
                                                     backgroundColor:
-                                                        Colors.blueAccent,
+                                                        Colors.indigo,
                                                     textColor: Colors.white,
                                                     fontSize: 16.0);
                                               } else {
@@ -220,7 +220,7 @@ class _ChangeEmailState extends State<ChangeEmail> {
                                                     gravity: ToastGravity.TOP,
                                                     timeInSecForIosWeb: 1,
                                                     backgroundColor:
-                                                        Colors.blueAccent,
+                                                        Colors.indigo,
                                                     textColor: Colors.white,
                                                     fontSize: 16.0);
                                               }
@@ -246,7 +246,7 @@ class _ChangeEmailState extends State<ChangeEmail> {
                       toastLength: Toast.LENGTH_LONG,
                       gravity: ToastGravity.TOP,
                       timeInSecForIosWeb: 1,
-                      backgroundColor: Colors.blueAccent,
+                      backgroundColor: Colors.indigo,
                       textColor: Colors.white,
                       fontSize: 16.0);
                 },
@@ -255,13 +255,13 @@ class _ChangeEmailState extends State<ChangeEmail> {
 
                 child: Scaffold(
                   appBar: AppBar(
+                    elevation: 0,
                     leading: Container(),
                     centerTitle: true,
-                    backgroundColor: Color(0xff2A4793),
-                    title: Text(
-                      "Update Email",
-                      textAlign: TextAlign.center,
-                    ),
+                    backgroundColor: Colors.white,
+                    title: Text("Update Email",
+                        textAlign: TextAlign.center,
+                        style: TextStyle(color: Color(0xff2A4793))),
                   ),
                   body: Center(
                       child: SingleChildScrollView(
@@ -274,7 +274,7 @@ class _ChangeEmailState extends State<ChangeEmail> {
                               child: Hero(
                                 tag: 'email',
                                 child: CircleAvatar(
-                                  backgroundColor: Colors.blue,
+                                  backgroundColor: Colors.indigo,
                                   foregroundColor: Colors.white,
                                   radius: 40,
                                   child: Icon(

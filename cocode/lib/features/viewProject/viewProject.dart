@@ -1,18 +1,21 @@
+import 'package:cocode/features/posts/posts.dart';
+import 'package:cocode/features/acceptReject/Members.dart';
 import 'package:cocode/features/userProfile.dart/userProfile.dart';
 import 'package:cocode/features/homePage/homePageView.dart';
 import 'package:cocode/features/viewProject/skills.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:kf_drawer/kf_drawer.dart';
 import '../../Auth.dart';
 import 'teamMembersData.dart';
 import 'teamMembers.dart';
 import 'skills.dart';
 
-class viewProject extends StatefulWidget {
+class viewProject extends KFDrawerContent {
   var id;
 
   String tab;
-  viewProject({Key key, @required this.id, this.tab}) : super(key: key);
+  viewProject({Key key, @required this.id, @required this.tab});
   @override
   _viewProjectState createState() => _viewProjectState();
 }
@@ -32,6 +35,8 @@ class _viewProjectState extends State<viewProject> {
         }
         if (snapshot.connectionState == ConnectionState.done) {
           Map<String, dynamic> data = snapshot.data.data();
+          String whatTab =
+              data['supervisor'] == "" ? "ideaOwner" : "supervisor";
           return DefaultTabController(
             length: 3,
             child: Scaffold(
@@ -40,7 +45,9 @@ class _viewProjectState extends State<viewProject> {
                 elevation: 0,
                 leading: BackButton(
                   color: Colors.indigo,
-                  onPressed: () => (Navigator.pop(context)),
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
                 ),
                 backgroundColor: Colors.white,
                 title: Text(
@@ -65,7 +72,7 @@ class _viewProjectState extends State<viewProject> {
               ),
               body: TabBarView(
                 children: [
-                  ProjectDetails(widget.id, data, widget.tab),
+                  ProjectDetails(widget.id, data, whatTab),
                   teamMembersList(
                     projectData: data,
                   ),
@@ -113,7 +120,6 @@ class ProjectDetails extends StatelessWidget {
     /*2 */
     //if they clicked applied, will execute Notapply "means bool = false"
     //remove their id from the list and update the firestore
-    String leaderRole = (tab == "member") ? 'supervisor' : 'ideaOwner';
 
     final ValueNotifier<bool> wantToApply = ValueNotifier<bool>(true);
     final ValueNotifier<bool> show = ValueNotifier<bool>(true);
@@ -140,7 +146,7 @@ class ProjectDetails extends StatelessWidget {
     Future<void> checkApplying() async {
       CollectionReference leaderprofile = FirebaseFirestore.instance
           .collection('User')
-          .doc(data[leaderRole])
+          .doc(data[tab])
           .collection('myProjects');
 
       await leaderprofile.doc(id).get().then((value) {
@@ -159,10 +165,11 @@ class ProjectDetails extends StatelessWidget {
     void apply() {
       //add the user to the list
       FirebaseFirestore.instance.runTransaction((transaction) async {
+        print(tab);
         DocumentSnapshot freshsnap = await transaction.get(FirebaseFirestore
             .instance
             .collection('User')
-            .doc(data[leaderRole])
+            .doc(data[tab])
             .collection('myProjects')
             .doc(id));
         List l = [Auth.getCurrentUserID()];
@@ -181,7 +188,7 @@ class ProjectDetails extends StatelessWidget {
         DocumentSnapshot freshsnap = await transaction.get(FirebaseFirestore
             .instance
             .collection('User')
-            .doc(data[leaderRole])
+            .doc(data[tab])
             .collection('myProjects')
             .doc(id));
         await transaction.update(freshsnap.reference, {
@@ -217,7 +224,6 @@ class ProjectDetails extends StatelessWidget {
         ),
         SizedBox(
           width: 350,
-          height: 350,
           child: Card(
             color: new Color(0xFFdfe7f2),
             shape: RoundedRectangleBorder(
@@ -238,7 +244,7 @@ class ProjectDetails extends StatelessWidget {
                             fontWeight: FontWeight.w900,
                             fontStyle: FontStyle.italic,
                             fontFamily: 'Open Sans',
-                            fontSize: 30),
+                            fontSize: 20),
                       ),
                     ),
                   ),
@@ -251,7 +257,7 @@ class ProjectDetails extends StatelessWidget {
                         style: TextStyle(
                             color: Colors.grey[800],
                             fontFamily: 'Open Sans',
-                            fontSize: 20),
+                            fontSize: 15),
                       ),
                     ),
                   ),
@@ -322,33 +328,93 @@ class ProjectDetails extends StatelessWidget {
                           List listofmembers = data['teamMembers'];
                           String currentSuper = data['supervisor'];
                           String currentOwner = data['ideaOwner'];
+                          String project = data['projectName'];
                           String user = Auth.getCurrentUserID();
+                          String listofwhat = "";
+                          if (currentSuper.compareTo(user) == 0)
+                            listofwhat = "Team Members Applicants";
+                          if (currentOwner.compareTo(user) == 0 &&
+                              currentSuper ==
+                                  "") //if they already have supervisor
+                            listofwhat = "Supervisors Applicants";
                           if (listofmembers.contains(Auth.getCurrentUserID()) ||
                               currentSuper.compareTo(user) == 0 ||
                               currentOwner.compareTo(user) == 0) {
-                            return Center(
-                              child: RawMaterialButton(
-                                elevation: 80.0,
-                                fillColor: const Color(0XFF2A4793),
-                                splashColor: const Color(0xff2980b9),
-                                child: Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                    vertical: 10.0,
-                                    horizontal: 50.0,
+                            return Padding(
+                              padding: const EdgeInsets.all(20.0),
+                              child: Column(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceAround,
+                                children: <Widget>[
+                                  Center(
+                                    child: RawMaterialButton(
+                                      elevation: 80.0,
+                                      fillColor: const Color(0XFF2A4793),
+                                      splashColor: const Color(0xff2980b9),
+                                      child: Padding(
+                                        padding: const EdgeInsets.symmetric(
+                                          vertical: 10.0,
+                                          horizontal: 35.0,
+                                        ),
+                                        child: Text(
+                                          "View Project Posts",
+                                          style: TextStyle(
+                                              color: Colors.white,
+                                              fontSize: 20.0),
+                                        ),
+                                      ),
+                                      onPressed: () {
+                                        Navigator.push(context,
+                                            MaterialPageRoute(builder: (_) {
+                                          return posts(); //update
+                                        }));
+                                      },
+                                      shape: const StadiumBorder(),
+                                    ),
                                   ),
-                                  child: Text(
-                                    "posts",
-                                    style: TextStyle(
-                                        color: Colors.white, fontSize: 20.0),
+                                  SizedBox(
+                                    height: 5.0,
                                   ),
-                                ),
-                                onPressed: () {
-                                  // Navigator.push(context,
-                                  //     MaterialPageRoute(builder: (_) {
-                                  //   return profilePage(); //update
-                                  // }));
-                                },
-                                shape: const StadiumBorder(),
+                                  Center(
+                                    child: listofwhat != ""
+                                        ? RawMaterialButton(
+                                            elevation: 80.0,
+                                            fillColor: const Color(0XFF2A4793),
+                                            splashColor:
+                                                const Color(0xff2980b9),
+                                            child: Padding(
+                                              padding:
+                                                  const EdgeInsets.symmetric(
+                                                vertical: 10.0,
+                                                horizontal: 20.0,
+                                              ),
+                                              child: Text(
+                                                listofwhat,
+                                                style: TextStyle(
+                                                    color: Colors.white,
+                                                    fontSize: 20.0),
+                                              ),
+                                            ),
+                                            onPressed: () {
+                                              Navigator.push(context,
+                                                  MaterialPageRoute(
+                                                      builder: (_) {
+                                                return Members(
+                                                  projectId: id,
+                                                  leader: user,
+                                                  header: "Applicants in " +
+                                                      project,
+                                                );
+                                              }));
+                                            },
+                                            shape: const StadiumBorder(),
+                                          )
+                                        : SizedBox(
+                                            width: 3.0,
+                                            height: 3.0,
+                                          ),
+                                  ),
+                                ],
                               ),
                             );
                           }
