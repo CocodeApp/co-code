@@ -4,15 +4,15 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cocode/Auth.dart';
 
 // ignore: camel_case_types
-class posts extends StatefulWidget {
-  static const String id = "CHAT";
-
-  const posts({Key key}) : super(key: key);
+class Chat extends StatefulWidget {
+  var projectId;
+  var channleId;
+  Chat({Key key,@required this.projectId,@required this.channleId}) : super(key: key);
   @override
-  _postsState createState() => _postsState();
+  _ChatState createState() => _ChatState();
 }
 
-class _postsState extends State<posts> {
+class _ChatState extends State<Chat> {
 
   final FirebaseFirestore firestore = FirebaseFirestore.instance;
   TextEditingController messageController = TextEditingController();
@@ -21,7 +21,9 @@ class _postsState extends State<posts> {
 
   Future<void> callback() async {
     if (messageController.text.length > 0) {
-      await firestore.collection('messages').add({
+      await firestore.collection('project').doc('projectId')
+          .collection('messages').doc('Channels').
+      collection('channleId').add({
         'text': messageController.text,
         'from': userName,
         'date': DateTime.now().toIso8601String().toString(),
@@ -46,7 +48,7 @@ class _postsState extends State<posts> {
         backgroundColor: Colors.white,
         centerTitle: true,
         title: Text(
-          'Posts',
+          'Posts',////////// خوذيه من نجد اسم التشانل
           style: TextStyle(color: Colors.indigo),
         ),
       ),
@@ -58,7 +60,9 @@ class _postsState extends State<posts> {
             Expanded(
               child: StreamBuilder<QuerySnapshot>(
                 stream: firestore
-                    .collection('messages')
+            .collection('project').doc('projectId')
+            .collection('messages').doc('Channels').
+        collection('channleId')
                     .orderBy('date')
                     .snapshots(),
                 builder: (context, snapshot) {
@@ -73,10 +77,10 @@ class _postsState extends State<posts> {
                       .map((doc) => Message(
 
                     from: doc.data()['from'],
-                            text: doc.data()['text'],
-                            currentUser:
-                            userName == doc.data()['from'],
-                          ))
+                    text: doc.data()['text'],
+                    currentUser:
+                    userName == doc.data()['from'],
+                  ))
                       .toList();
 
                   return ListView(
@@ -91,24 +95,24 @@ class _postsState extends State<posts> {
             // send massage container
 
             Container(
-            decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.only(
-            topLeft: Radius.circular(10),
-            topRight: Radius.circular(10),
-            bottomLeft: Radius.circular(10),
-            bottomRight: Radius.circular(10)
-            ),
-            boxShadow: [
-            BoxShadow(
-            color: Colors.grey.withOpacity(0.3),
-            spreadRadius: 5,
-            blurRadius: 5,
-            offset: Offset(0, 3), // changes position of shadow
-            ),
-            ],),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(10),
+                    topRight: Radius.circular(10),
+                    bottomLeft: Radius.circular(10),
+                    bottomRight: Radius.circular(10)
+                ),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.grey.withOpacity(0.3),
+                    spreadRadius: 5,
+                    blurRadius: 5,
+                    offset: Offset(0, 3), // changes position of shadow
+                  ),
+                ],),
               height:
-            0.1*MediaQuery.of(context).size.height, //ناقص احط خط فوق هذي الكونتينر نفس حق البروفايل اللي سوته لطيفه
+              0.1*MediaQuery.of(context).size.height, //ناقص احط خط فوق هذي الكونتينر نفس حق البروفايل اللي سوته لطيفه
               child: Row(
                 children: <Widget>[
                   SizedBox(
@@ -184,15 +188,15 @@ class Message extends StatelessWidget {
     return Container(
       child: Column(
         crossAxisAlignment:
-            currentUser ? CrossAxisAlignment.end : CrossAxisAlignment.start,
+        currentUser ? CrossAxisAlignment.end : CrossAxisAlignment.start,
         children: <Widget>[
-      Container(
-        padding:   currentUser ? EdgeInsets.only(
-        right:0.03*MediaQuery.of(context).size.width,):  EdgeInsets.only(left:0.03*MediaQuery.of(context).size.width, ),
-        child:Text(
-          from,
-        ),
-      ),
+          Container(
+            padding:   currentUser ? EdgeInsets.only(
+              right:0.03*MediaQuery.of(context).size.width,):  EdgeInsets.only(left:0.03*MediaQuery.of(context).size.width, ),
+            child:Text(
+              from,
+            ),
+          ),
 
           Material(
             color: currentUser ? Colors.teal[100] : Colors.blue[100],
