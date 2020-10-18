@@ -17,13 +17,13 @@ class _postsState extends State<posts> {
   final FirebaseFirestore firestore = FirebaseFirestore.instance;
   TextEditingController messageController = TextEditingController();
   ScrollController scrollController = ScrollController();
-  String userName = Auth.getCurrentUsername();
+  String userName = Auth.getCurrentUserID();
 
   Future<void> callback() async {
     if (messageController.text.length > 0) {
       await firestore.collection('messages').add({
         'text': messageController.text,
-        'from': userName, //////////////////////يجيب الايمبل ممكن اغيرها و تصير اليوزر نيم
+        'from': userName,
         'date': DateTime.now().toIso8601String().toString(),
       });
       messageController.clear();
@@ -43,14 +43,13 @@ class _postsState extends State<posts> {
         leading: BackButton(
           color: Colors.deepOrangeAccent,
         ),
-        elevation: 0,
         backgroundColor: Colors.white,
         centerTitle: true,
         title: Text(
           'Posts',
           style: TextStyle(color: Colors.indigo),
         ),
-      ), //ناقص احط خط فوق هذي الكونتينر نفس حق البروفايل اللي سوته لطيفه
+      ),
 
       body: SafeArea(
         child: Column(
@@ -90,13 +89,30 @@ class _postsState extends State<posts> {
               ),
             ),
             // send massage container
+
             Container(
+            decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(10),
+            topRight: Radius.circular(10),
+            bottomLeft: Radius.circular(10),
+            bottomRight: Radius.circular(10)
+            ),
+            boxShadow: [
+            BoxShadow(
+            color: Colors.grey.withOpacity(0.3),
+            spreadRadius: 5,
+            blurRadius: 5,
+            offset: Offset(0, 3), // changes position of shadow
+            ),
+            ],),
               height:
-                  70, //ناقص احط خط فوق هذي الكونتينر نفس حق البروفايل اللي سوته لطيفه
+            0.1*MediaQuery.of(context).size.height, //ناقص احط خط فوق هذي الكونتينر نفس حق البروفايل اللي سوته لطيفه
               child: Row(
                 children: <Widget>[
                   SizedBox(
-                    width: 10,
+                    width: 0.05*MediaQuery.of(context).size.width,
                   ),
                   Expanded(
                     child: TextField(
@@ -170,11 +186,16 @@ class Message extends StatelessWidget {
         crossAxisAlignment:
             currentUser ? CrossAxisAlignment.end : CrossAxisAlignment.start,
         children: <Widget>[
-          Text(
-            from,
-          ),
+      Container(
+        padding:   currentUser ? EdgeInsets.only(
+        right:0.03*MediaQuery.of(context).size.width,):  EdgeInsets.only(left:0.03*MediaQuery.of(context).size.width, ),
+        child:Text(
+          from,
+        ),
+      ),
+
           Material(
-            color: currentUser ? Colors.teal[200] : Colors.blue[200],
+            color: currentUser ? Colors.teal[100] : Colors.blue[100],
             borderRadius: BorderRadius.circular(10.0),
             elevation: 6.0,
             child: Container(
