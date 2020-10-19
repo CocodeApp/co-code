@@ -2,7 +2,21 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/co-code.iml" filepath="$PROJECT_DIR$/.idea/co-code.iml" />
+      <module fileurl="file://$PROJECT_DIR$/cocode/build/image_picker/intermediates/aapt_friendly_merged_manifests/debug/aapt/aapt.iml" filepath="$PROJECT_DIR$/cocode/build/image_picker/intermediates/aapt_friendly_merged_manifests/debug/aapt/aapt.iml" />
+      <module fileurl="file://$PROJECT_DIR$/cocode/android/android.iml" filepath="$PROJECT_DIR$/cocode/android/android.iml" />
+      <module fileurl="file://$PROJECT_DIR$/cocode/build/app/app.iml" filepath="$PROJECT_DIR$/cocode/build/app/app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/cocode/build/app/intermediates/bundle_manifest/debug/bundle-manifest/bundle-manifest.iml" filepath="$PROJECT_DIR$/cocode/build/app/intermediates/bundle_manifest/debug/bundle-manifest/bundle-manifest.iml" />
+      <module fileurl="file://$PROJECT_DIR$/cocode/build/cloud_firestore/cloud_firestore.iml" filepath="$PROJECT_DIR$/cocode/build/cloud_firestore/cloud_firestore.iml" />
+      <module fileurl="file://$PROJECT_DIR$/cocode/cocode.iml" filepath="$PROJECT_DIR$/cocode/cocode.iml" />
+      <module fileurl="file://$PROJECT_DIR$/cocode/build/image_picker/intermediates/library_manifest/debug/debug.iml" filepath="$PROJECT_DIR$/cocode/build/image_picker/intermediates/library_manifest/debug/debug.iml" />
+      <module fileurl="file://$PROJECT_DIR$/cocode/build/firebase_auth/firebase_auth.iml" filepath="$PROJECT_DIR$/cocode/build/firebase_auth/firebase_auth.iml" />
+      <module fileurl="file://$PROJECT_DIR$/cocode/build/firebase_core/firebase_core.iml" filepath="$PROJECT_DIR$/cocode/build/firebase_core/firebase_core.iml" />
+      <module fileurl="file://$PROJECT_DIR$/cocode/build/firebase_dynamic_links/firebase_dynamic_links.iml" filepath="$PROJECT_DIR$/cocode/build/firebase_dynamic_links/firebase_dynamic_links.iml" />
+      <module fileurl="file://$PROJECT_DIR$/cocode/build/flutter_keyboard_visibility/flutter_keyboard_visibility.iml" filepath="$PROJECT_DIR$/cocode/build/flutter_keyboard_visibility/flutter_keyboard_visibility.iml" />
+      <module fileurl="file://$PROJECT_DIR$/cocode/build/flutter_plugin_android_lifecycle/flutter_plugin_android_lifecycle.iml" filepath="$PROJECT_DIR$/cocode/build/flutter_plugin_android_lifecycle/flutter_plugin_android_lifecycle.iml" />
+      <module fileurl="file://$PROJECT_DIR$/cocode/build/fluttertoast/fluttertoast.iml" filepath="$PROJECT_DIR$/cocode/build/fluttertoast/fluttertoast.iml" />
+      <module fileurl="file://$PROJECT_DIR$/cocode/build/image_picker/image_picker.iml" filepath="$PROJECT_DIR$/cocode/build/image_picker/image_picker.iml" />
+      <module fileurl="file://$PROJECT_DIR$/cocode/android/app/src/profile/profile.iml" filepath="$PROJECT_DIR$/cocode/android/app/src/profile/profile.iml" />
     </modules>
   </component>
 </project>

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
 class posts extends StatefulWidget {
-  @override
   _postsState createState() => _postsState();
 }
 
