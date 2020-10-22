@@ -5,7 +5,7 @@
  * @Author: Scott McCartney
  * @Twitter: @skittlesMc9
  * @Github: https://github.com/scott-mccartney/google-calendar-cloud-function
- */
+//  */
 const { google } = require("googleapis");
 const OAuth2 = google.auth.OAuth2;
 const calendar = google.calendar("v3");
@@ -19,7 +19,7 @@ const ERROR_RESPONSE = {
 };
 const TIME_ZONE = "EST";
 
-exports.addEvent = functions.https.onCall((event, auth) => {
+function addEvent(event, auth) {
   return new Promise(function(resolve, reject) {
     calendar.events.insert(
       {
@@ -35,7 +35,8 @@ exports.addEvent = functions.https.onCall((event, auth) => {
           end: {
             dateTime: event.endTime,
             timeZone: TIME_ZONE
-          }
+          },
+          attendees: [{ email: "latifah.a.alomar@gmail.com" }]
         }
       },
       (err, res) => {
@@ -48,14 +49,15 @@ exports.addEvent = functions.https.onCall((event, auth) => {
       }
     );
   });
-});
+}
 
-exports.addEventToCalendar = functions.https.onRequest((request, response) => {
+exports.addEvent = functions.https.onRequest((request, response) => {
   const eventData = {
     eventName: request.body.eventName,
     description: request.body.description,
     startTime: request.body.startTime,
-    endTime: request.body.endTime
+    endTime: request.body.endTime,
+    attendees: [{ email: "latifah.a.alomar@gmail.com" }]
   };
   const oAuth2Client = new OAuth2(
     googleCredentials.web.client_id,
