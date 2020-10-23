@@ -15,15 +15,16 @@ class Chat extends StatefulWidget {
 class _ChatState extends State<Chat> {
 
   final FirebaseFirestore firestore = FirebaseFirestore.instance;
+  // CollectionReference channels = ;
   TextEditingController messageController = TextEditingController();
   ScrollController scrollController = ScrollController();
   String userName = Auth.getCurrentUserID();
 
   Future<void> callback() async {
     if (messageController.text.length > 0) {
-      await firestore.collection('project').doc('projectId')
-          .collection('messages').doc('Channels').
-      collection('channleId').add({
+      await firestore.collection('projects').doc(widget.projectId)
+          .collection('messages').doc(widget.channleId).
+      collection('chat').add({
         'text': messageController.text,
         'from': userName,
         'date': DateTime.now().toIso8601String().toString(),
@@ -48,7 +49,7 @@ class _ChatState extends State<Chat> {
         backgroundColor: Colors.white,
         centerTitle: true,
         title: Text(
-          'Posts',////////// خوذيه من نجد اسم التشانل
+          "Chat",////////// خوذيه من نجد اسم التشانل
           style: TextStyle(color: Colors.indigo),
         ),
       ),
@@ -60,9 +61,9 @@ class _ChatState extends State<Chat> {
             Expanded(
               child: StreamBuilder<QuerySnapshot>(
                 stream: firestore
-            .collection('project').doc('projectId')
-            .collection('messages').doc('Channels').
-        collection('channleId')
+            .collection('projects').doc(widget.projectId)
+            .collection('messages').doc(widget.channleId).
+        collection('chat')
                     .orderBy('date')
                     .snapshots(),
                 builder: (context, snapshot) {
