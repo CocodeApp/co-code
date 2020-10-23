@@ -43,11 +43,8 @@ dependencies:
   googleapis: ^0.56.1
   googleapis_auth: ^0.2.12
   url_launcher: ^5.7.5
-<<<<<<< HEAD
   google_sign_in: ^4.5.5
-=======
   adobe_xd: ^1.0.0+1
->>>>>>> 8011647c5885604c281c7ff09b60c9f2ba19a5e5
 
   dots_indicator: ^1.2.0
   slimy_card:

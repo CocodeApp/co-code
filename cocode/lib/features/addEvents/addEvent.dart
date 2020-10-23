@@ -34,8 +34,11 @@ class _addEventState extends State<addEvent> {
       end.dateTime = DateTime(2020, 10, 23, 7, 20);
 
       event.end = end;
+
       // Map<dynamic, dynamic> map = {"email": "latifah.a.alomar@gmail.com"};
-      // event.attendees = [EventAttendee.fromJson(map)]; //list of attendens
+      //EventAttendee.fromJson(map)
+
+      // event.attendees.add() //list of attendens
 
       event.location = location;
 
@@ -51,15 +54,15 @@ class _addEventState extends State<addEvent> {
       });
     }
 
-    return Scaffold(
-      body: Center(
-        child: FlatButton(
-          child: Text("add event"),
-          onPressed: () async {
-            addEvent();
-          },
-        ),
-      ),
-    );
+    // return Scaffold(
+    //   body: Center(
+    //     child: FlatButton(
+    //       child: Text("add event"),
+    //       onPressed: () async {
+    //         addEvent();
+    //       },
+    //     ),
+    //   ),
+    // );
   }
 }

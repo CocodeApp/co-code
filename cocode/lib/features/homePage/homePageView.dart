@@ -96,12 +96,12 @@ class _homePageViewState extends State<homePageView> {
           },
         ),
         decoration: BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-            colors: [Color.fromRGBO(42, 71, 147, 1.0), Colors.black],
-          ),
-        ),
+            // gradient: LinearGradient(
+            //   begin: Alignment.topLeft,
+            //   end: Alignment.bottomRight,
+            //   colors: [Color.fromRGBO(42, 71, 147, 1.0), Colors.black],
+            // ),
+            ),
       ),
     );
   }
