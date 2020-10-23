@@ -123,6 +123,7 @@ class _channelsState extends State<channels> {
   Future<void> addChannel() async {
     CollectionReference channels = FirebaseFirestore.instance.collection('projects')
         .doc(widget.projectId).collection('messages');
+    final nameController = TextEditingController();
     return showDialog<void>(
       context: context,
       barrierDismissible: true,
@@ -137,6 +138,7 @@ class _channelsState extends State<channels> {
                   decoration: InputDecoration(
                     hintText: 'e.g. Development',
                   ),
+                  controller: nameController,
                 ),
               ],
             ),
@@ -146,7 +148,7 @@ class _channelsState extends State<channels> {
               child: Text('Add'),
               onPressed: () {
                 channels.add({
-                  'name' : "New Channel"
+                  'name' : nameController.text
                 });
                 Navigator.of(context).pop();
               },
