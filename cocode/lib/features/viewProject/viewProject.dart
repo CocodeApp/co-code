@@ -1,4 +1,6 @@
 import 'package:cocode/features/addEvents/addEvent.dart';
+import 'package:cocode/features/addEvents/addEventForm.dart';
+import 'package:cocode/features/addEvents/v.dart';
 import 'package:cocode/features/posts/posts.dart';
 import 'package:cocode/features/acceptReject/Members.dart';
 import 'package:cocode/features/userProfile.dart/userProfile.dart';
@@ -220,7 +222,7 @@ class ProjectDetails extends StatelessWidget {
           child: Text('addEvent'),
           onPressed: () {
             Navigator.push(context, MaterialPageRoute(builder: (_) {
-              return addEvent(); //update
+              return AddEventFormPage(id: this.id); //update
             }));
           },
         ),

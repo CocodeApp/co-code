@@ -15,6 +15,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "592759573393-nvg7s3isg3qg85a21ksuf9tro62o9jpb.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.coco",
+            "certificate_hash": "5f755742c022cb25b1e1ce746e6c2b2a13f60b97"
+          }
+        },
+        {
           "client_id": "592759573393-kje430opaan22ih70985sr4bftr3vp8q.apps.googleusercontent.com",
           "client_type": 3
         }
@@ -28,8 +36,15 @@
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "592759573393-kje430opaan22ih70985sr4bftr3vp8q.apps.googleusercontent.com",
+              "client_id": "107944211822142345691",
               "client_type": 3
+            },
+            {
+              "client_id": "592759573393-pci4j0uj3r7v5mnfmribl4o0dqd8el8b.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.najdalsughaiyer.cocode"
+              }
             }
           ]
         }
@@ -44,6 +59,30 @@
       },
       "oauth_client": [
         {
+          "client_id": "592759573393-8tvbn4eakg3el71jllee6ctv3tdu6o82.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.heilamogren.cocode",
+            "certificate_hash": "d1aeab6a27f5e92e52a8e73ad9fe494ad6ae6d53"
+          }
+        },
+        {
+          "client_id": "592759573393-rot9rvg9711vucjior7kg1kcn8crnvar.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.heilamogren.cocode",
+            "certificate_hash": "1def83fc387f4e5fd3aab3a0d534d97ce85898b6"
+          }
+        },
+        {
+          "client_id": "592759573393-hn0rv4h19hkv260aksfcg7og662d021q.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.heilamogren.cocode",
+            "certificate_hash": "5f755742c022cb25b1e1ce746e6c2b2a13f60b97"
+          }
+        },
+        {
           "client_id": "592759573393-kje430opaan22ih70985sr4bftr3vp8q.apps.googleusercontent.com",
           "client_type": 3
         }
@@ -57,8 +96,15 @@
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "592759573393-kje430opaan22ih70985sr4bftr3vp8q.apps.googleusercontent.com",
+              "client_id": "107944211822142345691",
               "client_type": 3
+            },
+            {
+              "client_id": "592759573393-pci4j0uj3r7v5mnfmribl4o0dqd8el8b.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.najdalsughaiyer.cocode"
+              }
             }
           ]
         }

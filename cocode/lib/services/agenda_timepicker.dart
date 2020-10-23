@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
-import 'package:cocode/features/Agenda/form.dart';
+import 'package:cocode/features/addEvents/addEventForm.dart';
 
 class mytimepicker extends StatefulWidget {
   String lable;
@@ -41,10 +41,11 @@ class _datepickerstate extends State<mytimepicker> {
                     containerHeight: 210.0,
                   ),
                   showTitleActions: true, onConfirm: (date) {
-                if (widget.lable.compareTo("Deadline") == 0) {
-                  deadline = date;
+                if (widget.lable.compareTo("endTime") == 0) {
+                  endtime = date;
                 } else {
-                  startdate = date;
+                  print("else");
+                  starttime = date;
                 }
                 print('confirm $date');
                 _date = '${date.hour}:${date.minute}';
