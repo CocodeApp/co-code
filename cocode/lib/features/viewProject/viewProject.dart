@@ -1,3 +1,4 @@
+import 'package:cocode/features/addEvents/addEvent.dart';
 import 'package:cocode/features/posts/posts.dart';
 import 'package:cocode/features/acceptReject/Members.dart';
 import 'package:cocode/features/userProfile.dart/userProfile.dart';
@@ -212,6 +213,17 @@ class ProjectDetails extends StatelessWidget {
     return SingleChildScrollView(
         child: Column(
       children: [
+        SizedBox(
+          height: 30,
+        ),
+        FlatButton(
+          child: Text('addEvent'),
+          onPressed: () {
+            Navigator.push(context, MaterialPageRoute(builder: (_) {
+              return addEvent(); //update
+            }));
+          },
+        ),
         SizedBox(
           height: 30,
         ),

@@ -1,4 +1,3 @@
-import 'package:cocode/features/addEvents/addeventsView.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'Auth.dart';
@@ -11,8 +10,7 @@ Future<void> main() async {
 
   runApp(MaterialApp(
     theme: ThemeData(fontFamily: 'Open Sans'),
-    // home: await Auth.directoryPage(),
-    home: signIn(),
+    home: await Auth.directoryPage(),
   ));
 }
 

@@ -4,15 +4,15 @@ import 'package:googleapis/calendar/v3.dart';
 
 import 'GoogleAuthClient.dart';
 
-class signIn extends StatefulWidget {
+class addEvent extends StatefulWidget {
   @override
-  _signInState createState() => _signInState();
+  _addEventState createState() => _addEventState();
 }
 
-class _signInState extends State<signIn> {
+class _addEventState extends State<addEvent> {
   @override
   Widget build(BuildContext context) {
-    Future<void> signIn() async {
+    Future<void> addEvent() async {
       final googleSignIn =
           GoogleSignIn.standard(scopes: [CalendarApi.CalendarScope]);
       final GoogleSignInAccount account = await googleSignIn.signIn();
@@ -23,13 +23,13 @@ class _signInState extends State<signIn> {
       Event event = Event();
       event.summary = "test";
       EventDateTime start = new EventDateTime(); //Setting start time
-      start.dateTime = new DateTime(2020 - 10 - 23, 6, 30);
+      start.dateTime = new DateTime(2020, 10, 23, 6, 30);
       start.timeZone = "GMT+05:00";
       event.start = start;
 
       EventDateTime end = new EventDateTime(); //setting end time
       end.timeZone = "GMT+05:00";
-      end.dateTime = start.dateTime = new DateTime(2020 - 10 - 23, 7, 30);
+      end.dateTime = start.dateTime = new DateTime(2020, 10, 23, 7, 30);
       event.end = end;
       var calendar = CalendarApi(authenticateClient);
       String calendarId = "primary";
@@ -46,9 +46,9 @@ class _signInState extends State<signIn> {
     return Scaffold(
       body: Center(
         child: FlatButton(
-          child: Text("sign"),
+          child: Text("add event"),
           onPressed: () async {
-            signIn();
+            addEvent();
           },
         ),
       ),
