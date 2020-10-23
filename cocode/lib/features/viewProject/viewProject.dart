@@ -109,10 +109,10 @@ class ProjectDetails extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     //before building the widget
-    //get leader'sid
+    //get leader's id
     //get the current project
     //get temp list
-    //if the user exist,return flase, otherwise true
+    //if the user exist,return false, otherwise true
     //depending on the previous bool change the button
     //after building the widget
     /*1 */
