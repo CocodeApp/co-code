@@ -41,6 +41,8 @@ class _ChatState extends State<Chat> {
 
   @override
   Widget build(BuildContext context) {
+    var channel = firestore.collection('projects').doc(widget.projectId)
+        .collection('messages').doc(widget.channleId).get();
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
@@ -49,7 +51,7 @@ class _ChatState extends State<Chat> {
         ),
         backgroundColor: Colors.white,
         centerTitle: true,
-        title: Text( "Channel name",
+        title: Text( "channel",
           style: TextStyle(color: Colors.indigo),
         ),
       ),
