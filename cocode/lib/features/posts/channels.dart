@@ -121,6 +121,8 @@ class _channelsState extends State<channels> {
   }
 
   Future<void> addChannel() async {
+    CollectionReference channels = FirebaseFirestore.instance.collection('projects')
+        .doc(widget.projectId).collection('messages');
     return showDialog<void>(
       context: context,
       barrierDismissible: true,
@@ -133,7 +135,7 @@ class _channelsState extends State<channels> {
                 Text('Channel name:'),
                 TextField(
                   decoration: InputDecoration(
-                    hintText: 'e.g. Development'
+                    hintText: 'e.g. Development',
                   ),
                 ),
               ],
@@ -143,9 +145,18 @@ class _channelsState extends State<channels> {
             FlatButton(
               child: Text('Add'),
               onPressed: () {
+                channels.add({
+                  'name' : "New Channel"
+                });
                 Navigator.of(context).pop();
               },
             ),
+            FlatButton(
+              child: Text('Cancel'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            )
           ],
         );
       },
