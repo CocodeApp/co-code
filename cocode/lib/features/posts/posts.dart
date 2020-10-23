@@ -15,10 +15,10 @@ class Chat extends StatefulWidget {
 class _ChatState extends State<Chat> {
 
   final FirebaseFirestore firestore = FirebaseFirestore.instance;
-  // CollectionReference channels = ;
   TextEditingController messageController = TextEditingController();
   ScrollController scrollController = ScrollController();
-  String userName = Auth.getCurrentUserID();
+  String userName = Auth.getCurrentUserID(); // ممتاز بس فكري وقت العرض إن بنعرض الاسم مو الآيدي
+
 
   Future<void> callback() async {
     if (messageController.text.length > 0) {
@@ -80,7 +80,7 @@ class _ChatState extends State<Chat> {
                     from: doc.data()['from'],
                     text: doc.data()['text'],
                     currentUser:
-                    userName == doc.data()['from'],
+                    userName == doc.data()['from'], // هنا المفروض تعرضين اسم اليوزر
                   ))
                       .toList();
 
