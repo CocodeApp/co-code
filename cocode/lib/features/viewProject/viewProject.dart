@@ -7,7 +7,10 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:kf_drawer/kf_drawer.dart';
 import '../../Auth.dart';
+import '../addEvent.dart';
 import 'teamMembersData.dart';
+import 'package:circular_menu/circular_menu.dart';
+
 import 'teamMembers.dart';
 import 'skills.dart';
 
@@ -212,6 +215,17 @@ class ProjectDetails extends StatelessWidget {
     return SingleChildScrollView(
         child: Column(
       children: [
+        SizedBox(
+          height: 30,
+        ),
+        FlatButton(
+          child: Text("addEvent"),
+          onPressed: () {
+            Navigator.push(context, MaterialPageRoute(builder: (_) {
+              return signIn(); //update
+            }));
+          },
+        ),
         SizedBox(
           height: 30,
         ),
