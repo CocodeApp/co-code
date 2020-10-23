@@ -17,10 +17,11 @@ class _ChatState extends State<Chat> {
   final FirebaseFirestore firestore = FirebaseFirestore.instance;
   TextEditingController messageController = TextEditingController();
   ScrollController scrollController = ScrollController();
-  String userName = Auth.getCurrentUserID(); // ممتاز بس فكري وقت العرض إن بنعرض الاسم مو الآيدي
+  String userName = Auth.getCurrentUsername();
 
 
   Future<void> callback() async {
+
     if (messageController.text.length > 0) {
       await firestore.collection('projects').doc(widget.projectId)
           .collection('messages').doc(widget.channleId).
@@ -48,8 +49,8 @@ class _ChatState extends State<Chat> {
         ),
         backgroundColor: Colors.white,
         centerTitle: true,
-        title: Text(
-          "Chat",////////// خوذيه من نجد اسم التشانل
+        title: Text("najid",
+          ///////// خوذيه من نجد اسم التشانل
           style: TextStyle(color: Colors.indigo),
         ),
       ),
@@ -80,7 +81,7 @@ class _ChatState extends State<Chat> {
                     from: doc.data()['from'],
                     text: doc.data()['text'],
                     currentUser:
-                    userName == doc.data()['from'], // هنا المفروض تعرضين اسم اليوزر
+                    userName == doc.data()['from'],
                   ))
                       .toList();
 
@@ -113,7 +114,7 @@ class _ChatState extends State<Chat> {
                   ),
                 ],),
               height:
-              0.1*MediaQuery.of(context).size.height, //ناقص احط خط فوق هذي الكونتينر نفس حق البروفايل اللي سوته لطيفه
+              0.1*MediaQuery.of(context).size.height,
               child: Row(
                 children: <Widget>[
                   SizedBox(
