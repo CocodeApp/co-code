@@ -250,18 +250,14 @@ class ProjectDetails extends StatelessWidget {
       child: Column(
         children: [
           SizedBox(
-            height: 30,
-          ),
-
-          SizedBox(
-            height: 30,
+            height: 20,
           ),
           CircleAvatar(
             backgroundImage: AssetImage("imeges/logo-2.png"),
             radius: 60,
           ), // to be transparent if there is no logo
           SizedBox(
-            height: 30,
+            height: 20,
           ),
           SizedBox(
             width: 350,

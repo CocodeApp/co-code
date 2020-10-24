@@ -38,7 +38,7 @@ class _homePageViewState extends State<homePageView> {
           page: userProjects(),
         ),
         KFDrawerItem.initWithPage(
-          text: Text('settings', style: TextStyle(color: Colors.white)),
+          text: Text('Settings', style: TextStyle(color: Colors.white)),
           icon: Icon(Icons.settings, color: Colors.white),
           page: settingsPage(),
         ),

@@ -28,16 +28,12 @@ class event extends StatelessWidget {
         elevation: 0,
         leading: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 0.0),
-          child: IconButton(
+          child: BackButton(
             //change
             color: Colors.indigo,
             onPressed: () {
               Navigator.pop(context);
             },
-            icon: Icon(
-              Icons.arrow_back_ios,
-              size: 45.0,
-            ),
           ),
         ),
         backgroundColor: Colors.transparent,
@@ -69,14 +65,22 @@ class event extends StatelessWidget {
             offset: Offset(41.2, 207.0),
             child: SizedBox(
               width: 274.0,
-              child: Text(
-                eventDetails['name'],
-                style: TextStyle(
-                  fontFamily: 'Microsoft Sans Serif',
-                  fontSize: 35,
-                  color: const Color(0xff656d78),
-                ),
-                textAlign: TextAlign.center,
+              child: Column(
+                children: [
+                  Text(
+                    eventDetails['name'],
+                    style: TextStyle(
+                      fontFamily: 'Microsoft Sans Serif',
+                      fontSize: 45,
+                      color: const Color(0xff656d78),
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+                  Divider(
+                    color: Colors.black,
+                    thickness: 2,
+                  ),
+                ],
               ),
             ),
           ),
@@ -93,14 +97,29 @@ class event extends StatelessWidget {
                     ),
                     SizedBox(
                       width: 284.0,
-                      child: Text(
-                        eventDetails['description'],
-                        style: TextStyle(
-                          fontFamily: 'Microsoft PhagsPa',
-                          fontSize: 21,
-                          color: const Color(0xff000000),
-                        ),
-                        textAlign: TextAlign.left,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            'event description : ',
+                            style: TextStyle(
+                              fontFamily: 'Microsoft PhagsPa',
+                              fontSize: 18,
+                              color: const Color(0xff000000),
+                              fontWeight: FontWeight.bold,
+                            ),
+                            textAlign: TextAlign.left,
+                          ),
+                          Text(
+                            eventDetails['description'],
+                            style: TextStyle(
+                              fontFamily: 'Microsoft PhagsPa',
+                              fontSize: 21,
+                              color: const Color(0xff656d78),
+                            ),
+                            textAlign: TextAlign.left,
+                          ),
+                        ],
                       ),
                     ),
                   ],
@@ -116,22 +135,37 @@ class event extends StatelessWidget {
                       SizedBox(
                         width: 5.0,
                       ),
-                      Text(
-                        'From ' +
-                            startdate +
-                            ' at ' +
-                            starttime +
-                            '\n' +
-                            'To ' +
-                            enddate +
-                            ' at ' +
-                            endtime,
-                        style: TextStyle(
-                          fontFamily: 'Microsoft PhagsPa',
-                          fontSize: 18,
-                          color: const Color(0xff000000),
-                        ),
-                        textAlign: TextAlign.left,
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            'event dates : ',
+                            style: TextStyle(
+                              fontFamily: 'Microsoft PhagsPa',
+                              fontSize: 18,
+                              color: const Color(0xff000000),
+                              fontWeight: FontWeight.bold,
+                            ),
+                            textAlign: TextAlign.left,
+                          ),
+                          Text(
+                            'From ' +
+                                startdate +
+                                ' at ' +
+                                starttime +
+                                '\n' +
+                                'To ' +
+                                enddate +
+                                ' at ' +
+                                endtime,
+                            style: TextStyle(
+                              fontFamily: 'Microsoft PhagsPa',
+                              fontSize: 18,
+                              color: const Color(0xff656d78),
+                            ),
+                            textAlign: TextAlign.left,
+                          ),
+                        ],
                       ),
                     ],
                   ),
