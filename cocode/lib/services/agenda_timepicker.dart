@@ -36,22 +36,25 @@ class _datepickerstate extends State<mytimepicker> {
                     style: BorderStyle.solid),
                 borderRadius: BorderRadius.circular(30.0)),
             onPressed: () {
-              DatePicker.showTimePicker(context,
-                  theme: DatePickerTheme(
-                    containerHeight: 210.0,
-                  ),
-                  showTitleActions: true, onConfirm: (date) {
-                if (widget.lable.compareTo("endTime") == 0) {
-                  endtime = date;
-                } else {
-                  print("else");
-                  starttime = date;
-                }
-                print('confirm $date');
-                _date = '${date.hour}:${date.minute}';
+              DatePicker.showTimePicker(
+                context,
+                theme: DatePickerTheme(
+                  containerHeight: 210.0,
+                ),
+                showTitleActions: true,
+                onConfirm: (date) {
+                  if (widget.lable.compareTo("End Time") == 0) {
+                    endtime = date;
+                  } else {
+                    print("else");
+                    starttime = date;
+                  }
+                  print('confirm $date');
+                  _date = '${date.hour}:${date.minute}';
 
-                setState(() {});
-              }, currentTime: DateTime.now(), locale: LocaleType.en);
+                  setState(() {});
+                }, //currentTime: DateTime.now(), locale: LocaleType.en
+              );
             },
             child: Container(
               alignment: Alignment.center,

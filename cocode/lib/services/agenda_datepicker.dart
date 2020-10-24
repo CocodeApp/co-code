@@ -48,7 +48,7 @@ class _datepickerstate extends State<mydatepicker> {
                       DateTime.now().minute),
                   maxTime: DateTime(DateTime.now().year + 10, 12, 31),
                   onConfirm: (date) {
-                if (widget.lable.compareTo("EndDate") == 0) {
+                if (widget.lable.compareTo("End Date") == 0) {
                   print("if");
                   deadline = date;
                 } else {

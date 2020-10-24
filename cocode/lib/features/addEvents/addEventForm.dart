@@ -49,7 +49,6 @@ class _State extends State<AddEventFormPage> {
     deadline = null;
     starttime = null;
     endtime = null;
-
     _dateErorrmsg.value = "";
   }
 
@@ -57,14 +56,17 @@ class _State extends State<AddEventFormPage> {
       ValueNotifier<List<String>>([]);
   TextEditingController eCtrl = new TextEditingController();
   // TextEditingController membersCtrl = new TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     setState(() {});
 
     final _formKey = GlobalKey<FormState>();
+    Future.delayed(Duration.zero, () => showAlert(context));
+
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.lightBlueAccent,
+        backgroundColor: Colors.blue[300],
         leading: BackButton(
           color: Colors.deepOrangeAccent,
         ),
@@ -76,7 +78,7 @@ class _State extends State<AddEventFormPage> {
       ),
       body: new Container(
         height: 700.0,
-        decoration: new BoxDecoration(color: Colors.lightBlueAccent),
+        decoration: new BoxDecoration(color: Colors.blue[300]),
         child: Form(
           key: _formKey,
           child: SingleChildScrollView(
@@ -147,25 +149,25 @@ class _State extends State<AddEventFormPage> {
                           ),
                         ),
                         //startdate
-                        new mydatepicker("StartDate", (DateTime start) {
+                        new mydatepicker("Start Date", (DateTime start) {
                           setState(() {
                             startdate = start;
                           });
                         }),
 
-                        new mytimepicker("StartTime", (DateTime start) {
+                        new mytimepicker("Start Time", (DateTime start) {
                           setState(() {
                             starttime = start;
                           });
                         }),
                         //deadline
-                        new mydatepicker("EndDate", (DateTime dead) {
+                        new mydatepicker("End Date", (DateTime dead) {
                           setState(() {
                             deadline = dead;
                           });
                         }),
 
-                        new mytimepicker("endTime", (DateTime end) {
+                        new mytimepicker("End Time", (DateTime end) {
                           setState(() {
                             endtime = end;
                           });
@@ -185,7 +187,23 @@ class _State extends State<AddEventFormPage> {
                         ),
 
                         //post button
-                        postbutton(
+
+                        RawMaterialButton(
+                          shape: const StadiumBorder(),
+                          elevation: 80.0,
+                          fillColor: const Color(0xfff57862),
+                          splashColor: const Color(0xff2980b9),
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(
+                              vertical: 10.0,
+                              horizontal: 50.0,
+                            ),
+                            child: Text(
+                              "Add",
+                              style: TextStyle(
+                                  color: Colors.white, fontSize: 20.0),
+                            ),
+                          ),
                           onPressed: () async {
                             //                         DocumentReference project = FirebaseFirestore
                             //                             .instance
@@ -201,14 +219,26 @@ class _State extends State<AddEventFormPage> {
                             // project to the projects collections
 
                             print("id is  " + widget.id);
-                            if (startdate != null && deadline != null) {
+                            if (startdate != null &&
+                                deadline != null &&
+                                starttime != null &&
+                                endtime != null) {
                               if (startdate.isAfter(deadline))
                                 _dateErorrmsg.value =
-                                    "startdate must not be after deadline";
-                              else
+                                    "start date must not be after deadline!";
+                              else if (startdate.difference(deadline).inDays ==
+                                      0 &&
+                                  starttime.isAfter(endtime))
+                                _dateErorrmsg.value =
+                                    "start date must not be after deadline!";
+                              else {
                                 _dateErorrmsg.value = "";
+                              }
                             } else {
-                              if (startdate == null || deadline == null) {
+                              if (startdate == null ||
+                                  deadline == null ||
+                                  starttime == null ||
+                                  endtime == null) {
                                 _dateErorrmsg.value =
                                     "Date and time can't be empty";
                                 print("-------");
@@ -219,6 +249,7 @@ class _State extends State<AddEventFormPage> {
                                 _dateErorrmsg.value == "") {
                               //setting attributes
 
+                              print("pressed");
                               //1- event name
                               String event_name = eventname;
 
@@ -234,7 +265,6 @@ class _State extends State<AddEventFormPage> {
                                   starttime.minute);
 
                               //4- end date
-
                               DateTime end_date = DateTime(
                                   deadline.year,
                                   deadline.month,
@@ -286,27 +316,29 @@ class _State extends State<AddEventFormPage> {
                                       print("Failed to add event: $error"));
 
                               var res = await addEvent(event_name, start_date,
-                                  end_date, members_emails);
+                                      end_date, members_emails)
+                                  .then((res) {
+                                if (res) {
+                                  Fluttertoast.showToast(
+                                      msg: "Event added Successfully",
+                                      toastLength: Toast.LENGTH_LONG,
+                                      gravity: ToastGravity.CENTER,
+                                      timeInSecForIosWeb: 1,
+                                      backgroundColor: Colors.blueAccent,
+                                      textColor: Colors.white,
+                                      fontSize: 16.0);
+                                } else {
+                                  Fluttertoast.showToast(
+                                      msg: "Failed to add event",
+                                      toastLength: Toast.LENGTH_LONG,
+                                      gravity: ToastGravity.CENTER,
+                                      timeInSecForIosWeb: 1,
+                                      backgroundColor: Colors.blueAccent,
+                                      textColor: Colors.white,
+                                      fontSize: 16.0);
+                                }
+                              });
 
-                              if (res) {
-                                Fluttertoast.showToast(
-                                    msg: "Event added Successfully",
-                                    toastLength: Toast.LENGTH_LONG,
-                                    gravity: ToastGravity.CENTER,
-                                    timeInSecForIosWeb: 1,
-                                    backgroundColor: Colors.blueAccent,
-                                    textColor: Colors.white,
-                                    fontSize: 16.0);
-                              } else {
-                                Fluttertoast.showToast(
-                                    msg: "Failed to add event",
-                                    toastLength: Toast.LENGTH_LONG,
-                                    gravity: ToastGravity.CENTER,
-                                    timeInSecForIosWeb: 1,
-                                    backgroundColor: Colors.blueAccent,
-                                    textColor: Colors.white,
-                                    fontSize: 16.0);
-                              }
                               setState(() {});
 
                               setState(() {});
@@ -326,6 +358,50 @@ class _State extends State<AddEventFormPage> {
           ),
         ),
       ),
+    );
+  }
+
+  void showAlert(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+          content: Container(
+              width: 300,
+              height: 400,
+              padding: EdgeInsets.all(12.0),
+              child: Center(
+                  child: Column(children: <Widget>[
+                SizedBox(height: 20),
+                Icon(
+                  Icons.warning,
+                  color: Colors.indigo,
+                  size: 50.0,
+                ),
+                SizedBox(height: 20),
+                Center(
+                    child: Text("Note",
+                        style: TextStyle(
+                            color: Colors.grey[800],
+                            fontWeight: FontWeight.bold,
+                            fontSize: 20))),
+                SizedBox(height: 10),
+                Center(
+                    child: Text(
+                        "Please note that only members registered with Gmail will get the event on their personal celndar. Otherwise, they can view all events on project events page.")),
+                SizedBox(height: 20),
+                WillPopScope(
+                    onWillPop: () async => false,
+                    child: Container(
+                        child: Center(
+                            child: Column(children: <Widget>[
+                      OutlineButton(
+                        textColor: Colors.indigo,
+                        highlightedBorderColor: Colors.black.withOpacity(0.12),
+                        onPressed: Navigator.of(context).pop,
+                        child: Text("OK"),
+                      ),
+                    ]))))
+              ])))),
     );
   }
 }
