@@ -273,7 +273,7 @@ class _State extends State<AddEventFormPage> {
                                   .collection('projects')
                                   .doc(widget.id)
                                   .collection("project_events")
-                                  .doc(project.id) //check the output
+                                  .doc() //check the output
                                   .set({
                                     'name': event_name,
                                     'description': event_description,

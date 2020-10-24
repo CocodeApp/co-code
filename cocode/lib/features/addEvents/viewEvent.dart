@@ -1,117 +1,142 @@
 import 'package:flutter/material.dart';
-import 'package:adobe_xd/pinned.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:intl/intl.dart';
 
-class XDviewListOfEvents extends StatelessWidget {
-  XDviewListOfEvents({
+class event extends StatelessWidget {
+  Map<String, dynamic> eventDetails;
+
+  event({
     Key key,
+    @required this.eventDetails,
   }) : super(key: key);
   @override
   Widget build(BuildContext context) {
+    String eventName = eventDetails['name'];
+    String eventDescription = eventDetails['description'];
+
+    DateTime startdatetime =
+        DateTime.tryParse(eventDetails['startdate'].toDate().toString());
+    DateTime enddatetime =
+        DateTime.tryParse(eventDetails['enddate'].toDate().toString());
+    String startdate = DateFormat.yMMMMd().format(startdatetime);
+    String enddate = DateFormat.yMMMMd().format(enddatetime);
+    String starttime = DateFormat.jm().format(startdatetime);
+    String endtime = DateFormat.jm().format(enddatetime);
+
     return Scaffold(
-      backgroundColor: const Color(0xffffffff),
+      appBar: AppBar(
+        elevation: 0,
+        leading: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 0.0),
+          child: IconButton(
+            //change
+            color: Colors.indigo,
+            onPressed: () {
+              Navigator.pop(context);
+            },
+            icon: Icon(
+              Icons.arrow_back_ios,
+              size: 45.0,
+            ),
+          ),
+        ),
+        backgroundColor: Colors.transparent,
+      ),
+      backgroundColor: const Color(0xffd3deed),
       body: Stack(
         children: <Widget>[
-          Container(
-            width: 375.0,
-            height: 99.0,
-            decoration: BoxDecoration(),
-          ),
+          //white window
           Transform.translate(
-            offset: Offset(77.5, 14.5),
-            child: SvgPicture.string(
-              _svg_g4h265,
-              allowDrawingOutsideViewBox: true,
-            ),
-          ),
-          Transform.translate(
-            offset: Offset(80.0, 20.0),
+            offset: Offset(0.0, 158.0),
             child: Container(
-              width: 238.0,
-              height: 62.0,
+              width: 455.0,
+              height: 579.0,
               decoration: BoxDecoration(
-                borderRadius: BorderRadius.only(
-                  topRight: Radius.circular(25.0),
-                  bottomRight: Radius.circular(25.0),
-                ),
-                color: const Color(0xa1d1dded),
-              ),
-            ),
-          ),
-          Transform.translate(
-            offset: Offset(0.5, 99.5),
-            child: SvgPicture.string(
-              _svg_elo4wy,
-              allowDrawingOutsideViewBox: true,
-            ),
-          ),
-          Transform.translate(
-            offset: Offset(9.0, 14.0),
-            child: Container(
-              width: 68.0,
-              height: 74.0,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(10.0),
-              ),
-            ),
-          ),
-          Transform.translate(
-            offset: Offset(14.0, 25.0),
-            child: SizedBox(
-              width: 56.0,
-              height: 51.0,
-              child: Stack(
-                children: <Widget>[
-                  Pinned.fromSize(
-                    bounds: Rect.fromLTWH(0.0, 36.0, 56.0, 15.0),
-                    size: Size(56.0, 51.0),
-                    pinLeft: true,
-                    pinRight: true,
-                    pinBottom: true,
-                    fixedHeight: true,
-                    child: Text(
-                      'OCT-2020',
-                      style: TextStyle(
-                        fontFamily: 'Lato',
-                        fontSize: 12,
-                        color: const Color(0xff9097a2),
-                      ),
-                      textAlign: TextAlign.center,
-                    ),
-                  ),
-                  Pinned.fromSize(
-                    bounds: Rect.fromLTWH(11.0, 0.0, 34.0, 36.0),
-                    size: Size(56.0, 51.0),
-                    pinTop: true,
-                    fixedWidth: true,
-                    fixedHeight: true,
-                    child: Text(
-                      '12',
-                      style: TextStyle(
-                        fontFamily: 'Lato',
-                        fontSize: 30,
-                        color: const Color(0xff9097a2),
-                      ),
-                      textAlign: TextAlign.center,
-                    ),
+                borderRadius: BorderRadius.circular(50.0),
+                color: const Color(0xffffffff),
+                boxShadow: [
+                  BoxShadow(
+                    color: const Color(0x3d000000),
+                    offset: Offset(10, 10),
+                    blurRadius: 20,
                   ),
                 ],
               ),
             ),
           ),
+          //name
           Transform.translate(
-            offset: Offset(95.6, 42.0),
+            offset: Offset(41.2, 207.0),
             child: SizedBox(
-              width: 125.0,
+              width: 274.0,
               child: Text(
-                'EVENT NAME',
+                eventDetails['name'],
                 style: TextStyle(
                   fontFamily: 'Microsoft Sans Serif',
-                  fontSize: 16,
+                  fontSize: 35,
                   color: const Color(0xff656d78),
                 ),
                 textAlign: TextAlign.center,
               ),
+            ),
+          ),
+
+          Transform.translate(
+            offset: Offset(25.2, 350.0),
+            child: Column(
+              children: [
+                Row(
+                  children: [
+                    Icon(Icons.assignment_outlined, size: 40.0),
+                    SizedBox(
+                      width: 10.0,
+                    ),
+                    SizedBox(
+                      width: 284.0,
+                      child: Text(
+                        eventDetails['description'],
+                        style: TextStyle(
+                          fontFamily: 'Microsoft PhagsPa',
+                          fontSize: 21,
+                          color: const Color(0xff000000),
+                        ),
+                        textAlign: TextAlign.left,
+                      ),
+                    ),
+                  ],
+                ),
+                SizedBox(
+                  height: 50.0,
+                ),
+                SizedBox(
+                  width: 384.0,
+                  child: Row(
+                    children: [
+                      Icon(Icons.lock_clock, size: 40.0),
+                      SizedBox(
+                        width: 5.0,
+                      ),
+                      Text(
+                        'From ' +
+                            startdate +
+                            ' at ' +
+                            starttime +
+                            '\n' +
+                            'To ' +
+                            enddate +
+                            ' at ' +
+                            endtime,
+                        style: TextStyle(
+                          fontFamily: 'Microsoft PhagsPa',
+                          fontSize: 18,
+                          color: const Color(0xff000000),
+                        ),
+                        textAlign: TextAlign.left,
+                      ),
+                    ],
+                  ),
+                ),
+              ],
             ),
           ),
         ],
@@ -120,7 +145,5 @@ class XDviewListOfEvents extends StatelessWidget {
   }
 }
 
-const String _svg_g4h265 =
-    '<svg viewBox="77.5 14.5 1.0 73.0" ><path transform="translate(77.5, 14.5)" d="M 1 0 L 0 73" fill="none" fill-opacity="0.65" stroke="#d1dded" stroke-width="5" stroke-opacity="0.65" stroke-miterlimit="4" stroke-linecap="butt" /></svg>';
-const String _svg_elo4wy =
-    '<svg viewBox="0.5 99.5 375.0 1.0" ><path transform="translate(0.5, 99.5)" d="M 0 0 L 375 0" fill="none" stroke="#707070" stroke-width="1" stroke-miterlimit="4" stroke-linecap="butt" /></svg>';
+const String _svg_ic2bg4 =
+    '<svg viewBox="20.3 20.0 13.5 23.6" ><path transform="translate(9.0, 13.81)" d="M 15.32109355926514 18 L 24.2578125 9.0703125 C 24.91875076293945 8.409375190734863 24.91875076293945 7.340624809265137 24.2578125 6.686718940734863 C 23.59687423706055 6.025781631469727 22.52812576293945 6.032812595367432 21.8671875 6.686718940734863 L 11.7421875 16.8046875 C 11.10234355926514 17.44453048706055 11.08828163146973 18.47109413146973 11.69296836853027 19.13203048706055 L 21.86015701293945 29.3203125 C 22.19062614440918 29.65078163146973 22.62656402587891 29.8125 23.05546951293945 29.8125 C 23.484375 29.8125 23.92031288146973 29.65078163146973 24.25078201293945 29.3203125 C 24.91172027587891 28.65937423706055 24.91172027587891 27.59062576293945 24.25078201293945 26.93671798706055 L 15.32109355926514 18 Z" fill="#0d122f" stroke="none" stroke-width="1" stroke-miterlimit="4" stroke-linecap="butt" /></svg>';
