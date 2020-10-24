@@ -94,7 +94,7 @@ class eventTab extends StatelessWidget {
                         style: TextStyle(
                           fontFamily: 'Lato',
                           fontSize: 12,
-                          color: const Color(0xff9097a2),
+                          color: const Color(0xff656d78),
                         ),
                         textAlign: TextAlign.center,
                       ),

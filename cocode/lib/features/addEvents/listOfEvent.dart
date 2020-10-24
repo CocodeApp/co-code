@@ -48,7 +48,7 @@ class ListOfEvents extends StatelessWidget {
               ),
               onPressed: () {
                 Navigator.push(context, MaterialPageRoute(builder: (_) {
-                  return AddEventFormPage(id: projectId); //update
+                  return AddEventFormPage(id: projectId);
                 }));
               },
             )
