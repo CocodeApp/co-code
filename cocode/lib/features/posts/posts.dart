@@ -44,15 +44,10 @@ class _ChatState extends State<Chat> {
   @override
 
   Widget build(BuildContext context) {
-<<<<<<< HEAD
-    var channel = firestore.collection('projects').doc(widget.projectId)
-        .collection('messages').doc(widget.channleId).get();
-=======
     firestore.collection('projects').doc(widget.projectId)
         .collection('messages').doc(widget.channleId).get().then((snapshot) {
       Pname.value =  snapshot.data()['name'];
     });
->>>>>>> 309986d05f5f0cfed9c4fa3f093dc45e7be1f2fc
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
@@ -61,10 +56,6 @@ class _ChatState extends State<Chat> {
         ),
         backgroundColor: Colors.white,
         centerTitle: true,
-<<<<<<< HEAD
-        title: Text( "channel",
-          style: TextStyle(color: Colors.indigo),
-=======
 
         title: ValueListenableBuilder(
 
@@ -74,7 +65,6 @@ class _ChatState extends State<Chat> {
             );
           },
           valueListenable: Pname,
->>>>>>> 309986d05f5f0cfed9c4fa3f093dc45e7be1f2fc
         ),
       ),
 
@@ -85,8 +75,8 @@ class _ChatState extends State<Chat> {
             Expanded(
               child: StreamBuilder<QuerySnapshot>(
                 stream: firestore
-            .collection('projects').doc(widget.projectId)
-            .collection('messages').doc(widget.channleId).collection('chat')
+                    .collection('projects').doc(widget.projectId)
+                    .collection('messages').doc(widget.channleId).collection('chat')
                     .orderBy('date')
                     .snapshots(),
                 builder: (context, snapshot) {
@@ -94,12 +84,7 @@ class _ChatState extends State<Chat> {
                     return Center(
                       child: CircularProgressIndicator(),
                     );
-                  // if (snapshot.hasError) {
-                  //   return Text("Something went wrong");
-                  //  }
-                  // if (snapshot.connectionState == ConnectionState.done) {
-                  //   Map<String, dynamic> data = snapshot.data.data();
-                  // }
+
                   List<DocumentSnapshot> docs = snapshot.data.docs;
 
                   List<Widget> messages = docs
@@ -109,7 +94,7 @@ class _ChatState extends State<Chat> {
                     text: doc.data()['text'],
                     currentUser:
                     userID == doc.data()['userID'],
-                     ),)
+                  ),)
                       .toList();
 
                   return ListView(
@@ -237,9 +222,9 @@ class Message extends StatelessWidget {
               color: currentUser ? Colors.teal[100] : Colors.blue[100],
               borderRadius: currentUser?
               BorderRadius.only(
-                  topLeft:Radius.circular(25),
-                  topRight:Radius.circular(25),
-                  bottomLeft:Radius.circular(25),
+                topLeft:Radius.circular(25),
+                topRight:Radius.circular(25),
+                bottomLeft:Radius.circular(25),
               ):
               BorderRadius.only(
                   topLeft:Radius.circular(25),
