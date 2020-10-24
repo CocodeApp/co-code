@@ -8,7 +8,8 @@ import 'package:cocode/Auth.dart';
 // ignore: must_be_immutable, camel_case_types
 class channels extends StatefulWidget {
   var projectId;
-  channels({Key key, @required this.projectId}) : super(key: key);
+  bool isSuper;
+  channels({Key key, @required this.projectId, @required this.isSuper}) : super(key: key);
   @override
   _channelsState createState() => _channelsState();
 }
@@ -16,8 +17,13 @@ class channels extends StatefulWidget {
 // ignore: camel_case_types
 class _channelsState extends State<channels> {
   CollectionReference projects = FirebaseFirestore.instance.collection('projects');
+  String user = Auth.getCurrentUserID();
+  ValueNotifier<String> supervisor = new ValueNotifier<String>("");
   @override
   Widget build(BuildContext context) {
+    projects.doc(widget.projectId).get().then((snapshot){
+      supervisor.value = snapshot.data()['supervisor'];
+    });
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
@@ -25,10 +31,7 @@ class _channelsState extends State<channels> {
           color: Colors.deepOrangeAccent,
         ),
         backgroundColor: Colors.white,
-        title: Text(
-          'Channels',
-          style: TextStyle(color: Colors.indigo),
-        ),
+        title: Text('Channels'),
       ),
       body: SafeArea(
         child: Column(
@@ -54,13 +57,20 @@ class _channelsState extends State<channels> {
                 }
             ),
           ),
-            FloatingActionButton(
-                backgroundColor: Colors.deepOrangeAccent,
-                child: Icon(Icons.add),
-                onPressed: (){
-                  addChannel();
-                }
-                )
+            ValueListenableBuilder(
+              builder: (BuildContext context, value, Widget child) {
+                  return supervisor.value == user?
+                  FloatingActionButton(
+                      backgroundColor: Colors.deepOrangeAccent,
+                      child: Icon(Icons.add),
+                      onPressed: (){
+                        addChannel();
+                      }
+                  )
+                      : SizedBox();
+              },
+                  valueListenable: supervisor,
+            ),
           ]),
       ),
     ); // StreamBuilder
@@ -165,6 +175,14 @@ class _channelsState extends State<channels> {
     );
   }
 }
+
+// class addButton extends StatelessWidget {
+//   @override
+//   Widget build(BuildContext context) {
+//     return Container();
+//   }
+// }
+
 
 
 

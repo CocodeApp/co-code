@@ -367,7 +367,9 @@ class ProjectDetails extends StatelessWidget {
                                       onPressed: () {
                                         Navigator.push(context,
                                             MaterialPageRoute(builder: (_) {
-                                          return channels(projectId: id,); //update
+                                          return channels(projectId: id,
+                                          isSuper: listofwhat == "Team Members Applicants"?
+                                          true : false,); //update
                                         }));
                                       },
                                       shape: const StadiumBorder(),
