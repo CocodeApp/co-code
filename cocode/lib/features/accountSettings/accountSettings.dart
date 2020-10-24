@@ -43,11 +43,19 @@ class _settingsPageState extends State<settingsPage> {
     return new Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        backgroundColor: Colors.blue,
+        backgroundColor: Colors.indigo,
         title: Text(
           "Edit Account",
           textAlign: TextAlign.center,
         ),
+
+    leading: IconButton(
+    icon: Icon(
+    Icons.menu,
+    color: Colors.deepOrangeAccent,
+    ),
+    onPressed: widget.onMenuPressed,
+    ),
       ),
       body: FutureBuilder<DocumentSnapshot>(
         future: Auth.getcurrentUserInfo(),
@@ -62,17 +70,13 @@ class _settingsPageState extends State<settingsPage> {
             return Scaffold(
                 backgroundColor: Colors.white,
                 appBar: AppBar(
+                  centerTitle: true,
                   title: Text('Account Settings',
+                      textAlign: TextAlign.center,
                       style: TextStyle(fontSize: 20, color: Colors.indigo)),
-                  elevation: 0,
                   backgroundColor: Colors.white,
-                  leading: IconButton(
-                    icon: Icon(
-                      Icons.menu,
-                      color: Colors.deepOrangeAccent,
-                    ),
-                    onPressed: widget.onMenuPressed,
-                  ),
+                  elevation: 0,
+
                 ),
                 body: Padding(
                     padding: const EdgeInsets.all(10.0),

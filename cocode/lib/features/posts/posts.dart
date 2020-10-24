@@ -18,7 +18,8 @@ class _ChatState extends State<Chat> {
   TextEditingController messageController = TextEditingController();
   ScrollController scrollController = ScrollController();
   String userName = Auth.getCurrentUsername();
-
+  String userID = Auth.getCurrentUserID();
+  ValueNotifier<String> Pname = new ValueNotifier<String>("");
 
   Future<void> callback() async {
 
@@ -29,6 +30,7 @@ class _ChatState extends State<Chat> {
         'text': messageController.text,
         'from': userName,
         'date': DateTime.now().toIso8601String().toString(),
+        'userID':userID,
       });
       messageController.clear();
       scrollController.animateTo(
@@ -40,7 +42,12 @@ class _ChatState extends State<Chat> {
   }
 
   @override
+
   Widget build(BuildContext context) {
+    firestore.collection('projects').doc(widget.projectId)
+        .collection('messages').doc(widget.channleId).get().then((snapshot) {
+      Pname.value =  snapshot.data()['name'];
+    });
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
@@ -49,9 +56,15 @@ class _ChatState extends State<Chat> {
         ),
         backgroundColor: Colors.white,
         centerTitle: true,
-        title: Text("najid",
-          ///////// خوذيه من نجد اسم التشانل
-          style: TextStyle(color: Colors.indigo),
+
+        title: ValueListenableBuilder(
+
+          builder: (BuildContext context, value, Widget child) {
+            return Text(Pname.value,
+              style: TextStyle(color: Colors.indigo),
+            );
+          },
+          valueListenable: Pname,
         ),
       ),
 
@@ -63,8 +76,7 @@ class _ChatState extends State<Chat> {
               child: StreamBuilder<QuerySnapshot>(
                 stream: firestore
             .collection('projects').doc(widget.projectId)
-            .collection('messages').doc(widget.channleId).
-        collection('chat')
+            .collection('messages').doc(widget.channleId).collection('chat')
                     .orderBy('date')
                     .snapshots(),
                 builder: (context, snapshot) {
@@ -81,8 +93,8 @@ class _ChatState extends State<Chat> {
                     from: doc.data()['from'],
                     text: doc.data()['text'],
                     currentUser:
-                    userName == doc.data()['from'],
-                  ))
+                    userID == doc.data()['userID'],
+                     ),)
                       .toList();
 
                   return ListView(
@@ -95,6 +107,7 @@ class _ChatState extends State<Chat> {
               ),
             ),
             // send massage container
+
 
             Container(
               decoration: BoxDecoration(
@@ -179,7 +192,6 @@ class SendButton extends StatelessWidget {
 class Message extends StatelessWidget {
   final String from; // user how sent the massage
   final String text; // body of the massage
-
   final bool currentUser;
 
   const Message({Key key, this.from, this.text, this.currentUser})
@@ -192,22 +204,38 @@ class Message extends StatelessWidget {
         crossAxisAlignment:
         currentUser ? CrossAxisAlignment.end : CrossAxisAlignment.start,
         children: <Widget>[
+          SizedBox(
+            height: 0.02*MediaQuery.of(context).size.height,
+          ),
           Container(
             padding:   currentUser ? EdgeInsets.only(
-              right:0.03*MediaQuery.of(context).size.width,):  EdgeInsets.only(left:0.03*MediaQuery.of(context).size.width, ),
+              right:0.05*MediaQuery.of(context).size.width,):
+            EdgeInsets.only(left:0.05*MediaQuery.of(context).size.width, ),
             child:Text(
               from,
             ),
           ),
 
-          Material(
-            color: currentUser ? Colors.teal[100] : Colors.blue[100],
-            borderRadius: BorderRadius.circular(10.0),
-            elevation: 6.0,
-            child: Container(
-              padding: EdgeInsets.symmetric(vertical: 10.0, horizontal: 15.0),
-              child: Text(
-                text,
+          Container(
+            margin: const EdgeInsets.only(left:8,right:8,bottom: 5),
+            child: Material(
+              color: currentUser ? Colors.teal[100] : Colors.blue[100],
+              borderRadius: currentUser?
+              BorderRadius.only(
+                  topLeft:Radius.circular(25),
+                  topRight:Radius.circular(25),
+                  bottomLeft:Radius.circular(25),
+              ):
+              BorderRadius.only(
+                  topLeft:Radius.circular(25),
+                  topRight:Radius.circular(25),
+                  bottomRight:Radius.circular(25)),
+              elevation: 6.0,
+              child: Container(
+                padding: EdgeInsets.symmetric(vertical: 10.0, horizontal: 15.0),
+                child: Text(
+                  text,
+                ),
               ),
             ),
           )
