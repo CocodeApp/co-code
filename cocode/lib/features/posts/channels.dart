@@ -22,7 +22,7 @@ class _channelsState extends State<channels> {
   @override
   Widget build(BuildContext context) {
     projects.doc(widget.projectId).get().then((snapshot){
-      supervisor.value = snapshot.data()['supervisor'];
+      supervisor.value= snapshot.data()['supervisor'];
     });
     return Scaffold(
       backgroundColor: Colors.white,
@@ -31,7 +31,10 @@ class _channelsState extends State<channels> {
           color: Colors.deepOrangeAccent,
         ),
         backgroundColor: Colors.white,
-        title: Text('Channels'),
+        title: Text(
+          'Channels',
+          style: TextStyle(color: Colors.indigo),
+        ),
       ),
       body: SafeArea(
         child: Column(

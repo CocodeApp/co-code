@@ -1,0 +1,10 @@
+# pack-refs with: peeled fully-peeled sorted 
+709847a06e8abf1f15bc227e4b8f708a6ab10323 refs/heads/Agenda
+56b6e59cfeaaed481496d2e888c6474be9c5f1ee refs/heads/EventIntegration
+2ad263625e455437c745e695a37874fbcb8453e0 refs/heads/HCI
+06538cea0bac189df87b48c5254d31232eaa0542 refs/heads/addEventUI
+8491fc104ee54b0cc6034f2efa06cbeda00b27dc refs/heads/addevent
+f2035eaea804abcd29e1f7564e1ead5634a7f68a refs/heads/master
+d2e7d44c373b8f457172d07c768279a2d6039d79 refs/heads/sharePost
+8059d5d5d4cf1a4703e4383d13ffed56a146605b refs/heads/userProfile
+c63f301252738534205ca48314ffecbe97a74e26 refs/pull/1/head
