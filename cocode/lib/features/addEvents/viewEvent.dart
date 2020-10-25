@@ -43,10 +43,10 @@ class event extends StatelessWidget {
         children: <Widget>[
           //white window
           Transform.translate(
-            offset: Offset(0.0, 158.0),
+            offset: Offset(0.0, 100.0),
             child: Container(
               width: 455.0,
-              height: 579.0,
+              height: 679.0,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(50.0),
                 color: const Color(0xffffffff),
@@ -62,7 +62,7 @@ class event extends StatelessWidget {
           ),
           //name
           Transform.translate(
-            offset: Offset(41.2, 207.0),
+            offset: Offset(45.2, 150.0),
             child: SizedBox(
               width: 274.0,
               child: Column(
@@ -86,7 +86,7 @@ class event extends StatelessWidget {
           ),
 
           Transform.translate(
-            offset: Offset(25.2, 350.0),
+            offset: Offset(25.2, 290.0),
             child: Column(
               children: [
                 Row(
