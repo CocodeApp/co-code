@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:googleapis/calendar/v3.dart';
 
+import '../../Auth.dart';
 import 'GoogleAuthClient.dart';
 
 Future<bool> addEvent(String summary, DateTime startTime, DateTime endTime,
@@ -43,6 +44,9 @@ Future<bool> addEvent(String summary, DateTime startTime, DateTime endTime,
       map = {"email": attendeeslist[i]};
       attendees.add(EventAttendee.fromJson(map));
     }
+
+    map = {"email": Auth.getCurrentUserEmail()};
+    attendees.add(EventAttendee.fromJson(map));
     //out of the loop
     event.attendees = attendees; //list of attendens
     print("attendees:" + event.attendees.toString());

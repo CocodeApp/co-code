@@ -111,8 +111,8 @@ class _State extends State<AddEventFormPage> {
                             validator: (value) {
                               if (value.isEmpty) {
                                 return 'Please enter Event Name';
-                              } else if (value.length > 12) {
-                                return 'Project Name must not exceed 12 characters';
+                              } else if (value.length > 20) {
+                                return 'Project Name must not exceed 20 characters';
                               }
                               eventname = value;
 
@@ -387,7 +387,7 @@ class _State extends State<AddEventFormPage> {
                 SizedBox(height: 10),
                 Center(
                     child: Text(
-                        "Please note that only members registered with Gmail will get the event on their personal celndar. Otherwise, they can view all events on project events page.")),
+                        "Please note that only members registered with Gmail will get the event on their personal calendar. Otherwise, they can view all events on project events page.")),
                 SizedBox(height: 20),
                 WillPopScope(
                     onWillPop: () async => false,

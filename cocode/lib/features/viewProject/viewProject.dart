@@ -1,5 +1,6 @@
 import 'package:cocode/features/addEvents/addEvent.dart';
 import 'package:cocode/features/addEvents/listOfEvent.dart';
+import 'package:cocode/features/posts/channels.dart';
 import 'package:cocode/features/posts/posts.dart';
 import 'package:cocode/features/acceptReject/Members.dart';
 import 'package:cocode/features/userProfile.dart/userProfile.dart';
@@ -408,7 +409,9 @@ class ProjectDetails extends StatelessWidget {
                                         onPressed: () {
                                           Navigator.push(context,
                                               MaterialPageRoute(builder: (_) {
-                                            return posts(); //update
+                                            return channels(
+                                                projectId:
+                                                    id); //update; //update
                                           }));
                                         },
                                         shape: const StadiumBorder(),
