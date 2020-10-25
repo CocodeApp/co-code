@@ -35,7 +35,9 @@ class _homePageControllerState extends State<homePageController> {
           title: Text(
             _currentIndex == 0
                 ? 'Explore'
-                : _currentIndex == 1 ? 'Notifications' : '',
+                : _currentIndex == 1
+                    ? 'Notifications'
+                    : '',
             style: TextStyle(color: Colors.indigo),
           ),
           centerTitle: true,

@@ -43,6 +43,7 @@ Widget bottomCardWidget(String description, String ID, BuildContext context) {
                       builder: (context) => viewProject(
                         id: ID,
                         tab: "ideaOwner",
+                        previouspage: "",
                       ),
                     ));
               },

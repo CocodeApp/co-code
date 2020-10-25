@@ -45,14 +45,14 @@ class eventTab extends StatelessWidget {
               decoration: BoxDecoration(),
             ),
             Transform.translate(
-              offset: Offset(77.5, 14.5),
+              offset: Offset(86.5, 14.5),
               child: SvgPicture.string(
                 _svg_g4h265,
                 allowDrawingOutsideViewBox: true,
               ),
             ),
             Transform.translate(
-              offset: Offset(80.0, 20.0),
+              offset: Offset(89.0, 20.0),
               child: Container(
                 width: 238.0,
                 height: 62.0,

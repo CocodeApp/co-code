@@ -22,7 +22,14 @@ class _MembersState extends State<Members> {
         backgroundColor: Colors.white,
         leading: BackButton(
           color: Colors.deepOrangeAccent,
-          onPressed: () => (Navigator.pop(context)),
+          onPressed: () =>
+              (Navigator.push(context, MaterialPageRoute(builder: (_) {
+            return viewProject(
+              id: widget.projectId,
+              tab: "member",
+              previouspage: "list of applicants",
+            );
+          }))),
         ),
         title: Text(widget.header, style: TextStyle(color: Colors.indigo)),
       ),
