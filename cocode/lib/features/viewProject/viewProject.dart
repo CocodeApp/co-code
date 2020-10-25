@@ -18,7 +18,12 @@ class viewProject extends KFDrawerContent {
   var id;
 
   String tab;
-  viewProject({Key key, @required this.id, @required this.tab});
+  String previouspage = "";
+  viewProject(
+      {Key key,
+      @required this.id,
+      @required this.tab,
+      @required this.previouspage});
   @override
   _viewProjectState createState() => _viewProjectState();
 }
@@ -103,7 +108,13 @@ class _viewProjectState extends State<viewProject> {
                 leading: BackButton(
                   color: Colors.indigo,
                   onPressed: () {
-                    Navigator.pop(context);
+                    if (widget.previouspage.length == 0) {
+                      Navigator.pop(context);
+                    } else {
+                      Navigator.push(context, MaterialPageRoute(builder: (_) {
+                        return homePageView();
+                      }));
+                    }
                   },
                 ),
                 backgroundColor: Colors.white,
@@ -400,7 +411,7 @@ class ProjectDetails extends StatelessWidget {
                                             horizontal: 35.0,
                                           ),
                                           child: Text(
-                                            "View Project Posts",
+                                            "View Project channels",
                                             style: TextStyle(
                                                 color: Colors.white,
                                                 fontSize: 20.0),

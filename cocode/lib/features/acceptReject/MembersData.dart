@@ -160,6 +160,7 @@ class _MembersListState extends State<MembersList> {
                                   return viewProject(
                                     id: widget.projectId,
                                     tab: "member",
+                                    previouspage: "list of applicants",
                                   );
                                 }));
                               } else {

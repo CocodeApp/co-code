@@ -256,6 +256,7 @@ class _profilePageState extends State<profilePage> {
                           return new viewProject(
                             id: doc[index].id,
                             tab: "ideaOwner",
+                            previouspage: "",
                           ); //// latefa     // this must lead to the projects that user in
                         },
                       ),

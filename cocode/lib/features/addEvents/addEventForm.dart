@@ -112,7 +112,7 @@ class _State extends State<AddEventFormPage> {
                               if (value.isEmpty) {
                                 return 'Please enter Event Name';
                               } else if (value.length > 20) {
-                                return 'Event Name must not exceed 20 characters';
+                                return 'Project Name must not exceed 20 characters';
                               }
                               eventname = value;
 
@@ -140,7 +140,7 @@ class _State extends State<AddEventFormPage> {
                               if (value.isEmpty) {
                                 return 'Please enter Event Description';
                               } else if (value.length > 170) {
-                                return 'Event description must not exceed 170 characters';
+                                return 'Evnt description must not exceed 170 characters';
                               }
                               eventdescription = value;
 
