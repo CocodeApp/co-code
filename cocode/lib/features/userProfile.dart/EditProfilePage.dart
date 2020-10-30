@@ -60,7 +60,7 @@ class EditProfile extends State<EditProfilePage> {
                   Expanded(
                     child: Container(
                       decoration: BoxDecoration(
-                        color: Theme.of(context).primaryColor,
+                        color: Colors.blueAccent[400],
                         borderRadius: BorderRadius.only(
                           bottomLeft: Radius.circular(20.0),
                           bottomRight: Radius.circular(20.0),
@@ -70,14 +70,22 @@ class EditProfile extends State<EditProfilePage> {
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: <Widget>[
                         CircleAvatar(
-                          backgroundImage: AssetImage('imeges/man.png'),// must be the same from database
+                          backgroundColor: Colors.white70,
+                          radius: 65,
+                          child:FlatButton(
+                            //onPressed: callback,
+                            child: Icon(Icons.add,
+                              size: 0.055*MediaQuery.of(context).size.height,),
+                          ),
                         ),
-                          Text("Hi nice to see you here"),
+                          Text("Change your profile image here",
+                              style:TextStyle(fontSize: 15,color: Colors.white70,
+                                fontWeight: FontWeight.w600,)),
                         ],
                       ),
                     ),
                   ),
-          Expanded(
+                  Expanded(
           flex: 2,
                 child:  Padding(
                     padding: const EdgeInsets.all(10.0),
@@ -87,7 +95,7 @@ class EditProfile extends State<EditProfilePage> {
                           child: ListTile(
                               leading: GestureDetector(
                                 child: Hero(
-                                    tag: 'username',
+                                    tag: 'university',
                                     child: CircleAvatar(
                                       backgroundColor: Colors.indigo,
                                       foregroundColor: Colors.white,
@@ -106,7 +114,145 @@ class EditProfile extends State<EditProfilePage> {
                                 },
                               ),
                               dense: false,
-                              title: Text('Username',
+                              title: Text('University',
+                                  style: TextStyle(
+                                      fontSize: 14.0,
+                                      color: Colors.grey)),
+                              subtitle: Text(id,
+                                  style: TextStyle(
+                                      fontSize: 17.0,
+                                      color: Colors.black87)),
+                              trailing:
+                              Icon(Icons.keyboard_arrow_right),
+                              onTap: () {
+                                Navigator.push(
+                                  context,
+                                  new MaterialPageRoute(
+                                      builder: (context) =>
+                                      new ChangeUsername()),
+                                ).then((value) {
+                                  setState(() {
+                                    id = AccountInfo.username;
+                                  });
+                                });
+                              }),
+                        ),
+                        Card(
+                          child: ListTile(
+                              leading: GestureDetector(
+                                child: Hero(
+                                    tag: 'major',
+                                    child: CircleAvatar(
+                                      backgroundColor: Colors.indigo,
+                                      foregroundColor: Colors.white,
+                                      radius: 20,
+                                      child: Icon(
+                                        Icons.alternate_email,
+                                        color: Colors.white,
+                                        size: 30.0,
+                                      ),
+                                    )),
+                                onTap: () {
+                                  Navigator.push(context,
+                                      MaterialPageRoute(builder: (_) {
+                                        return ChangeUsername();
+                                      }));
+                                },
+                              ),
+                              dense: false,
+                              title: Text('Major',
+                                  style: TextStyle(
+                                      fontSize: 14.0,
+                                      color: Colors.grey)),
+                              subtitle: Text(id,
+                                  style: TextStyle(
+                                      fontSize: 17.0,
+                                      color: Colors.black87)),
+                              trailing:
+                              Icon(Icons.keyboard_arrow_right),
+                              onTap: () {
+                                Navigator.push(
+                                  context,
+                                  new MaterialPageRoute(
+                                      builder: (context) =>
+                                      new ChangeUsername()),
+                                ).then((value) {
+                                  setState(() {
+                                    id = AccountInfo.username;
+                                  });
+                                });
+                              }),
+                        ),
+                        Card(
+                          child: ListTile(
+                              leading: GestureDetector(
+                                child: Hero(
+                                    tag: 'University',
+                                    child: CircleAvatar(
+                                      backgroundColor: Colors.indigo,
+                                      foregroundColor: Colors.white,
+                                      radius: 20,
+                                      child: Icon(
+                                        Icons.alternate_email,
+                                        color: Colors.white,
+                                        size: 30.0,
+                                      ),
+                                    )),
+                                onTap: () {
+                                  Navigator.push(context,
+                                      MaterialPageRoute(builder: (_) {
+                                        return ChangeUsername();
+                                      }));
+                                },
+                              ),
+                              dense: false,
+                              title: Text('Bio',
+                                  style: TextStyle(
+                                      fontSize: 14.0,
+                                      color: Colors.grey)),
+                              subtitle: Text(id,
+                                  style: TextStyle(
+                                      fontSize: 17.0,
+                                      color: Colors.black87)),
+                              trailing:
+                              Icon(Icons.keyboard_arrow_right),
+                              onTap: () {
+                                Navigator.push(
+                                  context,
+                                  new MaterialPageRoute(
+                                      builder: (context) =>
+                                      new ChangeUsername()),
+                                ).then((value) {
+                                  setState(() {
+                                    id = AccountInfo.username;
+                                  });
+                                });
+                              }),
+                        ),
+                        Card(
+                          child: ListTile(
+                              leading: GestureDetector(
+                                child: Hero(
+                                    tag: 'University',
+                                    child: CircleAvatar(
+                                      backgroundColor: Colors.indigo,
+                                      foregroundColor: Colors.white,
+                                      radius: 20,
+                                      child: Icon(
+                                        Icons.alternate_email,
+                                        color: Colors.white,
+                                        size: 30.0,
+                                      ),
+                                    )),
+                                onTap: () {
+                                  Navigator.push(context,
+                                      MaterialPageRoute(builder: (_) {
+                                        return ChangeUsername();
+                                      }));
+                                },
+                              ),
+                              dense: false,
+                              title: Text('Edit Skills',
                                   style: TextStyle(
                                       fontSize: 14.0,
                                       color: Colors.grey)),
