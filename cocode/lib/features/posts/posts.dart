@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cocode/Auth.dart';
+import 'package:intl/intl.dart';
 
 // ignore: camel_case_types
 class Chat extends StatefulWidget {
@@ -29,7 +30,8 @@ class _ChatState extends State<Chat> {
       collection('chat').add({
         'text': messageController.text,
         'from': userName,
-        'date': DateTime.now().toIso8601String().toString(),
+        'time': DateTime.now().toIso8601String().toString(),
+        'date': DateTime.now(),
         'userID':userID,
       });
       messageController.clear();
@@ -77,7 +79,7 @@ class _ChatState extends State<Chat> {
                 stream: firestore
                     .collection('projects').doc(widget.projectId)
                     .collection('messages').doc(widget.channleId).collection('chat')
-                    .orderBy('date')
+                    .orderBy('time')
                     .snapshots(),
                 builder: (context, snapshot) {
                   if (!snapshot.hasData)
@@ -94,6 +96,8 @@ class _ChatState extends State<Chat> {
                     text: doc.data()['text'],
                     currentUser:
                     userID == doc.data()['userID'],
+                    time: doc.data()['time'],
+                    date: doc.data()['date'],
                   ),)
                       .toList();
 
@@ -193,12 +197,17 @@ class Message extends StatelessWidget {
   final String from; // user how sent the massage
   final String text; // body of the massage
   final bool currentUser;
+  final String time;
+  final Timestamp date;
 
-  const Message({Key key, this.from, this.text, this.currentUser})
+  const Message({Key key, this.from, this.text, this.currentUser,this.time,this.date})
       : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    DateTime Date = date.toDate();
+    final DateFormat formatter = DateFormat('yMMMd');
+
     return Container(
       child: Column(
         crossAxisAlignment:
@@ -233,8 +242,27 @@ class Message extends StatelessWidget {
               elevation: 6.0,
               child: Container(
                 padding: EdgeInsets.symmetric(vertical: 10.0, horizontal: 15.0),
-                child: Text(
-                  text,
+                child: Column(
+                  children: [
+                    Text(
+                        text,
+                        style:TextStyle(fontSize: 15,
+                          fontWeight: FontWeight.w600,)
+                    ),
+                    Text(
+                      DateFormat.jm().format(DateFormat("hh:mm:ss").parse(time.substring(11,19))),
+                      style:TextStyle(color: Colors.blueGrey,
+                          fontSize: 10)
+                      ,
+                    ),
+
+                    Text(
+                        formatter.format(Date),
+                        style:TextStyle(color: Colors.blueGrey,
+                            fontSize: 10)
+                    ),
+
+                  ],
                 ),
               ),
             ),
