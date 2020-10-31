@@ -13,6 +13,7 @@ import '../../Auth.dart';
 import 'teamMembersData.dart';
 import 'teamMembers.dart';
 import 'skills.dart';
+import 'package:cocode/features/editProject/editProjectForm.dart';
 
 class viewProject extends KFDrawerContent {
   var id;
@@ -122,6 +123,11 @@ class _viewProjectState extends State<viewProject> {
                   data['projectName'],
                   style: TextStyle(color: Colors.indigo),
                 ),
+                actions: [
+                  IconButton(
+                      icon: Icon(Icons.edit),
+                      onPressed: null /*نوديه للفورم*/,)
+                ],
                 bottom: TabBar(
                   indicatorColor: Colors.deepOrangeAccent,
                   labelColor: Colors.indigo,
