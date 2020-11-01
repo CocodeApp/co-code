@@ -30,7 +30,7 @@ class ListOfEvents extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
                     Icon(
-                      Icons.add_outlined,
+                      Icons.add,
                       color: Colors.white,
                     ),
                     SizedBox(
