@@ -31,6 +31,7 @@ class viewProject extends KFDrawerContent {
 }
 
 class _viewProjectState extends State<viewProject> {
+  Map<String, dynamic> data;
   @override
   Widget build(BuildContext context) {
     CollectionReference users =
@@ -44,7 +45,7 @@ class _viewProjectState extends State<viewProject> {
           return Text("Something went wrong");
         }
         if (snapshot.connectionState == ConnectionState.done) {
-          Map<String, dynamic> data = snapshot.data.data();
+          data = snapshot.data.data();
           String whatTab =
               data['supervisor'] == "" ? "ideaOwner" : "supervisor";
           List listofmembers = data['teamMembers'];
@@ -107,7 +108,7 @@ class _viewProjectState extends State<viewProject> {
               backgroundColor: Colors.white,
               appBar: AppBar(
                 actions: [
-                  isprojectmember
+                  isSuper
                       ? IconButton(
                           icon: Icon(
                             Icons.edit,
@@ -119,7 +120,9 @@ class _viewProjectState extends State<viewProject> {
                               new MaterialPageRoute(
                                   builder: (context) =>
                                       new updateProject(id: widget.id)),
-                            );
+                            ).then((valeu) {
+                              setState(() {});
+                            });
                           },
                         )
                       : Container()
@@ -142,11 +145,6 @@ class _viewProjectState extends State<viewProject> {
                   data['projectName'],
                   style: TextStyle(color: Colors.indigo),
                 ),
-                actions: [
-                  IconButton(
-                      icon: Icon(Icons.edit),
-                      onPressed: null /*نوديه للفورم*/,)
-                ],
                 bottom: TabBar(
                   indicatorColor: Colors.deepOrangeAccent,
                   labelColor: Colors.indigo,
@@ -216,6 +214,7 @@ class ProjectDetails extends StatelessWidget {
 
     final ValueNotifier<bool> wantToApply = ValueNotifier<bool>(true);
     final ValueNotifier<bool> show = ValueNotifier<bool>(true);
+    String status;
 
     Future<void> checkApplying() async {
       CollectionReference leaderprofile = FirebaseFirestore.instance

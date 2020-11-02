@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 
-class uploadLogo extends StatefulWidget {
+class upLoadLogo extends StatefulWidget {
   @override
-  _uploadLogoState createState() => _uploadLogoState();
+  _upLoadLogoState createState() => _upLoadLogoState();
 }
 
-class _uploadLogoState extends State<uploadLogo> {
+class _upLoadLogoState extends State<upLoadLogo> {
   @override
   Widget build(BuildContext context) {
     return Container();

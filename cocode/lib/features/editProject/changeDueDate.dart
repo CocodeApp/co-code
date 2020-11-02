@@ -1,13 +1,27 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cocode/buttons/RoundeButton.dart';
+import 'package:cocode/features/postIdea/form.dart';
 import 'package:cocode/services/datepicker.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
+import 'package:intl/intl.dart';
 
 class changeDueDate extends StatefulWidget {
+  var id;
+  String deadline;
+  changeDueDate({Key key, @required this.id, @required this.deadline});
   @override
   _changeDueDateState createState() => _changeDueDateState();
 }
 
 class _changeDueDateState extends State<changeDueDate> {
+  String _date = "";
+  @override
+  void initState() {
+    super.initState();
+    _date = widget.deadline;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -54,11 +68,90 @@ class _changeDueDateState extends State<changeDueDate> {
                   children: [
                     Container(
                         width: 330.0,
-                        child: mydatepicker("StartDate", (DateTime start) {
-                          setState(() {
-                            var startdate = start;
-                          });
-                        })),
+                        child: Column(
+                          children: <Widget>[
+                            Padding(
+                              padding: EdgeInsets.symmetric(vertical: 8.0),
+                              child: FlatButton(
+                                shape: RoundedRectangleBorder(
+                                    side: BorderSide(
+                                        color: Colors.grey[700],
+                                        width: 1,
+                                        style: BorderStyle.solid),
+                                    borderRadius: BorderRadius.circular(30.0)),
+                                onPressed: () {
+                                  DatePicker.showDatePicker(context,
+                                      theme: DatePickerTheme(
+                                        containerHeight: 210.0,
+                                      ),
+                                      showTitleActions: true,
+                                      minTime: DateTime(
+                                          DateTime.now().year,
+                                          DateTime.now().month,
+                                          DateTime.now().day,
+                                          DateTime.now().hour,
+                                          DateTime.now().minute),
+                                      maxTime: DateTime(
+                                          DateTime.now().year + 10, 12, 31),
+                                      onConfirm: (date) {
+                                    print('confirm $date');
+
+                                    setState(() {
+                                      _date =
+                                          '${date.year}/${date.month}/${date.day}';
+                                    });
+                                  },
+                                      currentTime: DateTime.now(),
+                                      locale: LocaleType.en);
+                                },
+                                child: Container(
+                                  alignment: Alignment.center,
+                                  height: 50.0,
+                                  child: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: <Widget>[
+                                      Row(
+                                        children: <Widget>[
+                                          Container(
+                                            child: Row(
+                                              children: <Widget>[
+                                                Icon(
+                                                  Icons.date_range,
+                                                  size: 30.0,
+                                                ),
+                                                Padding(
+                                                  padding: EdgeInsets.symmetric(
+                                                      vertical: 10.0,
+                                                      horizontal: 10),
+                                                  child: Text(
+                                                    " deadline : $_date",
+                                                    style: TextStyle(
+                                                        color:
+                                                            Color(0XAA2A4793),
+                                                        fontSize: 15.0),
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          )
+                                        ],
+                                      ),
+                                      Text(
+                                        "  Change",
+                                        style: TextStyle(
+                                            color: Color(0XDDF57862),
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 18.0),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                color: Colors.white,
+                              ),
+                            ),
+                          ],
+                        )),
                   ],
                 ),
               ),
@@ -68,15 +161,14 @@ class _changeDueDateState extends State<changeDueDate> {
                 text: "Save",
                 color: Colors.indigo,
                 textColor: Colors.white,
-                press: () {
-                  //najd
-                  // fAfter = _editNameFormBloc._firstnameFieldBloc.value;
-                  // lAfter = _editNameFormBloc._lastnameFieldBloc.value;
-
-                  // hasChanged = (fBefore != fAfter) || (lBefore != lAfter);
-                  // if (isEnabled && hasChanged)
-                  //   _editNameFormBloc.submit();
-                  // else
+                press: () async {
+                  print(_date);
+                  await FirebaseFirestore.instance
+                      .collection('projects')
+                      .doc(widget.id)
+                      .update({
+                    'deadline': _date,
+                  });
                   Navigator.of(context).pop();
                 }),
             SizedBox(height: 20),
