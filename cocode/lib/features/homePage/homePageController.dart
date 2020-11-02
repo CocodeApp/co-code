@@ -1,10 +1,15 @@
+import 'dart:async';
+import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:googleapis/storage/v1.dart';
 import 'projectScreen.dart';
 import 'package:convex_bottom_bar/convex_bottom_bar.dart';
 import 'package:cocode/features/postIdea/postIdeaForm.dart' as PostIdea;
 import 'package:cocode/features/notifications/notification.dart';
 import 'package:animations/animations.dart';
 import 'package:kf_drawer/kf_drawer.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class homePageController extends KFDrawerContent {
   @override
@@ -12,6 +17,53 @@ class homePageController extends KFDrawerContent {
 }
 
 class _homePageControllerState extends State<homePageController> {
+  final FirebaseFirestore _db = FirebaseFirestore.instance;
+  final FirebaseMessaging _fcm = FirebaseMessaging();
+
+  StreamSubscription iosSubscription;
+
+  void initState() {
+    super.initState();
+    if (Platform.isIOS) {
+      iosSubscription = _fcm.onIosSettingsRegistered.listen((data) {
+        // save the token  OR subscribe to a topic here
+      });
+
+      _fcm.requestNotificationPermissions(IosNotificationSettings());
+    }
+
+    _fcm.configure(
+      onMessage: (Map<String, dynamic> message) async {
+        print("onMessage: $message");
+        showDialog(
+          context: context,
+          builder: (context) => AlertDialog(
+            content: ListTile(
+              title: Text(message['notification']['title']),
+              subtitle: Text(message['notification']['body']),
+            ),
+            actions: <Widget>[
+              FlatButton(
+                child: Text('Ok'),
+                onPressed: () => Navigator.of(context).pop(),
+              ),
+            ],
+          ),
+        );
+      },
+      onLaunch: (Map<String, dynamic> message) async {
+        print("onLaunch: $message");
+        // TODO optional
+      },
+      onResume: (Map<String, dynamic> message) async {
+        print("onResume: $message");
+        Navigator.push(context, MaterialPageRoute(builder: (_) {
+          return notification();
+        }));
+      },
+    );
+  }
+
   @override
   int _currentIndex = 0;
 

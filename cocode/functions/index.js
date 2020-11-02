@@ -10,6 +10,8 @@ const { google } = require("googleapis");
 const OAuth2 = google.auth.OAuth2;
 const calendar = google.calendar("v3");
 const functions = require("firebase-functions");
+const admin = require('firebase-admin');
+
 
 const googleCredentials = require("./credentials.json");
 
@@ -20,7 +22,7 @@ const ERROR_RESPONSE = {
 const TIME_ZONE = "EST";
 
 function addEvent(event, auth) {
-  return new Promise(function(resolve, reject) {
+  return new Promise(function (resolve, reject) {
     calendar.events.insert(
       {
         auth: auth,
@@ -80,3 +82,29 @@ exports.addEvent = functions.https.onRequest((request, response) => {
       return;
     });
 });
+
+
+
+admin.initializeApp();
+
+const db = admin.firestore();
+const fcm = admin.messaging();
+
+exports.sendToTopic = functions.firestore
+  .document('projects/{projectId}')
+  .onCreate(async snapshot => {
+    const project = snapshot.data();
+
+    const payload = {
+      notification: {
+        click_action: ".MainActivity",
+
+
+        //icon: 'your-icon-url',
+        data: { title: 'New project!', body: `${project.projectName} was posted`, },
+        click_action: 'FLUTTER_NOTIFICATION_CLICK'
+      }
+    };
+
+    return fcm.sendToTopic('projs', payload);
+  });

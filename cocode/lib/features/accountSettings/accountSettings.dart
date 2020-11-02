@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cocode/buttons/RoundeButton.dart';
+import 'package:cocode/features/NotificationHandler/notificationsHandler.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_form_bloc/flutter_form_bloc.dart';
@@ -65,13 +66,25 @@ class _settingsPageState extends State<settingsPage> {
             AccountInfo.email = this.email = data['email'];
             AccountInfo.firstname = this.firstname = data['firstName'];
             AccountInfo.lastname = this.lastname = data['lastName'];
-
+//MessageHandler
             return Scaffold(
                 backgroundColor: Colors.white,
                 body: Padding(
                     padding: const EdgeInsets.all(10.0),
                     child: ListView(
                       children: <Widget>[
+                        OutlineButton(
+                          textColor: Colors.indigo,
+                          highlightedBorderColor:
+                              Colors.black.withOpacity(0.12),
+                          onPressed: () async {
+                            Navigator.push(context,
+                                MaterialPageRoute(builder: (_) {
+                              return MessageHandler();
+                            }));
+                          },
+                          child: Text("Try"),
+                        ),
                         Card(
                           child: ListTile(
                               leading: GestureDetector(
