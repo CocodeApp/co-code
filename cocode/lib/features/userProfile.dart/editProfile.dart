@@ -42,7 +42,7 @@ class _editProfileState extends State<editProfile> {
         centerTitle: true,
         backgroundColor: Colors.indigo,
         title: Text(
-          "Edit Account",
+          "Edit Profile",
           textAlign: TextAlign.center,
         ),
         leading: BackButton(
@@ -58,15 +58,46 @@ class _editProfileState extends State<editProfile> {
 
             return Scaffold(
                 backgroundColor: Colors.white,
-                appBar: AppBar(
-                  centerTitle: true,
-                  title: Text('edit profile',
-                      textAlign: TextAlign.center,
-                      style: TextStyle(fontSize: 20, color: Colors.indigo)),
-                  backgroundColor: Colors.white,
-                  elevation: 0,
+              body: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: <Widget>[
+               Expanded(
+                 child: Container(
+                  decoration: BoxDecoration(
+                  color: Colors.blueAccent[400],
+                  borderRadius: BorderRadius.only(
+                  bottomLeft: Radius.circular(20.0),
+                  bottomRight: Radius.circular(20.0),
+                  ),
                 ),
-                body: Padding(
+                   child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: <Widget>[
+                  CircleAvatar(
+                    backgroundColor: Colors.white70,
+                    radius: 65,
+                    child: FlatButton(
+                      //onPressed: callback,
+                      child: Icon(
+                        Icons.add,
+                        size:
+                        0.055 * MediaQuery.of(context).size.height,
+                      ),
+                    ),
+                  ),
+                  Text("Change your profile image here",
+                      style: TextStyle(
+                        fontSize: 15,
+                        color: Colors.white70,
+                        fontWeight: FontWeight.w600,
+                      )),
+                ],
+              ),
+            ),
+          ),
+          Expanded(
+          flex: 2,
+                child: Padding(
                     padding: const EdgeInsets.all(10.0),
                     child: ListView(
                       children: <Widget>[
@@ -93,7 +124,7 @@ class _editProfileState extends State<editProfile> {
                                 },
                               ),
                               dense: false,
-                              title: Text('Username',
+                              title: Text('Bio',
                                   style: TextStyle(
                                       fontSize: 14.0, color: Colors.grey)),
                               subtitle: Text(this.bio,
@@ -322,7 +353,7 @@ class _editProfileState extends State<editProfile> {
                         //   ),
                         // ),
                       ],
-                    )));
+                    )))]));
           } else if (!snapshot.hasData)
             return Center(
               child: Card(

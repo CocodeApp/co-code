@@ -1,8 +1,12 @@
+import 'dart:io';
+
 import 'package:cocode/buttons/indicator.dart';
 import 'package:cocode/features/accountSettings/changeUsername.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cocode/features/accountSettings/AccountInfo.dart';
+import 'package:image_picker/image_picker.dart';
 
 import '../../Auth.dart';
 import 'changeBio.dart';
@@ -80,7 +84,7 @@ class EditProfile extends State<EditProfilePage> {
                               child: Icon(
                                 Icons.add,
                                 size:
-                                    0.055 * MediaQuery.of(context).size.height,
+                                0.055 * MediaQuery.of(context).size.height,
                               ),
                             ),
                           ),
@@ -118,8 +122,8 @@ class EditProfile extends State<EditProfilePage> {
                                   onTap: () {
                                     Navigator.push(context,
                                         MaterialPageRoute(builder: (_) {
-                                      return ChangeUsername();
-                                    }));
+                                          return ChangeUsername();
+                                        }));
                                   },
                                 ),
                                 dense: false,
@@ -135,7 +139,7 @@ class EditProfile extends State<EditProfilePage> {
                                     context,
                                     new MaterialPageRoute(
                                         builder: (context) =>
-                                            new ChangeUsername()),
+                                        new ChangeUsername()),
                                   ).then((value) {
                                     setState(() {
                                       id = AccountInfo.username;
@@ -161,8 +165,8 @@ class EditProfile extends State<EditProfilePage> {
                                   onTap: () {
                                     Navigator.push(context,
                                         MaterialPageRoute(builder: (_) {
-                                      return ChangeUsername();
-                                    }));
+                                          return ChangeUsername();
+                                        }));
                                   },
                                 ),
                                 dense: false,
@@ -178,7 +182,7 @@ class EditProfile extends State<EditProfilePage> {
                                     context,
                                     new MaterialPageRoute(
                                         builder: (context) =>
-                                            new ChangeUsername()),
+                                        new ChangeUsername()),
                                   ).then((value) {
                                     setState(() {
                                       id = AccountInfo.username;
@@ -204,8 +208,8 @@ class EditProfile extends State<EditProfilePage> {
                                   onTap: () {
                                     Navigator.push(context,
                                         MaterialPageRoute(builder: (_) {
-                                      return ChangeUsername();
-                                    }));
+                                          return ChangeUsername();
+                                        }));
                                   },
                                 ),
                                 dense: false,
@@ -246,8 +250,8 @@ class EditProfile extends State<EditProfilePage> {
                                   onTap: () {
                                     Navigator.push(context,
                                         MaterialPageRoute(builder: (_) {
-                                      return ChangeUsername();
-                                    }));
+                                          return ChangeUsername();
+                                        }));
                                   },
                                 ),
                                 dense: false,
@@ -263,7 +267,7 @@ class EditProfile extends State<EditProfilePage> {
                                     context,
                                     new MaterialPageRoute(
                                         builder: (context) =>
-                                            new ChangeUsername()),
+                                        new ChangeUsername()),
                                   ).then((value) {
                                     setState(() {
                                       id = AccountInfo.username;
@@ -281,4 +285,5 @@ class EditProfile extends State<EditProfilePage> {
           }
         });
   }
+
 }
