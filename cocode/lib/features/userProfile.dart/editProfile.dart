@@ -1,11 +1,15 @@
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cocode/buttons/RoundeButton.dart';
 import 'package:cocode/features/userProfile.dart/changeBio.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_form_bloc/flutter_form_bloc.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:form_bloc/form_bloc.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:kf_drawer/kf_drawer.dart';
 import 'dart:async';
 import 'package:cocode/features/accountSettings/AccountInfo.dart';
@@ -24,7 +28,7 @@ class editProfile extends KFDrawerContent {
 
 class _editProfileState extends State<editProfile> {
   String bio;
-
+  String imageUrl;
   bool isLoading;
 
   @override
@@ -73,17 +77,8 @@ class _editProfileState extends State<editProfile> {
                    child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: <Widget>[
-                  CircleAvatar(
-                    backgroundColor: Colors.white70,
-                    radius: 65,
-                    child: FlatButton(
-                      //onPressed: callback,
-                      child: Icon(
-                        Icons.add,
-                        size:
-                        0.055 * MediaQuery.of(context).size.height,
-                      ),
-                    ),
+                  Avatar(
+                    onTap: ()  => imageUrl=uploadImage(),
                   ),
                   Text("Change your profile image here",
                       style: TextStyle(
@@ -377,6 +372,55 @@ class _editProfileState extends State<editProfile> {
               ),
             );
         },
+      ),
+    );
+  }
+  uploadImage() async {
+    final _storage = FirebaseStorage.instance;
+    final _picker = ImagePicker();
+    PickedFile image;
+    String id = Auth.getCurrentUserID();
+    //Select Image
+    image = await _picker.getImage(source: ImageSource.gallery);
+    var file = File(image.path);
+
+    if (image != null){
+      //Upload to Firebase
+      var snapshot = await _storage.ref()
+          .child('profileImage/'+id)
+          .putFile(file)
+          .onComplete;
+      var downloadUrl = await snapshot.ref.getDownloadURL();
+      return downloadUrl;
+    } else {
+      print('No Path Received');
+    }
+
+
+  }
+
+}
+
+class Avatar extends StatelessWidget {
+  final String avatarUrl;
+  final Function onTap;
+  const Avatar({this.avatarUrl, this.onTap});
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Center(
+        child: avatarUrl == null
+            ? CircleAvatar(
+          radius: 65.0,
+          backgroundColor: Colors.white70,
+          child: Icon(Icons.photo_camera,size: 30,),
+        )
+            : CircleAvatar(
+          radius: 65.0,
+          backgroundImage: NetworkImage(avatarUrl),
+        ),
       ),
     );
   }

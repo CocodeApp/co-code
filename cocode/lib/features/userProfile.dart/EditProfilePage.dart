@@ -76,24 +76,13 @@ class EditProfile extends State<EditProfilePage> {
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: <Widget>[
-                          CircleAvatar(
-                            backgroundColor: Colors.white70,
-                            radius: 65,
-                            child: FlatButton(
-                              //onPressed: callback,
-                              child: Icon(
-                                Icons.add,
-                                size:
-                                0.055 * MediaQuery.of(context).size.height,
-                              ),
-                            ),
+                          Avatar(
+                            onTap: ()  => uploadImage(),
                           ),
                           Text("Change your profile image here",
-                              style: TextStyle(
-                                fontSize: 15,
-                                color: Colors.white70,
-                                fontWeight: FontWeight.w600,
-                              )),
+                              style:TextStyle(fontSize: 15,color: Colors.white70,
+                                fontWeight: FontWeight.w600,)),
+
                         ],
                       ),
                     ),
@@ -285,5 +274,53 @@ class EditProfile extends State<EditProfilePage> {
           }
         });
   }
+  uploadImage() async {
+    final _storage = FirebaseStorage.instance;
+    final _picker = ImagePicker();
+    PickedFile image;
+    String id = Auth.getCurrentUserID();
+    //Select Image
+    image = await _picker.getImage(source: ImageSource.gallery);
+    var file = File(image.path);
 
+    if (image != null){
+      //Upload to Firebase
+      var snapshot = await _storage.ref()
+          .child('profileImage/'+id)
+          .putFile(file)
+          .onComplete;
+
+      var downloadUrl = await snapshot.ref.getDownloadURL();
+          } else {
+      print('No Path Received');
+    }
+
+
+  }
+
+}
+
+class Avatar extends StatelessWidget {
+  final String avatarUrl;
+  final Function onTap;
+  const Avatar({this.avatarUrl, this.onTap});
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Center(
+        child: avatarUrl == null
+            ? CircleAvatar(
+          radius: 65.0,
+          backgroundColor: Colors.white70,
+          child: Icon(Icons.photo_camera,size: 30,),
+        )
+            : CircleAvatar(
+          radius: 65.0,
+          backgroundImage: NetworkImage(avatarUrl),
+        ),
+      ),
+    );
+  }
 }
