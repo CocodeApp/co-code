@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cocode/buttons/RoundeButton.dart';
 import 'package:cocode/features/userProfile.dart/changeBio.dart';
+import 'package:cocode/features/userProfile.dart/changeUniversity.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -28,6 +29,8 @@ class editProfile extends KFDrawerContent {
 
 class _editProfileState extends State<editProfile> {
   String bio;
+  String major;
+  String university;
   String imageUrl;
   bool isLoading;
 
@@ -59,7 +62,8 @@ class _editProfileState extends State<editProfile> {
           if (snapshot.hasData) {
             Map<String, dynamic> data = snapshot.data.data();
             AccountInfo.bio = this.bio = data['bio'];
-
+            AccountInfo.major= this.major=data['major'];
+            AccountInfo.university= this.university=data['university'];
             return Scaffold(
                 backgroundColor: Colors.white,
               body: Column(
@@ -68,7 +72,7 @@ class _editProfileState extends State<editProfile> {
                Expanded(
                  child: Container(
                   decoration: BoxDecoration(
-                  color: Colors.blueAccent[400],
+                  color: Colors.blueAccent[100],
                   borderRadius: BorderRadius.only(
                   bottomLeft: Radius.circular(20.0),
                   bottomRight: Radius.circular(20.0),
@@ -100,6 +104,90 @@ class _editProfileState extends State<editProfile> {
                           child: ListTile(
                               leading: GestureDetector(
                                 child: Hero(
+                                    tag: 'university',
+                                    child: CircleAvatar(
+                                      backgroundColor: Colors.indigo,
+                                      foregroundColor: Colors.white,
+                                      radius: 20,
+                                      child: Icon(
+                                        Icons.person,
+                                        color: Colors.white,
+                                        size: 30.0,
+                                      ),
+                                    )),
+                                onTap: () {
+                                  Navigator.push(context,
+                                      MaterialPageRoute(builder: (_) {
+                                    return changeUniversity();
+                                  }));
+                                },
+                              ),
+                              dense: false,
+                              title: Text('University',
+                                  style: TextStyle(
+                                      fontSize: 14.0, color: Colors.grey)),
+                              subtitle: Text(this.university,
+                                  style: TextStyle(
+                                      fontSize: 17.0, color: Colors.black87)),
+                              trailing: Icon(Icons.keyboard_arrow_right),
+                              onTap: () {
+                                Navigator.push(
+                                  context,
+                                  new MaterialPageRoute(
+                                      builder: (context) => new changeUniversity()),
+                                ).then((value) {
+                                  setState(() {
+                                    this.university = AccountInfo.university;
+                                  });
+                                });
+                              }),
+                        ),
+                        Card(
+                          child: ListTile(
+                              leading: GestureDetector(
+                                child: Hero(
+                                    tag: 'major',
+                                    child: CircleAvatar(
+                                      backgroundColor: Colors.indigo,
+                                      foregroundColor: Colors.white,
+                                      radius: 20,
+                                      child: Icon(
+                                        Icons.person,
+                                        color: Colors.white,
+                                        size: 30.0,
+                                      ),
+                                    )),
+                                onTap: () {
+                                  Navigator.push(context,
+                                      MaterialPageRoute(builder: (_) {
+                                        return changeBio();
+                                      }));
+                                },
+                              ),
+                              dense: false,
+                              title: Text('Major',
+                                  style: TextStyle(
+                                      fontSize: 14.0, color: Colors.grey)),
+                              subtitle: Text(this.major,
+                                  style: TextStyle(
+                                      fontSize: 17.0, color: Colors.black87)),
+                              trailing: Icon(Icons.keyboard_arrow_right),
+                              onTap: () {
+                                Navigator.push(
+                                  context,
+                                  new MaterialPageRoute(
+                                      builder: (context) => new changeBio()),
+                                ).then((value) {
+                                  setState(() {
+                                    this.major = AccountInfo.major;
+                                  });
+                                });
+                              }),
+                        ),
+                        Card(
+                          child: ListTile(
+                              leading: GestureDetector(
+                                child: Hero(
                                     tag: 'bio',
                                     child: CircleAvatar(
                                       backgroundColor: Colors.indigo,
@@ -114,8 +202,8 @@ class _editProfileState extends State<editProfile> {
                                 onTap: () {
                                   Navigator.push(context,
                                       MaterialPageRoute(builder: (_) {
-                                    return changeBio();
-                                  }));
+                                        return changeBio();
+                                      }));
                                 },
                               ),
                               dense: false,
@@ -375,7 +463,7 @@ class _editProfileState extends State<editProfile> {
       ),
     );
   }
-  uploadImage() async {
+  static uploadImage() async {
     final _storage = FirebaseStorage.instance;
     final _picker = ImagePicker();
     PickedFile image;

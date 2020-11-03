@@ -105,7 +105,7 @@ class _profilePageState extends State<profilePage> {
                           padding: EdgeInsets.only(bottom: 20),
                           width: MediaQuery.of(context).size.width,
                           decoration: BoxDecoration(
-                            color: Color(0xffD1DDED),
+                            color: Colors.white70,
                             borderRadius: BorderRadius.all(
                               Radius.circular(30.0),
                             ),
@@ -300,8 +300,14 @@ class _profilePageState extends State<profilePage> {
     if (data == null) return Container();
     return Container(
       //first part the blue one
-      color: Colors.white,
-      height: 0.38 * MediaQuery.of(context).size.height,
+        height: 0.38 * MediaQuery.of(context).size.height,
+    decoration: BoxDecoration(
+        color: Colors.blueAccent[100],
+        borderRadius: BorderRadius.only(
+        bottomLeft: Radius.circular(30.0),
+    bottomRight: Radius.circular(30.0),
+    ),),
+
       child: Padding(
           padding: EdgeInsets.only(
             // image position
