@@ -2,9 +2,10 @@ import 'package:cocode/buttons/indicator.dart';
 import 'package:cocode/features/accountSettings/changeUsername.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:cocode/features/accountSettings/AccountInfo.dart';
 
-import '../../AccountInfo.dart';
 import '../../Auth.dart';
+import 'changeBio.dart';
 
 class EditProfilePage extends StatefulWidget {
   @override
@@ -14,6 +15,7 @@ class EditProfilePage extends StatefulWidget {
 class EditProfile extends State<EditProfilePage> {
   String university = "";
   String major = '';
+  String bio = '';
   String id = Auth.getCurrentUserID();
   @override
   Widget build(BuildContext context) {
@@ -36,6 +38,7 @@ class EditProfile extends State<EditProfilePage> {
             List<dynamic> skills = data['skills'];
             university = data['university'];
             major = data['major'];
+            AccountInfo.bio = bio = data['bio'];
 
             return Scaffold(
               appBar: AppBar(
@@ -69,216 +72,210 @@ class EditProfile extends State<EditProfilePage> {
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: <Widget>[
-                        CircleAvatar(
-                          backgroundColor: Colors.white70,
-                          radius: 65,
-                          child:FlatButton(
-                            //onPressed: callback,
-                            child: Icon(Icons.add,
-                              size: 0.055*MediaQuery.of(context).size.height,),
+                          CircleAvatar(
+                            backgroundColor: Colors.white70,
+                            radius: 65,
+                            child: FlatButton(
+                              //onPressed: callback,
+                              child: Icon(
+                                Icons.add,
+                                size:
+                                    0.055 * MediaQuery.of(context).size.height,
+                              ),
+                            ),
                           ),
-                        ),
                           Text("Change your profile image here",
-                              style:TextStyle(fontSize: 15,color: Colors.white70,
-                                fontWeight: FontWeight.w600,)),
+                              style: TextStyle(
+                                fontSize: 15,
+                                color: Colors.white70,
+                                fontWeight: FontWeight.w600,
+                              )),
                         ],
                       ),
                     ),
                   ),
                   Expanded(
-          flex: 2,
-                child:  Padding(
-                    padding: const EdgeInsets.all(10.0),
-                    child: ListView(
-                      children: <Widget>[
-                        Card(
-                          child: ListTile(
-                              leading: GestureDetector(
-                                child: Hero(
-                                    tag: 'university',
-                                    child: CircleAvatar(
-                                      backgroundColor: Colors.indigo,
-                                      foregroundColor: Colors.white,
-                                      radius: 20,
-                                      child: Icon(
-                                        Icons.alternate_email,
-                                        color: Colors.white,
-                                        size: 30.0,
-                                      ),
-                                    )),
+                    flex: 2,
+                    child: Padding(
+                      padding: const EdgeInsets.all(10.0),
+                      child: ListView(
+                        children: <Widget>[
+                          Card(
+                            child: ListTile(
+                                leading: GestureDetector(
+                                  child: Hero(
+                                      tag: 'university',
+                                      child: CircleAvatar(
+                                        backgroundColor: Colors.indigo,
+                                        foregroundColor: Colors.white,
+                                        radius: 20,
+                                        child: Icon(
+                                          Icons.alternate_email,
+                                          color: Colors.white,
+                                          size: 30.0,
+                                        ),
+                                      )),
+                                  onTap: () {
+                                    Navigator.push(context,
+                                        MaterialPageRoute(builder: (_) {
+                                      return ChangeUsername();
+                                    }));
+                                  },
+                                ),
+                                dense: false,
+                                title: Text('University',
+                                    style: TextStyle(
+                                        fontSize: 14.0, color: Colors.grey)),
+                                subtitle: Text(id,
+                                    style: TextStyle(
+                                        fontSize: 17.0, color: Colors.black87)),
+                                trailing: Icon(Icons.keyboard_arrow_right),
                                 onTap: () {
-                                  Navigator.push(context,
-                                      MaterialPageRoute(builder: (_) {
-                                        return ChangeUsername();
-                                      }));
-                                },
-                              ),
-                              dense: false,
-                              title: Text('University',
-                                  style: TextStyle(
-                                      fontSize: 14.0,
-                                      color: Colors.grey)),
-                              subtitle: Text(id,
-                                  style: TextStyle(
-                                      fontSize: 17.0,
-                                      color: Colors.black87)),
-                              trailing:
-                              Icon(Icons.keyboard_arrow_right),
-                              onTap: () {
-                                Navigator.push(
-                                  context,
-                                  new MaterialPageRoute(
-                                      builder: (context) =>
-                                      new ChangeUsername()),
-                                ).then((value) {
-                                  setState(() {
-                                    id = AccountInfo.username;
+                                  Navigator.push(
+                                    context,
+                                    new MaterialPageRoute(
+                                        builder: (context) =>
+                                            new ChangeUsername()),
+                                  ).then((value) {
+                                    setState(() {
+                                      id = AccountInfo.username;
+                                    });
                                   });
-                                });
-                              }),
-                        ),
-                        Card(
-                          child: ListTile(
-                              leading: GestureDetector(
-                                child: Hero(
-                                    tag: 'major',
-                                    child: CircleAvatar(
-                                      backgroundColor: Colors.indigo,
-                                      foregroundColor: Colors.white,
-                                      radius: 20,
-                                      child: Icon(
-                                        Icons.alternate_email,
-                                        color: Colors.white,
-                                        size: 30.0,
-                                      ),
-                                    )),
+                                }),
+                          ),
+                          Card(
+                            child: ListTile(
+                                leading: GestureDetector(
+                                  child: Hero(
+                                      tag: 'major',
+                                      child: CircleAvatar(
+                                        backgroundColor: Colors.indigo,
+                                        foregroundColor: Colors.white,
+                                        radius: 20,
+                                        child: Icon(
+                                          Icons.alternate_email,
+                                          color: Colors.white,
+                                          size: 30.0,
+                                        ),
+                                      )),
+                                  onTap: () {
+                                    Navigator.push(context,
+                                        MaterialPageRoute(builder: (_) {
+                                      return ChangeUsername();
+                                    }));
+                                  },
+                                ),
+                                dense: false,
+                                title: Text('Major',
+                                    style: TextStyle(
+                                        fontSize: 14.0, color: Colors.grey)),
+                                subtitle: Text(id,
+                                    style: TextStyle(
+                                        fontSize: 17.0, color: Colors.black87)),
+                                trailing: Icon(Icons.keyboard_arrow_right),
                                 onTap: () {
-                                  Navigator.push(context,
-                                      MaterialPageRoute(builder: (_) {
-                                        return ChangeUsername();
-                                      }));
-                                },
-                              ),
-                              dense: false,
-                              title: Text('Major',
-                                  style: TextStyle(
-                                      fontSize: 14.0,
-                                      color: Colors.grey)),
-                              subtitle: Text(id,
-                                  style: TextStyle(
-                                      fontSize: 17.0,
-                                      color: Colors.black87)),
-                              trailing:
-                              Icon(Icons.keyboard_arrow_right),
-                              onTap: () {
-                                Navigator.push(
-                                  context,
-                                  new MaterialPageRoute(
-                                      builder: (context) =>
-                                      new ChangeUsername()),
-                                ).then((value) {
-                                  setState(() {
-                                    id = AccountInfo.username;
+                                  Navigator.push(
+                                    context,
+                                    new MaterialPageRoute(
+                                        builder: (context) =>
+                                            new ChangeUsername()),
+                                  ).then((value) {
+                                    setState(() {
+                                      id = AccountInfo.username;
+                                    });
                                   });
-                                });
-                              }),
-                        ),
-                        Card(
-                          child: ListTile(
-                              leading: GestureDetector(
-                                child: Hero(
-                                    tag: 'University',
-                                    child: CircleAvatar(
-                                      backgroundColor: Colors.indigo,
-                                      foregroundColor: Colors.white,
-                                      radius: 20,
-                                      child: Icon(
-                                        Icons.alternate_email,
-                                        color: Colors.white,
-                                        size: 30.0,
-                                      ),
-                                    )),
+                                }),
+                          ),
+                          Card(
+                            child: ListTile(
+                                leading: GestureDetector(
+                                  child: Hero(
+                                      tag: 'University',
+                                      child: CircleAvatar(
+                                        backgroundColor: Colors.indigo,
+                                        foregroundColor: Colors.white,
+                                        radius: 20,
+                                        child: Icon(
+                                          Icons.alternate_email,
+                                          color: Colors.white,
+                                          size: 30.0,
+                                        ),
+                                      )),
+                                  onTap: () {
+                                    Navigator.push(context,
+                                        MaterialPageRoute(builder: (_) {
+                                      return ChangeUsername();
+                                    }));
+                                  },
+                                ),
+                                dense: false,
+                                title: Text('Bio',
+                                    style: TextStyle(
+                                        fontSize: 14.0, color: Colors.grey)),
+                                subtitle: Text(id,
+                                    style: TextStyle(
+                                        fontSize: 17.0, color: Colors.black87)),
+                                trailing: Icon(Icons.keyboard_arrow_right),
                                 onTap: () {
-                                  Navigator.push(context,
-                                      MaterialPageRoute(builder: (_) {
-                                        return ChangeUsername();
-                                      }));
-                                },
-                              ),
-                              dense: false,
-                              title: Text('Bio',
-                                  style: TextStyle(
-                                      fontSize: 14.0,
-                                      color: Colors.grey)),
-                              subtitle: Text(id,
-                                  style: TextStyle(
-                                      fontSize: 17.0,
-                                      color: Colors.black87)),
-                              trailing:
-                              Icon(Icons.keyboard_arrow_right),
-                              onTap: () {
-                                Navigator.push(
-                                  context,
-                                  new MaterialPageRoute(
-                                      builder: (context) =>
-                                      new ChangeUsername()),
-                                ).then((value) {
-                                  setState(() {
-                                    id = AccountInfo.username;
+                                  Navigator.push(
+                                    context,
+                                    new MaterialPageRoute(
+                                        builder: (context) => new changeBio()),
+                                  ).then((value) {
+                                    setState(() {
+                                      this.bio = AccountInfo.bio;
+                                    });
                                   });
-                                });
-                              }),
-                        ),
-                        Card(
-                          child: ListTile(
-                              leading: GestureDetector(
-                                child: Hero(
-                                    tag: 'University',
-                                    child: CircleAvatar(
-                                      backgroundColor: Colors.indigo,
-                                      foregroundColor: Colors.white,
-                                      radius: 20,
-                                      child: Icon(
-                                        Icons.alternate_email,
-                                        color: Colors.white,
-                                        size: 30.0,
-                                      ),
-                                    )),
+                                }),
+                          ),
+                          Card(
+                            child: ListTile(
+                                leading: GestureDetector(
+                                  child: Hero(
+                                      tag: 'University',
+                                      child: CircleAvatar(
+                                        backgroundColor: Colors.indigo,
+                                        foregroundColor: Colors.white,
+                                        radius: 20,
+                                        child: Icon(
+                                          Icons.alternate_email,
+                                          color: Colors.white,
+                                          size: 30.0,
+                                        ),
+                                      )),
+                                  onTap: () {
+                                    Navigator.push(context,
+                                        MaterialPageRoute(builder: (_) {
+                                      return ChangeUsername();
+                                    }));
+                                  },
+                                ),
+                                dense: false,
+                                title: Text('Edit Skills',
+                                    style: TextStyle(
+                                        fontSize: 14.0, color: Colors.grey)),
+                                subtitle: Text(id,
+                                    style: TextStyle(
+                                        fontSize: 17.0, color: Colors.black87)),
+                                trailing: Icon(Icons.keyboard_arrow_right),
                                 onTap: () {
-                                  Navigator.push(context,
-                                      MaterialPageRoute(builder: (_) {
-                                        return ChangeUsername();
-                                      }));
-                                },
-                              ),
-                              dense: false,
-                              title: Text('Edit Skills',
-                                  style: TextStyle(
-                                      fontSize: 14.0,
-                                      color: Colors.grey)),
-                              subtitle: Text(id,
-                                  style: TextStyle(
-                                      fontSize: 17.0,
-                                      color: Colors.black87)),
-                              trailing:
-                              Icon(Icons.keyboard_arrow_right),
-                              onTap: () {
-                                Navigator.push(
-                                  context,
-                                  new MaterialPageRoute(
-                                      builder: (context) =>
-                                      new ChangeUsername()),
-                                ).then((value) {
-                                  setState(() {
-                                    id = AccountInfo.username;
+                                  Navigator.push(
+                                    context,
+                                    new MaterialPageRoute(
+                                        builder: (context) =>
+                                            new ChangeUsername()),
+                                  ).then((value) {
+                                    setState(() {
+                                      id = AccountInfo.username;
+                                    });
                                   });
-                                });
-                              }),
-                        ),
-                      ],
+                                }),
+                          ),
+                        ],
+                      ),
                     ),
                   ),
-          ),],
+                ],
               ),
             );
           }

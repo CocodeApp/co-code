@@ -5,4 +5,5 @@ class AccountInfo {
   static String password;
   static String firstname;
   static String lastname;
+  static String bio;
 }

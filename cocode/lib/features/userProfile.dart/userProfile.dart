@@ -8,6 +8,8 @@ import 'package:percent_indicator/percent_indicator.dart';
 import 'package:kf_drawer/kf_drawer.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
+import 'editProfile.dart';
+
 class profilePage extends KFDrawerContent {
   var userId;
   Widget
@@ -80,7 +82,7 @@ class _profilePageState extends State<profilePage> {
                                 context,
                                 MaterialPageRoute(
                                   builder: (context) {
-                                    return new EditProfilePage();
+                                    return new editProfile();
                                   },
                                 ),
                               );
