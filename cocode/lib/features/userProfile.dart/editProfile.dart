@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cocode/buttons/RoundeButton.dart';
+import 'package:cocode/features/accountSettings/changeProfileImage.dart';
 import 'package:cocode/features/userProfile.dart/changeBio.dart';
 import 'package:cocode/features/userProfile.dart/changeMajor.dart';
 import 'package:cocode/features/userProfile.dart/changeUniversity.dart';
@@ -18,10 +19,6 @@ import 'package:cocode/features/accountSettings/AccountInfo.dart';
 
 import '../../Auth.dart';
 
-class CommonThings {
-  static Size size;
-}
-
 //Storing Account Info
 class editProfile extends KFDrawerContent {
   @override
@@ -32,9 +29,8 @@ class _editProfileState extends State<editProfile> {
   String bio;
   String major;
   String university;
-  String imageUrl;
   bool isLoading;
-
+  String imageUrl;
   @override
   void initState() {
     super.initState();
@@ -66,6 +62,7 @@ class _editProfileState extends State<editProfile> {
             AccountInfo.bio = this.bio = data['bio'];
             AccountInfo.major= this.major=data['major'];
             AccountInfo.university= this.university=data['university'];
+            AccountInfo.image= this.imageUrl=data['image'];
             return Scaffold(
                 backgroundColor: Colors.white,
               body: Column(
@@ -84,12 +81,23 @@ class _editProfileState extends State<editProfile> {
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: <Widget>[
                   Avatar(
-                    onTap: ()  => imageUrl=uploadImage(),
+                    onTap: () {
+                        uploadImage()
+                      .then((value) {
+                        setState(() {
+                          imageUrl = AccountInfo.image;
+
+
+
+                          print(" data['image'] = "+data['image'] );
+                        });
+                      });
+                    },
                   ),
-                  Text("Change your profile image here",
+                  Text("change your Image here ",
                       style: TextStyle(
                         fontSize: 15,
-                        color: Colors.white70,
+                        color: Colors.greenAccent,
                         fontWeight: FontWeight.w600,
                       )),
                 ],
@@ -465,7 +473,7 @@ class _editProfileState extends State<editProfile> {
       ),
     );
   }
-  static uploadImage() async {
+    uploadImage() async {
     final _storage = FirebaseStorage.instance;
     final _picker = ImagePicker();
     PickedFile image;
@@ -481,14 +489,16 @@ class _editProfileState extends State<editProfile> {
           .putFile(file)
           .onComplete;
       var downloadUrl = await snapshot.ref.getDownloadURL();
-      return downloadUrl;
+      setState(() {
+        imageUrl = downloadUrl;
+        FirebaseFirestore.instance.collection('User').doc(id)
+            .update({'image':downloadUrl});
+        AccountInfo.image= this.imageUrl;
+      });
     } else {
       print('No Path Received');
     }
-
-
   }
-
 }
 
 class Avatar extends StatelessWidget {
