@@ -1,7 +1,6 @@
 import 'package:cocode/features/accountSettings/AccountInfo.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/material.dart';
 import '../../Auth.dart';
 import 'package:cocode/buttons/RoundeButton.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -10,35 +9,22 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:form_bloc/form_bloc.dart';
 import 'dart:async';
 
-class editBioFormBloc extends FormBloc<String, String> {
-  final _bioFieldBloc =
-  TextFieldBloc(asyncValidatorDebounceTime: Duration(milliseconds: 300));
+class editUniFormBloc extends FormBloc<String, String> {
+  final _uniFieldBloc =
+      TextFieldBloc(asyncValidatorDebounceTime: Duration(milliseconds: 300));
 
   @override
   List<FieldBloc> get fieldBlocs => [
-    _bioFieldBloc,
-  ];
-
-  editBioFormBloc() {
-    // _bioFieldBloc.addAsyncValidators([_validatebio]);
-
-    _bioFieldBloc.updateInitialValue(AccountInfo.bio);
+    _uniFieldBloc,
+      ];
+  editUniFormBloc() {
+    _uniFieldBloc.updateInitialValue(AccountInfo.university);
   }
 
-  // Future<String> _validatebio(String bio) async {
-  //   // validate if username exists
-  //   if (bio.length > 140) {
-  //     return "bio should be 140 letter only";
-  //   } else {
-  //     return "";
-  //   }
-  // }
-
   StreamSubscription<TextFieldBlocState> _textFieldBlocSubscription;
-
   @override
   void dispose() {
-    _bioFieldBloc.dispose();
+    _uniFieldBloc.dispose();
 
     _textFieldBlocSubscription.cancel();
     super.dispose();
@@ -49,7 +35,7 @@ class editBioFormBloc extends FormBloc<String, String> {
     try {
       String uID = Auth.getCurrentUserID();
       await FirebaseFirestore.instance.collection('User').doc(uID).update({
-        'bio': _bioFieldBloc.value,
+        'university': _uniFieldBloc.value,
       });
 
       yield currentState.toSuccess();
@@ -65,15 +51,15 @@ class changeUniversity extends StatefulWidget {
 }
 
 class _changeUniversityState extends State<changeUniversity> {
-  String bioBefore;
-  String bioAfter;
+  String uniBefore;
+  String uniAfter;
   bool hasChanged;
   bool isEnabled;
   @override
   void initState() {
     super.initState();
     isEnabled = false;
-    bioBefore = AccountInfo.bio;
+    uniBefore = AccountInfo.university;
   }
 
   @override
@@ -81,15 +67,15 @@ class _changeUniversityState extends State<changeUniversity> {
     CollectionReference users = FirebaseFirestore.instance.collection('User');
     return new WillPopScope(
         onWillPop: () async => false,
-        child: BlocProvider<editBioFormBloc>(
-          builder: (context) => editBioFormBloc(),
-          child: FutureBuilder<DocumentSnapshot>(
-            future: users.doc(Auth.getCurrentUserID()).get(),
-            builder: (context, AsyncSnapshot<DocumentSnapshot> snapshot) {
-              final _editBioFormBloc =
-              BlocProvider.of<editBioFormBloc>(context);
-              return Scaffold(
-                  body: FormBlocListener<editBioFormBloc, String, String>(
+        child: BlocProvider<editUniFormBloc>(
+            builder: (context) => editUniFormBloc(),
+            child: FutureBuilder<DocumentSnapshot>(
+                future: users.doc(Auth.getCurrentUserID()).get(),
+                builder: (context, AsyncSnapshot<DocumentSnapshot> snapshot) {
+                  final _editBioFormBloc =
+                      BlocProvider.of<editUniFormBloc>(context);
+                  return Scaffold(
+                      body: FormBlocListener<editUniFormBloc, String, String>(
                     onSubmitting: (context, state) {
                       showDialog(
                         context: context,
@@ -110,7 +96,8 @@ class _changeUniversityState extends State<changeUniversity> {
                       );
                     },
                     onSuccess: (context, state) {
-                      AccountInfo.bio = _editBioFormBloc._bioFieldBloc.value;
+                      AccountInfo.university =
+                          _editBioFormBloc._uniFieldBloc.value;
 
                       // Hide the progress dialog
                       Navigator.of(context).pop();
@@ -144,94 +131,104 @@ class _changeUniversityState extends State<changeUniversity> {
                         leading: Container(),
                         centerTitle: true,
                         backgroundColor: Colors.white,
-                        title: Text("Change Bio",
+                        title: Text("Change University",
                             textAlign: TextAlign.center,
                             style: TextStyle(color: Color(0xff2A4793))),
                       ),
                       body: Center(
                           child: SingleChildScrollView(
-                            child: Column(
-                              children: <Widget>[
-                                SizedBox(height: 100),
-                                Container(
-                                  //box
-                                  height: 100,
-                                  width: 250.0,
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Container(
-                                        width: 125.0,
-                                        child: TextFieldBlocBuilder(
-                                          textFieldBloc: _editBioFormBloc._bioFieldBloc,
-                                          suffixButton: SuffixButton
-                                              .circularIndicatorWhenIsAsyncValidating,
-                                          decoration: new InputDecoration(
-                                            labelText: 'Bio',
-                                            border: UnderlineInputBorder(
-                                                borderSide:
-                                                BorderSide(color: Colors.red)),
-                                            focusedBorder: UnderlineInputBorder(
-                                              borderSide: BorderSide(
-                                                  color: Colors.indigo, width: 2.0),
-                                            ),
-                                            enabledBorder: UnderlineInputBorder(
-                                              borderSide:
-                                              BorderSide(color: Colors.indigo),
-                                            ),
-                                            disabledBorder: UnderlineInputBorder(
-                                                borderSide:
-                                                BorderSide(color: Colors.red)),
-                                            errorBorder: UnderlineInputBorder(
-                                                borderSide:
-                                                BorderSide(color: Colors.red)),
-                                            contentPadding: EdgeInsets.only(
-                                                left: 15,
-                                                bottom: 11,
-                                                top: 11,
-                                                right: -30),
-                                            hintText: "bio",
-                                          ),
-                                          onChanged: (text) {
-                                            setState(() {
-                                              isEnabled = true;
-                                            });
-                                          },
-                                        ),
-                                      ),
-                                    ],
+                        child: Column(
+                          children: <Widget>[
+                            SizedBox(height: 20),
+                            Container(
+                              width: 230.0,
+                              child: GestureDetector(
+                                child: Hero(
+                                  tag: 'university',
+                                  child: CircleAvatar(
+                                    backgroundColor: Color(0xff2A4793),
+                                    foregroundColor: Colors.white,
+                                    radius: 40,
+                                    child: Icon(
+                                      Icons.account_balance,
+                                      color: Colors.white,
+                                      size: 50.0,
+                                    ),
                                   ),
                                 ),
-                                SizedBox(height: 20),
-                                RoundedButton(
-                                    text: "Save",
-                                    color: Colors.indigo,
-                                    textColor: Colors.white,
-                                    press: () {
-                                      bioAfter = _editBioFormBloc._bioFieldBloc.value;
-
-                                      hasChanged = (bioBefore != bioAfter);
-                                      if (isEnabled && hasChanged)
-                                        _editBioFormBloc.submit();
-                                      else
-                                        Navigator.of(context).pop();
-                                    }),
-                                SizedBox(height: 20),
-                                RoundedButton(
-                                  text: "Cancel",
-                                  color: Colors.blue[100],
-                                  textColor: Colors.black,
-                                  press: () {
-                                    Navigator.of(context).pop();
-                                  },
-                                )
-                              ],
+                              ),
                             ),
-                          )),
+                            Container(
+                              width: 125.0,
+                              child: TextFieldBlocBuilder(
+                                textFieldBloc: _editBioFormBloc._uniFieldBloc,
+                                suffixButton: SuffixButton
+                                    .circularIndicatorWhenIsAsyncValidating,
+                                textAlign: TextAlign.center,
+                                textAlignVertical: TextAlignVertical.center,
+                                style: TextStyle(fontSize: 20),
+                                decoration: new InputDecoration(
+                                  labelText: 'University',
+                                  border: UnderlineInputBorder(
+                                      borderSide:
+                                          BorderSide(color: Colors.red)),
+                                  focusedBorder: UnderlineInputBorder(
+                                    borderSide: BorderSide(
+                                        color: Colors.indigo, width: 2.0),
+                                  ),
+                                  enabledBorder: UnderlineInputBorder(
+                                    borderSide:
+                                        BorderSide(color: Colors.indigo),
+                                  ),
+                                  disabledBorder: UnderlineInputBorder(
+                                      borderSide:
+                                          BorderSide(color: Colors.red)),
+                                  errorBorder: UnderlineInputBorder(
+                                      borderSide:
+                                          BorderSide(color: Colors.red)),
+                                  contentPadding: EdgeInsets.only(
+                                      left: 15,
+                                      bottom: 11,
+                                      top: 11,
+                                      right: -30),
+                                  hintText: "University",
+                                ),
+                                onChanged: (text) {
+                                  setState(() {
+                                    isEnabled = true;
+                                  });
+                                },
+                              ),
+                            ),
+                            SizedBox(height: 20),
+                            RoundedButton(
+                                text: "Save",
+                                color: Colors.indigo,
+                                textColor: Colors.white,
+                                press: () {
+                                  uniAfter =
+                                      _editBioFormBloc._uniFieldBloc.value;
+
+                                  hasChanged = (uniBefore != uniAfter);
+                                  if (isEnabled && hasChanged)
+                                    _editBioFormBloc.submit();
+                                  else
+                                    Navigator.of(context).pop();
+                                }),
+                            SizedBox(height: 20),
+                            RoundedButton(
+                              text: "Cancel",
+                              color: Colors.blue[100],
+                              textColor: Colors.black,
+                              press: () {
+                                Navigator.of(context).pop();
+                              },
+                            )
+                          ],
+                        ),
+                      )),
                     ),
                   ));
-            },
-          ),
-        ));
+                })));
   }
 }

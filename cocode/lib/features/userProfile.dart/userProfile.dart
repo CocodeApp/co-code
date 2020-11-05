@@ -23,7 +23,7 @@ class _profilePageState extends State<profilePage> {
   String currentName = "";
   String email = '';
   String id = Auth.getCurrentUserID();
-
+  String imageURL ;
   @override
   Widget build(BuildContext context) {
     CollectionReference users = FirebaseFirestore.instance.collection('User');
@@ -46,7 +46,8 @@ class _profilePageState extends State<profilePage> {
             List<dynamic> skills = data['skills'];
 
             currentName = data['firstName'] + " " + data['lastName'];
-            email = data[email];
+            email = data['email'];
+            imageURL=data['image'];
 
             return Scaffold(
                 backgroundColor: Colors.white,
@@ -327,8 +328,8 @@ class _profilePageState extends State<profilePage> {
                         shape: BoxShape.circle,
                         image: DecorationImage(
                             fit: BoxFit.cover,
-                            image: AssetImage(
-                                "imeges/man.png")) //// profile imeag MUST be from database
+                           image: imageURL==null?AssetImage('imeges/man.png'):NetworkImage(data['image']),
+                        ) //// profile imeag MUST be from database
                         ),
                   ),
                   SizedBox(

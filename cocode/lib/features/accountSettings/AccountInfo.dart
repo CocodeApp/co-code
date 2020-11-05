@@ -8,4 +8,6 @@ class AccountInfo {
   static String bio;
   static String major;
   static String university;
+  static String image;
+
 }
