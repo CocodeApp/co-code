@@ -1,3 +1,4 @@
+import 'package:cloud_functions/cloud_functions.dart';
 import 'package:cocode/features/homePage/homePageView.dart';
 import 'package:cocode/features/userProfile.dart/userProfile.dart';
 import 'package:cocode/features/viewProject/viewProject.dart';
@@ -113,7 +114,7 @@ class _MembersListState extends State<MembersList> {
                           IconButton(
                             icon: Icon(Icons.check_circle),
                             color: Colors.green,
-                            onPressed: () {
+                            onPressed: () async {
                               if (role == "Idea Owner") {
                                 //add the supervisor
                                 FirebaseFirestore.instance
@@ -142,6 +143,19 @@ class _MembersListState extends State<MembersList> {
                                         print("project Added to the user"))
                                     .catchError((error) =>
                                         print("Failed to add project: $error"));
+
+                                var callable = FirebaseFunctions.instance
+                                    .httpsCallable('notifyAccepted');
+
+                                var x = await callable.call(<String, dynamic>{
+                                  'applicatant': id,
+                                  'project': projectName,
+
+                                  //replace param1 with the name of the parameter in the Cloud Function and the value you want to insert
+                                }).catchError((onError) {
+                                  //Handle your error here if the function failed
+                                  print(onError.toString());
+                                });
                                 //clean the list "not important"
                                 FirebaseFirestore.instance
                                     .runTransaction((transaction) async {
@@ -204,6 +218,19 @@ class _MembersListState extends State<MembersList> {
                                         print("project Added to the user"))
                                     .catchError((error) =>
                                         print("Failed to add project: $error"));
+                                //notify user
+                                var callable = FirebaseFunctions.instance
+                                    .httpsCallable('notifyAccepted');
+
+                                var x = await callable.call(<String, dynamic>{
+                                  'applicatant': id,
+                                  'project': projectName,
+
+                                  //replace param1 with the name of the parameter in the Cloud Function and the value you want to insert
+                                }).catchError((onError) {
+                                  print(onError.toString());
+                                });
+
                                 //remove it from tempmember
                                 tempMember.value.removeAt(index);
                                 tempMember.notifyListeners();

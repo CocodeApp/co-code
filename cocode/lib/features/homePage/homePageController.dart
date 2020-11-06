@@ -35,12 +35,13 @@ class _homePageControllerState extends State<homePageController> {
     _fcm.configure(
       onMessage: (Map<String, dynamic> message) async {
         print("onMessage: $message");
+
         await showDialog(
           context: context,
           builder: (context) => AlertDialog(
             content: ListTile(
-              title: Text('hi'),
-              subtitle: Text('hi'),
+              title: Text(message['notification']['title']),
+              subtitle: Text(message['notification']['body']),
             ),
             actions: <Widget>[
               FlatButton(

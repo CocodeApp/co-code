@@ -13,50 +13,50 @@ class MessageHandlerx extends StatefulWidget {
 }
 
 class _MessageHandlerState extends State<MessageHandlerx> {
-  // final FirebaseFirestore _db = FirebaseFirestore.instance;
-  // final FirebaseMessaging _fcm = FirebaseMessaging();
+  final FirebaseFirestore _db = FirebaseFirestore.instance;
+  final FirebaseMessaging _fcm = FirebaseMessaging();
 
-  // StreamSubscription iosSubscription;
+  StreamSubscription iosSubscription;
 
   @override
   void initState() {
     super.initState();
-    // if (Platform.isIOS) {
-    //   iosSubscription = _fcm.onIosSettingsRegistered.listen((data) {
-    //     // save the token  OR subscribe to a topic here
-    //   });
+    if (Platform.isIOS) {
+      iosSubscription = _fcm.onIosSettingsRegistered.listen((data) {
+        // save the token  OR subscribe to a topic here
+      });
 
-    //   _fcm.requestNotificationPermissions(IosNotificationSettings());
-    // }
+      _fcm.requestNotificationPermissions(IosNotificationSettings());
+    }
 
-    // _fcm.configure(
-    //   onMessage: (Map<String, dynamic> message) async {
-    //     print("onMessage");
-    //     showDialog(
-    //       context: context,
-    //       builder: (context) => AlertDialog(
-    //         content: ListTile(
-    //           title: Text(message['data']['title']),
-    //           subtitle: Text(message['data']['body']),
-    //         ),
-    //         actions: <Widget>[
-    //           FlatButton(
-    //             child: Text('Ok'),
-    //             onPressed: () => Navigator.of(context).pop(),
-    //           ),
-    //         ],
-    //       ),
-    //     );
-    //   },
-    //   onLaunch: (Map<String, dynamic> message) async {
-    //     print("onLaunch: $message");
-    //     // TODO optional
-    //   },
-    //   onResume: (Map<String, dynamic> message) async {
-    //     print("onResume: $message");
-    //     // TODO optional
-    //   },
-    // );
+    _fcm.configure(
+      onMessage: (Map<String, dynamic> message) async {
+        print("onMessage");
+        showDialog(
+          context: context,
+          builder: (context) => AlertDialog(
+            content: ListTile(
+              title: Text(message['notification']['title']),
+              subtitle: Text(message['notification']['body']),
+            ),
+            actions: <Widget>[
+              FlatButton(
+                child: Text('Ok'),
+                onPressed: () => Navigator.of(context).pop(),
+              ),
+            ],
+          ),
+        );
+      },
+      onLaunch: (Map<String, dynamic> message) async {
+        print("onLaunch: $message");
+        // TODO optional
+      },
+      onResume: (Map<String, dynamic> message) async {
+        print("onResume: $message");
+        // TODO optional
+      },
+    );
   }
 
   @override

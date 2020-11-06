@@ -81,6 +81,27 @@ class _settingsPageState extends State<settingsPage> {
                           highlightedBorderColor:
                               Colors.black.withOpacity(0.12),
                           onPressed: () async {
+                            String fcmToken = await _fcm.getToken();
+
+                            // Save it to Firestore
+                            if (fcmToken != null) {
+                              _db
+                                  .collection('User')
+                                  .doc(Auth.getCurrentUserID())
+                                  .collection('tokens')
+                                  .doc(fcmToken)
+                                  .set({
+                                    'token': fcmToken,
+                                    'createdAt': FieldValue
+                                        .serverTimestamp(), // optional
+                                  })
+                                  .then((value) => print('yyeeessss'))
+                                  .catchError((e) {
+                                    print('the error is ' + e.toString());
+                                  });
+                              print('token is ' + fcmToken);
+                            }
+
                             _fcm.subscribeToTopic('projs');
                             //   print('start');
                             //   return await FirebaseFunctions.instance

@@ -96,9 +96,14 @@ exports.sendToTopic = functions.firestore
   .onCreate(async snapshot => {
     const project = snapshot.data();
 
-    const payload = { "notification": { "body": "this is a body", "title": "this is a title" }, "priority": "high", "data": { "click_action": "FLUTTER_NOTIFICATION_CLICK", "id": "1", "status": "done" } };
+    const payload = { 
+    "notification": { "body": `a new project \"${project.projectName}\" is added`
+    , //last change
+    "title": "new project!" }, 
+     "data": { "click_action": "FLUTTER_NOTIFICATION_CLICK", "id": "1", "status": "done" } };
+     fcm.sendToTopic('projs', payload);
+     return ;
 
-    return fcm.sendToTopic('projs', payload);
   });
 
 
@@ -107,20 +112,14 @@ exports.notifyAccepted = functions.https.onCall((data, context) => {
   //   applicatant: request.body.applicatant,
   //   project: request.body.project,
   // };
+  print(data.applicatant);
+  print(data.project);
 
-
-  const payload = {
-    notification: {
-      title: 'Congrats!',
-      body: `you were accepted`,
-      //icon: 'your-icon-url',
-      data: {
-        click_action: 'FLUTTER_NOTIFICATION_CLICK', // required only for onResume or onLaunch callbacks
-        click_action: ".MainActivity",
-      }
-
-    }
-  };
+  const payload = { 
+    "notification": { "body": `congrats ${data.applicatant}!!`
+    , //last change
+    "title": `you were accepted in ${data.project}` }, 
+     "data": { "click_action": "FLUTTER_NOTIFICATION_CLICK", "id": "1", "status": "done" } };
 
 
 
