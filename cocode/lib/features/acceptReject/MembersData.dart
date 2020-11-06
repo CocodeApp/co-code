@@ -150,7 +150,6 @@ class _MembersListState extends State<MembersList> {
                                 var x = await callable.call(<String, dynamic>{
                                   'applicatant': id,
                                   'project': projectName,
-
                                   //replace param1 with the name of the parameter in the Cloud Function and the value you want to insert
                                 }).catchError((onError) {
                                   //Handle your error here if the function failed

@@ -16,6 +16,7 @@ admin.initializeApp();
 var request = require('request');
 
 const googleCredentials = require("./credentials.json");
+const { firebase } = require("googleapis/build/src/apis/firebase");
 
 const ERROR_RESPONSE = {
   status: "500",
@@ -112,22 +113,24 @@ exports.notifyAccepted = functions.https.onCall((data, context) => {
   //   applicatant: request.body.applicatant,
   //   project: request.body.project,
   // };
-  print(data.applicatant);
-  print(data.project);
 
   const payload = { 
-    "notification": { "body": `congrats ${data.applicatant}!!`
+    "notification": { "body": `you were accepted in ${data.project}`
     , //last change
-    "title": `you were accepted in ${data.project}` }, 
+    "title":  `congrats ${data.applicatant}!!`}, 
      "data": { "click_action": "FLUTTER_NOTIFICATION_CLICK", "id": "1", "status": "done" } };
 
+     var snapshots = FirebaseFirestore.instance
+     .collection('User')
+     .doc(data.applicatant)
+     .collection('tokens').get();
+     
+     var tok = snapshots.docs.map((snap)=> snap.id);
 
 
 
 
-
-
-  return fcm.sendToTopic('projs', payload);
+  return fcm.sendToDevice(tok, payload);
 
 
 });
