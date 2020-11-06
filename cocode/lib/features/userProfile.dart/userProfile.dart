@@ -23,7 +23,7 @@ class _profilePageState extends State<profilePage> {
   String currentName = "";
   String email = '';
   String id = Auth.getCurrentUserID();
-  String imageURL ;
+  String imageURL;
   @override
   Widget build(BuildContext context) {
     CollectionReference users = FirebaseFirestore.instance.collection('User');
@@ -47,7 +47,7 @@ class _profilePageState extends State<profilePage> {
 
             currentName = data['firstName'] + " " + data['lastName'];
             email = data['email'];
-            imageURL=data['image'];
+            imageURL = data['image'];
 
             return Scaffold(
                 backgroundColor: Colors.white,
@@ -301,13 +301,14 @@ class _profilePageState extends State<profilePage> {
     if (data == null) return Container();
     return Container(
       //first part the blue one
-        height: 0.38 * MediaQuery.of(context).size.height,
-    decoration: BoxDecoration(
+      height: 0.38 * MediaQuery.of(context).size.height,
+      decoration: BoxDecoration(
         color: Colors.blueAccent[100],
         borderRadius: BorderRadius.only(
-        bottomLeft: Radius.circular(30.0),
-    bottomRight: Radius.circular(30.0),
-    ),),
+          bottomLeft: Radius.circular(30.0),
+          bottomRight: Radius.circular(30.0),
+        ),
+      ),
 
       child: Padding(
           padding: EdgeInsets.only(
@@ -327,8 +328,10 @@ class _profilePageState extends State<profilePage> {
                     decoration: BoxDecoration(
                         shape: BoxShape.circle,
                         image: DecorationImage(
-                            fit: BoxFit.cover,
-                           image: imageURL==null?AssetImage('imeges/man.png'):NetworkImage(data['image']),
+                          fit: BoxFit.cover,
+                          image: imageURL == null
+                              ? AssetImage('imeges/man.png')
+                              : NetworkImage(data['image']),
                         ) //// profile imeag MUST be from database
                         ),
                   ),
@@ -425,7 +428,7 @@ class _profilePageState extends State<profilePage> {
   }
 
   skillAndLevel(String skillName, String level) {
-    var skil = int.parse(level);
+    var skil = double.parse(level);
     var percent = skil * 0.01;
     return Padding(
       padding: const EdgeInsets.only(left: 5),
