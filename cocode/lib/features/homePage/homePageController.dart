@@ -35,12 +35,12 @@ class _homePageControllerState extends State<homePageController> {
     _fcm.configure(
       onMessage: (Map<String, dynamic> message) async {
         print("onMessage: $message");
-        showDialog(
+        await showDialog(
           context: context,
           builder: (context) => AlertDialog(
             content: ListTile(
-              title: Text(message['notification']['title']),
-              subtitle: Text(message['notification']['body']),
+              title: Text('hi'),
+              subtitle: Text('hi'),
             ),
             actions: <Widget>[
               FlatButton(
@@ -50,16 +50,15 @@ class _homePageControllerState extends State<homePageController> {
             ],
           ),
         );
+        return;
       },
       onLaunch: (Map<String, dynamic> message) async {
         print("onLaunch: $message");
-        // TODO optional
+        return;
       },
       onResume: (Map<String, dynamic> message) async {
         print("onResume: $message");
-        Navigator.push(context, MaterialPageRoute(builder: (_) {
-          return notification();
-        }));
+        return;
       },
     );
   }

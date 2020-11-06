@@ -1,11 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:cocode/buttons/RoundeButton.dart';
+import 'package:cloud_functions/cloud_functions.dart';
 import 'package:cocode/features/NotificationHandler/notificationsHandler.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_form_bloc/flutter_form_bloc.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:form_bloc/form_bloc.dart';
 import 'package:kf_drawer/kf_drawer.dart';
 import 'dart:async';
 
@@ -33,6 +31,11 @@ class _settingsPageState extends State<settingsPage> {
   String firstname;
   String lastname;
   bool isLoading;
+
+  final FirebaseFirestore _db = FirebaseFirestore.instance;
+  final FirebaseMessaging _fcm = FirebaseMessaging();
+
+  StreamSubscription iosSubscription;
 
   @override
   void initState() {
@@ -78,10 +81,29 @@ class _settingsPageState extends State<settingsPage> {
                           highlightedBorderColor:
                               Colors.black.withOpacity(0.12),
                           onPressed: () async {
-                            Navigator.push(context,
-                                MaterialPageRoute(builder: (_) {
-                              return MessageHandler();
-                            }));
+                            _fcm.subscribeToTopic('projs');
+                            //   print('start');
+                            //   return await FirebaseFunctions.instance
+                            //       .httpsCallable('notifyAccepted')
+                            //       .call();
+                            // }
+
+                            var callable = FirebaseFunctions.instance
+                                .httpsCallable('notifyAccepted');
+
+                            var x = await callable.call(<String, dynamic>{
+                              'applicatant': 'applicantname',
+                              'project': 'applicantname',
+
+                              //replace param1 with the name of the parameter in the Cloud Function and the value you want to insert
+                            }).catchError((onError) {
+                              //Handle your error here if the function failed
+                            });
+
+                            // Navigator.push(context,
+                            //     MaterialPageRoute(builder: (_) {
+                            //   return MessageHandlerx();
+                            // }));
                           },
                           child: Text("Try"),
                         ),

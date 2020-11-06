@@ -12,6 +12,8 @@ const calendar = google.calendar("v3");
 const functions = require("firebase-functions");
 const admin = require('firebase-admin');
 
+admin.initializeApp();
+var request = require('request');
 
 const googleCredentials = require("./credentials.json");
 
@@ -85,7 +87,6 @@ exports.addEvent = functions.https.onRequest((request, response) => {
 
 
 
-admin.initializeApp();
 
 const db = admin.firestore();
 const fcm = admin.messaging();
@@ -95,16 +96,39 @@ exports.sendToTopic = functions.firestore
   .onCreate(async snapshot => {
     const project = snapshot.data();
 
-    const payload = {
-      notification: {
-        click_action: ".MainActivity",
-
-
-        //icon: 'your-icon-url',
-        data: { title: 'New project!', body: `${project.projectName} was posted`, },
-        click_action: 'FLUTTER_NOTIFICATION_CLICK'
-      }
-    };
+    const payload = { "notification": { "body": "this is a body", "title": "this is a title" }, "priority": "high", "data": { "click_action": "FLUTTER_NOTIFICATION_CLICK", "id": "1", "status": "done" } };
 
     return fcm.sendToTopic('projs', payload);
   });
+
+
+exports.notifyAccepted = functions.https.onCall((data, context) => {
+  // const eventData = {
+  //   applicatant: request.body.applicatant,
+  //   project: request.body.project,
+  // };
+
+
+  const payload = {
+    notification: {
+      title: 'Congrats!',
+      body: `you were accepted`,
+      //icon: 'your-icon-url',
+      data: {
+        click_action: 'FLUTTER_NOTIFICATION_CLICK', // required only for onResume or onLaunch callbacks
+        click_action: ".MainActivity",
+      }
+
+    }
+  };
+
+
+
+
+
+
+
+  return fcm.sendToTopic('projs', payload);
+
+
+});
