@@ -17,12 +17,12 @@ class _notificationState extends State<notification> {
         backgroundColor: Colors.white,
         appBar: AppBar(
             centerTitle: false,
-            titleSpacing: 0.0,
+            titleSpacing: 5.0,
             elevation: 0.0,
             backgroundColor: Colors.white,
             title: Transform(
                 // you can forcefully translate values left side using Transform
-                transform: Matrix4.translationValues(-20.0, 0.0, 0.0),
+                transform: Matrix4.translationValues(5.0, 0.0, 0.0),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [

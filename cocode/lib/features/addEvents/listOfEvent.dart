@@ -50,7 +50,7 @@ class ListOfEvents extends StatelessWidget {
                 Navigator.push(context, MaterialPageRoute(builder: (_) {
                   return AddEventFormPage(id: projectId);
                 }));
-              },
+              }, 
             )
           : FloatingActionButton(
               elevation: 0.0,
