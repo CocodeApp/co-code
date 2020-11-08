@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:io';
+import 'package:cocode/Auth.dart';
 import 'package:flutter/material.dart';
 import 'package:googleapis/storage/v1.dart';
 import 'projectScreen.dart';
@@ -35,7 +36,6 @@ class _homePageControllerState extends State<homePageController> {
     _fcm.configure(
       onMessage: (Map<String, dynamic> message) async {
         print("onMessage: $message");
-
         await showDialog(
           context: context,
           builder: (context) => AlertDialog(
@@ -51,6 +51,9 @@ class _homePageControllerState extends State<homePageController> {
             ],
           ),
         );
+
+        addNoti(message['notification']['title'], message['notification']['body']);
+
         return;
       },
       onLaunch: (Map<String, dynamic> message) async {
@@ -77,6 +80,15 @@ class _homePageControllerState extends State<homePageController> {
 
   void _onItemTapped(int selectedIndex) {
     _pageController.jumpToPage(selectedIndex);
+  }
+
+  void addNoti(String title, String body){
+    CollectionReference users = FirebaseFirestore.instance.collection('User');
+    String user = Auth.getCurrentUserID();
+    users.doc(user).collection('notifications').add({
+      'title' : title,
+      'body' : body,
+    });
   }
 
   Widget build(BuildContext context) {
