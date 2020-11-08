@@ -11,6 +11,7 @@ import 'features/verifyEmail/VerifyEmail.dart';
 import 'features/welcomePage/WelcomeScreen.dart';
 
 //sources
+//https://github.com/tensor-programming/chat_app_live_stream/blob/master/lib/main.dart
 //https://firebase.flutter.dev/docs/auth/usage/
 //https://stackoverflow.com/questions/61931976/how-to-manage-firebase-authentication-state-in-flutter
 //https://flutter.dev/docs/cookbook/navigation/hero-animations

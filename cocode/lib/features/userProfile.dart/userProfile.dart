@@ -8,6 +8,8 @@ import 'package:percent_indicator/percent_indicator.dart';
 import 'package:kf_drawer/kf_drawer.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
+import 'editProfile.dart';
+
 class profilePage extends KFDrawerContent {
   var userId;
   Widget
@@ -21,7 +23,7 @@ class _profilePageState extends State<profilePage> {
   String currentName = "";
   String email = '';
   String id = Auth.getCurrentUserID();
-
+  String imageURL;
   @override
   Widget build(BuildContext context) {
     CollectionReference users = FirebaseFirestore.instance.collection('User');
@@ -44,7 +46,8 @@ class _profilePageState extends State<profilePage> {
             List<dynamic> skills = data['skills'];
 
             currentName = data['firstName'] + " " + data['lastName'];
-            email = data[email];
+            email = data['email'];
+            imageURL = data['image'];
 
             return Scaffold(
                 backgroundColor: Colors.white,
@@ -80,10 +83,12 @@ class _profilePageState extends State<profilePage> {
                                 context,
                                 MaterialPageRoute(
                                   builder: (context) {
-                                    return new EditProfilePage();
+                                    return new editProfile();
                                   },
                                 ),
-                              );
+                              ).then((value) {
+                                setState(() {});
+                              });
                             },
                           )
                         : Container(),
@@ -103,7 +108,7 @@ class _profilePageState extends State<profilePage> {
                           padding: EdgeInsets.only(bottom: 20),
                           width: MediaQuery.of(context).size.width,
                           decoration: BoxDecoration(
-                            color: Color(0xffD1DDED),
+                            color: Colors.white70,
                             borderRadius: BorderRadius.all(
                               Radius.circular(30.0),
                             ),
@@ -299,8 +304,15 @@ class _profilePageState extends State<profilePage> {
     if (data == null) return Container();
     return Container(
       //first part the blue one
-      color: Colors.white,
       height: 0.38 * MediaQuery.of(context).size.height,
+      decoration: BoxDecoration(
+        color: Colors.blueAccent[100],
+        borderRadius: BorderRadius.only(
+          bottomLeft: Radius.circular(30.0),
+          bottomRight: Radius.circular(30.0),
+        ),
+      ),
+
       child: Padding(
           padding: EdgeInsets.only(
             // image position
@@ -319,9 +331,11 @@ class _profilePageState extends State<profilePage> {
                     decoration: BoxDecoration(
                         shape: BoxShape.circle,
                         image: DecorationImage(
-                            fit: BoxFit.cover,
-                            image: AssetImage(
-                                "imeges/man.png")) //// profile imeag MUST be from database
+                          fit: BoxFit.cover,
+                          image: imageURL == null
+                              ? AssetImage('imeges/man.png')
+                              : NetworkImage(data['image']),
+                        ) //// profile imeag MUST be from database
                         ),
                   ),
                   SizedBox(
@@ -417,7 +431,7 @@ class _profilePageState extends State<profilePage> {
   }
 
   skillAndLevel(String skillName, String level) {
-    var skil = int.parse(level);
+    var skil = double.parse(level);
     var percent = skil * 0.01;
     return Padding(
       padding: const EdgeInsets.only(left: 5),

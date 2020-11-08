@@ -28,6 +28,8 @@ class _AcademicInfoPageState extends State<AcademicInfoPage> {
   final _formKey = GlobalKey<FormState>();
   String university;
   String major;
+  String bio = "";
+  List<dynamic> skills = new List<dynamic>();
   bool isLoading = false;
 
   @override
@@ -181,7 +183,9 @@ class _AcademicInfoPageState extends State<AcademicInfoPage> {
                                             .doc(uID)
                                             .update({
                                           'university': university,
-                                          'major': major
+                                          'major': major,
+                                          'bio': bio,
+                                          'skills': skills
                                         });
                                       } catch (e) {
                                         Fluttertoast.showToast(

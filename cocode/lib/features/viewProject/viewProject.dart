@@ -190,7 +190,7 @@ class _viewProjectState extends State<viewProject> {
 class ProjectDetails extends StatelessWidget {
   Map<String, dynamic> data;
   var id;
-
+  String imageURL;
   String tab;
   //firestore
 
@@ -199,10 +199,10 @@ class ProjectDetails extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     //before building the widget
-    //get leader'sid
+    //get leader's id
     //get the current project
     //get temp list
-    //if the user exist,return flase, otherwise true
+    //if the user exist,return false, otherwise true
     //depending on the previous bool change the button
     //after building the widget
     /*1 */
@@ -273,6 +273,7 @@ class ProjectDetails extends StatelessWidget {
       wantToApply.value = true;
     }
 
+    imageURL = data['image'];
     String deadline;
     data['deadline'] == ''
         ? deadline = 'not assigned yet'
@@ -289,7 +290,9 @@ class ProjectDetails extends StatelessWidget {
             height: 20,
           ),
           CircleAvatar(
-            backgroundImage: AssetImage("imeges/logo-2.png"),
+            backgroundImage: imageURL == null
+                ? AssetImage("imeges/logo-2.png")
+                : NetworkImage(data['image']),
             radius: 60,
           ), // to be transparent if there is no logo
           SizedBox(
@@ -425,33 +428,36 @@ class ProjectDetails extends StatelessWidget {
                                       MainAxisAlignment.spaceAround,
                                   children: <Widget>[
                                     Center(
-                                      child: RawMaterialButton(
-                                        elevation: 80.0,
-                                        fillColor: const Color(0XFF2A4793),
-                                        splashColor: const Color(0xff2980b9),
-                                        child: Padding(
-                                          padding: const EdgeInsets.symmetric(
-                                            vertical: 10.0,
-                                            horizontal: 35.0,
-                                          ),
-                                          child: Text(
-                                            "View Project channels",
-                                            style: TextStyle(
-                                                color: Colors.white,
-                                                fontSize: 20.0),
-                                          ),
+                                        child: RawMaterialButton(
+                                      elevation: 80.0,
+                                      fillColor: const Color(0XFF2A4793),
+                                      splashColor: const Color(0xff2980b9),
+                                      child: Padding(
+                                        padding: const EdgeInsets.symmetric(
+                                          vertical: 10.0,
+                                          horizontal: 35.0,
                                         ),
-                                        onPressed: () {
-                                          Navigator.push(context,
-                                              MaterialPageRoute(builder: (_) {
-                                            return channels(
-                                                projectId:
-                                                    id); //update; //update
-                                          }));
-                                        },
-                                        shape: const StadiumBorder(),
+                                        child: Text(
+                                          "View Project channels",
+                                          style: TextStyle(
+                                              color: Colors.white,
+                                              fontSize: 20.0),
+                                        ),
                                       ),
-                                    ),
+                                      onPressed: () {
+                                        Navigator.push(context,
+                                            MaterialPageRoute(builder: (_) {
+                                          return channels(
+                                            projectId: id,
+                                            isSuper: listofwhat ==
+                                                    "Team Members Applicants"
+                                                ? true
+                                                : false,
+                                          ); //update
+                                        }));
+                                      },
+                                      shape: const StadiumBorder(),
+                                    )),
                                     SizedBox(
                                       height: 5.0,
                                     ),

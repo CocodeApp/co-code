@@ -4,12 +4,18 @@ import 'package:cocode/features/postIdea/form.dart';
 import 'package:cocode/services/datepicker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
 
 class changeDueDate extends StatefulWidget {
   var id;
+  String startDate;
   String deadline;
-  changeDueDate({Key key, @required this.id, @required this.deadline});
+  changeDueDate(
+      {Key key,
+      @required this.id,
+      @required this.deadline,
+      @required this.startDate});
   @override
   _changeDueDateState createState() => _changeDueDateState();
 }
@@ -162,7 +168,20 @@ class _changeDueDateState extends State<changeDueDate> {
                 color: Colors.indigo,
                 textColor: Colors.white,
                 press: () async {
+                  print("m ldmzgmkfdmb");
                   print(_date);
+
+                  // var parsedStart = DateTime.parse(widget.startDate);
+                  // var parsDeadLine = DateTime.parse(_date);
+                  // if (parsDeadLine.isBefore(parsedStart)) {
+                  //   Fluttertoast.showToast(
+                  //       msg: "Dead line can't be before start date",
+                  //       gravity: ToastGravity.TOP,
+                  //       timeInSecForIosWeb: 1,
+                  //       backgroundColor: Colors.red[900],
+                  //       textColor: Colors.white,
+                  //       fontSize: 16.0);
+                  // } else {
                   await FirebaseFirestore.instance
                       .collection('projects')
                       .doc(widget.id)

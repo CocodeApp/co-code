@@ -1,6 +1,10 @@
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:kf_drawer/kf_drawer.dart';
 
 import '../../Auth.dart';
@@ -36,6 +40,7 @@ class _updateProjectState extends State<updateProject> {
   String status;
   int index;
   List<String> stringslist = new List<String>();
+  String imageUrl;
 
   @override
   void initState() {
@@ -63,10 +68,7 @@ class _updateProjectState extends State<updateProject> {
             Map<String, dynamic> data = snapshot.data.data();
 
             projectInfo.skills = this.skills = data['requiredSkills'];
-
-            stringslist.forEach((value) {
-              print(value);
-            });
+            imageUrl = data['image'];
             projectInfo.startDate = this.startDate = data['startdate'];
             projectInfo.dueDate = this.dueDate = data['deadline'];
             projectInfo.membersNum = this.membersNum = data['membersNum'];
@@ -85,7 +87,51 @@ class _updateProjectState extends State<updateProject> {
                     padding: const EdgeInsets.all(10.0),
                     child: ListView(
                       children: <Widget>[
-                        uploadLogo(context),
+                        Expanded(
+                          child: Container(
+                            decoration: BoxDecoration(
+                              color: Colors.indigo,
+                              borderRadius: BorderRadius.only(
+                                bottomLeft: Radius.circular(20.0),
+                                bottomRight: Radius.circular(20.0),
+                              ),
+                            ),
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              children: <Widget>[
+                                GestureDetector(
+                                  onTap: () {
+                                    uploadImage().then((value) {
+                                      setState(() {});
+                                    });
+                                  },
+                                  child: Center(
+                                    child: imageUrl == null
+                                        ? CircleAvatar(
+                                            radius: 65.0,
+                                            backgroundColor: Colors.white,
+                                            child: Icon(
+                                              Icons.photo_camera,
+                                              size: 30,
+                                            ),
+                                          )
+                                        : CircleAvatar(
+                                            radius: 65.0,
+                                            backgroundImage:
+                                                NetworkImage(imageUrl),
+                                          ),
+                                  ),
+                                ),
+                                Text("uploade logo ",
+                                    style: TextStyle(
+                                      fontSize: 15,
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.w600,
+                                    )),
+                              ],
+                            ),
+                          ),
+                        ),
                         start(context),
                         deadLine(context),
                         updateSkills(context),
@@ -205,12 +251,7 @@ class _updateProjectState extends State<updateProject> {
                 builder: (context) => new teamMembersNumber(
                     number: this.membersNum, id: widget.id)),
           ).then((value) {
-            setState(() {
-              //نجد
-              //وش بيصير ب����������د التغيير
-              // this.firstname = AccountInfo.firstname;
-              // this.lastname = AccountInfo.lastname;
-            });
+            setState(() {});
           });
         },
       ),
@@ -276,6 +317,7 @@ class _updateProjectState extends State<updateProject> {
               return changeDueDate(
                 id: widget.id,
                 deadline: dueDate,
+                startDate: startDate,
               );
             }));
           },
@@ -293,6 +335,7 @@ class _updateProjectState extends State<updateProject> {
                 builder: (context) => new changeDueDate(
                       id: widget.id,
                       deadline: dueDate,
+                      startDate: startDate,
                     )),
           ).then((value) {
             setState(() {
@@ -353,34 +396,63 @@ class _updateProjectState extends State<updateProject> {
     );
   }
 
-  Card uploadLogo(BuildContext context) {
-    return Card(
-      child: ListTile(
-        leading: GestureDetector(
-          child: Hero(
-              tag: 'logo',
-              child: CircleAvatar(
-                //نجد
-                //المفروض هنا يكون فيه الصورة من الداتا بيس
-                backgroundImage: AssetImage("imeges/logo-2.png"),
-                radius: 20,
-              )),
-        ),
-        dense: false,
-        title: Text('uploade logo',
-            style: TextStyle(fontSize: 14.0, color: Colors.grey)),
-        trailing: Icon(Icons.keyboard_arrow_right),
-        onTap: () async {
-          Navigator.push(
-            context,
-            new MaterialPageRoute(builder: (context) => new upLoadLogo()),
-          ).then((value) {
-            setState(() {
-              //نجد
-              // this.email = AccountInfo.email;
-            });
-          });
-        },
+  uploadImage() async {
+    final _storage = FirebaseStorage.instance;
+    final _picker = ImagePicker();
+    PickedFile image;
+
+    //Select Image
+    image = await _picker.getImage(source: ImageSource.gallery);
+    var file = File(image.path);
+
+    if (image != null) {
+      //Upload to Firebase
+      var snapshot = await _storage
+          .ref()
+          .child('logoImage/' + widget.id)
+          .putFile(file)
+          .onComplete;
+      var downloadUrl = await snapshot.ref.getDownloadURL();
+      setState(() {
+        imageUrl = downloadUrl;
+        FirebaseFirestore.instance
+            .collection('projects')
+            .doc(widget.id)
+            .update({'image': downloadUrl});
+      });
+    } else {
+      print('No Path Received');
+    }
+  }
+}
+
+class projectLogo extends StatefulWidget {
+  final String avatarUrl;
+  final Function onTap;
+  const projectLogo({this.avatarUrl, this.onTap});
+  @override
+  _projectLogoState createState() => _projectLogoState();
+}
+
+class _projectLogoState extends State<projectLogo> {
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: () {},
+      child: Center(
+        child: widget.avatarUrl == null
+            ? CircleAvatar(
+                radius: 65.0,
+                backgroundColor: Colors.white70,
+                child: Icon(
+                  Icons.photo_camera,
+                  size: 30,
+                ),
+              )
+            : CircleAvatar(
+                radius: 65.0,
+                backgroundImage: NetworkImage(widget.avatarUrl),
+              ),
       ),
     );
   }

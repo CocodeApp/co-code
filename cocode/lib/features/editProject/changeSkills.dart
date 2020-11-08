@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cocode/buttons/RoundeButton.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 class changeSkills extends StatefulWidget {
   List<dynamic> skills;
@@ -125,8 +126,19 @@ class _changeSkillsState extends State<changeSkills> {
                                       hoverColor: Color(0XFF2A4793),
                                       icon: Icon(Icons.add),
                                       onPressed: () {
-                                        if (eCtrl.text != "") {
-                                          skillsNotifier.value.add(eCtrl.text);
+                                        if (eCtrl.text == "" ||
+                                            eCtrl.text.trim().isEmpty) {
+                                          Fluttertoast.showToast(
+                                              msg: "skill field can't be empty",
+                                              gravity: ToastGravity.TOP,
+                                              timeInSecForIosWeb: 1,
+                                              backgroundColor: Colors.red[900],
+                                              textColor: Colors.white,
+                                              fontSize: 16.0);
+                                        } else {
+                                          skillsNotifier.value.add(
+                                            eCtrl.text,
+                                          );
                                           eCtrl.clear();
                                           skillsNotifier.notifyListeners();
                                         }

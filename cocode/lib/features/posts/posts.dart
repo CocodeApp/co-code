@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cocode/Auth.dart';
+import 'package:intl/intl.dart';
 
 // ignore: camel_case_types
 class Chat extends StatefulWidget {
@@ -101,6 +102,7 @@ class _ChatState extends State<Chat> {
                           from: doc.data()['from'],
                           text: doc.data()['text'],
                           currentUser: userID == doc.data()['userID'],
+                          date: doc.data()['date'],
                         ),
                       )
                       .toList();
@@ -199,12 +201,15 @@ class Message extends StatelessWidget {
   final String from; // user how sent the massage
   final String text; // body of the massage
   final bool currentUser;
-
-  const Message({Key key, this.from, this.text, this.currentUser})
+  final String date;
+  const Message({Key key, this.from, this.text, this.currentUser, this.date})
       : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    var Date = DateTime.parse(date);
+    final DateFormat formatter = DateFormat('yMMMd');
+
     return Container(
       child: Column(
         crossAxisAlignment:
@@ -242,8 +247,21 @@ class Message extends StatelessWidget {
               elevation: 6.0,
               child: Container(
                 padding: EdgeInsets.symmetric(vertical: 10.0, horizontal: 15.0),
-                child: Text(
-                  text,
+                child: Column(
+                  children: [
+                    Text(text,
+                        style: TextStyle(
+                          fontSize: 15,
+                          fontWeight: FontWeight.w600,
+                        )),
+                    Text(
+                      DateFormat.jm().format(
+                          DateFormat("hh:mm:ss").parse(date.substring(11, 19))),
+                      style: TextStyle(color: Colors.blueGrey, fontSize: 10),
+                    ),
+                    Text(formatter.format(Date),
+                        style: TextStyle(color: Colors.blueGrey, fontSize: 10)),
+                  ],
                 ),
               ),
             ),

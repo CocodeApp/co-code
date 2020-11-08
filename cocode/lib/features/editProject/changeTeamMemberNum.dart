@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cocode/buttons/RoundeButton.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 class teamMembersNumber extends StatefulWidget {
   String number;
@@ -96,15 +97,26 @@ class _teamMembersNumberState extends State<teamMembersNumber> {
                 color: Colors.indigo,
                 textColor: Colors.white,
                 press: () async {
-                  widget.number = membersCtrl.text;
-                  print("wi" + widget.number);
-                  await FirebaseFirestore.instance
-                      .collection('projects')
-                      .doc(widget.id)
-                      .update({
-                    'membersNum': membersCtrl.text,
-                  });
-                  Navigator.of(context).pop();
+                  if (int.parse(widget.number) > int.parse(membersCtrl.text)) {
+                    Fluttertoast.showToast(
+                        msg:
+                            "new team member number can't be less than current team member number",
+                        gravity: ToastGravity.TOP,
+                        timeInSecForIosWeb: 1,
+                        backgroundColor: Colors.red[900],
+                        textColor: Colors.white,
+                        fontSize: 16.0);
+                  } else {
+                    widget.number = membersCtrl.text;
+                    print("wi" + widget.number);
+                    await FirebaseFirestore.instance
+                        .collection('projects')
+                        .doc(widget.id)
+                        .update({
+                      'membersNum': membersCtrl.text,
+                    });
+                    Navigator.of(context).pop();
+                  }
                 }),
             SizedBox(height: 20),
             RoundedButton(
