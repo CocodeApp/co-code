@@ -19,13 +19,14 @@ class _changeSkillsState extends State<changeSkills> {
   final ValueNotifier<List<Map<String, String>>> skillsNotifier =
       ValueNotifier<List<Map<String, String>>>([]);
   TextEditingController eCtrl = new TextEditingController();
-  Widget skillWidget;
   @override
   void initState() {
-    widget.skills.forEach((value) {
-      skillsNotifier.value
-          .add({'name': value['name'], 'value': value['value']});
-    });
+    if (widget.skills != null) {
+      widget.skills.forEach((value) {
+        skillsNotifier.value
+            .add({'name': value['name'], 'value': value['value']});
+      });
+    }
     super.initState();
   }
 

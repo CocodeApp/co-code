@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cocode/features/accountSettings/accountSettings.dart';
 import 'package:flutter/material.dart';
 import 'package:cocode/features/userProjects/myProjectsPage.dart';
@@ -64,12 +65,7 @@ class _homePageViewState extends State<homePageView> {
               width: MediaQuery.of(context).size.width * 0.6,
               child: Column(
                 children: [
-                  InkWell(
-                    child: CircleAvatar(
-                      backgroundImage: AssetImage("imeges/man.png"),
-                      radius: 40,
-                    ),
-                  ),
+                  InkWell(child: userImg()),
                   SizedBox(
                     height: 20,
                   ),
@@ -103,6 +99,33 @@ class _homePageViewState extends State<homePageView> {
           ),
         ),
       ),
+    );
+  }
+
+  Widget userImg() {
+    return FutureBuilder(
+      future: FirebaseFirestore.instance
+          .collection("User")
+          .doc(Auth.getCurrentUserID())
+          .get(),
+      builder: (context, snapshot) {
+        if (snapshot.data == null) return Text('');
+
+        Map<String, dynamic> data = snapshot.data.data();
+        String imgUrl = data['image'];
+        if (snapshot.hasError) {
+          return Text("Something went wrong");
+        }
+        if (snapshot.connectionState == ConnectionState.done) {
+          return CircleAvatar(
+            backgroundImage: imgUrl == null
+                ? new AssetImage("imeges/man.png")
+                : NetworkImage(imgUrl),
+            backgroundColor: Colors.white,
+            radius: 40,
+          );
+        }
+      },
     );
   }
 }

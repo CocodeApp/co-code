@@ -24,6 +24,7 @@ class _profilePageState extends State<profilePage> {
   String email = '';
   String id = Auth.getCurrentUserID();
   String imageURL;
+
   @override
   Widget build(BuildContext context) {
     CollectionReference users = FirebaseFirestore.instance.collection('User');
@@ -198,16 +199,7 @@ class _profilePageState extends State<profilePage> {
         ),
         GestureDetector(
           // for Edit Skills
-          onTap: () {
-            // Navigator.push(
-            //   context,
-            //   MaterialPageRoute(
-            //     builder: (context) {
-            //       return new ProjectScreen(); // this must lead to the edit char page
-            //     },
-            //   ),
-            // );
-          },
+          onTap: () {},
           child: Text(
             "", //edit skills
             style: TextStyle(color: Colors.grey, fontSize: 17),
@@ -218,8 +210,8 @@ class _profilePageState extends State<profilePage> {
   }
 
   Widget projects(BuildContext context, CollectionReference userProjects) {
-    return StreamBuilder<QuerySnapshot>(
-      stream: userProjects.snapshots(),
+    return FutureBuilder<QuerySnapshot>(
+      future: userProjects.get(),
 // ignore: missing_return
       builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
         if (snapshot.data == null) {
@@ -251,6 +243,8 @@ class _profilePageState extends State<profilePage> {
               itemCount: doc.length,
               itemBuilder: (context, index) {
                 Map data = doc[index].data();
+                String projectImg = data['image'];
+                print(projectImg);
                 return InkWell(
 //stream list v
                   onTap: () {
@@ -273,12 +267,13 @@ class _profilePageState extends State<profilePage> {
                       Container(
 //project logo from database
                         height: 0.10 * MediaQuery.of(context).size.height,
-                        width: 0.300 * MediaQuery.of(context).size.width,
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.circular(20.0),
-                          child: Image.asset(
-                            'imeges/logo-2.png', //project logo
-                          ),
+
+                        child: CircleAvatar(
+                          radius: 40,
+                          backgroundColor: Colors.white,
+                          backgroundImage: projectImg == null
+                              ? AssetImage('imeges/logo-2.png')
+                              : NetworkImage(projectImg),
                         ),
                       ),
                       Text(

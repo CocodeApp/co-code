@@ -18,9 +18,18 @@ class _MembersListState extends State<MembersList> {
   ValueNotifier<List> tempMember = ValueNotifier<List>([]);
   String role;
   String projectName;
+  String projectImg;
   @override
   Widget build(BuildContext context) {
     Future<void> getTempList() async {
+      Future<DocumentSnapshot> project = FirebaseFirestore.instance
+          .collection("projects")
+          .doc(widget.projectId)
+          .get();
+      await project.then((value) {
+        var data = value.data();
+        projectImg = data['image'];
+      });
       Future<DocumentSnapshot> leaderRef = FirebaseFirestore.instance
           .collection("User")
           .doc(widget.leader)
@@ -53,6 +62,7 @@ class _MembersListState extends State<MembersList> {
               Map<String, dynamic> data = snapshot.data.data();
               String first = data['firstName'];
               String last = data['lastName'];
+              String imgUrl = data['image'];
 
               String fullName = first + " " + last;
               print(first);
@@ -96,14 +106,15 @@ class _MembersListState extends State<MembersList> {
                       ),
                     ),
                     Container(
-                      margin: new EdgeInsets.symmetric(vertical: 10.0),
-                      alignment: FractionalOffset.bottomLeft,
-                      child: new Image(
-                        image: new AssetImage("imeges/man.png"), //later
-                        height: 70.0,
-                        width: 70.0,
-                      ),
-                    ),
+                        margin: new EdgeInsets.symmetric(vertical: 10.0),
+                        alignment: FractionalOffset.bottomLeft,
+                        child: CircleAvatar(
+                          backgroundImage: imgUrl == null
+                              ? new AssetImage("imeges/man.png")
+                              : NetworkImage(imgUrl),
+                          backgroundColor: Colors.white,
+                          radius: 40,
+                        )),
                     Container(
                       alignment: Alignment.center,
                       height: 90.0,
@@ -133,6 +144,7 @@ class _MembersListState extends State<MembersList> {
                                     .collection('myProjects')
                                     .doc(widget.projectId)
                                     .set({
+                                      'image': projectImg,
                                       'projectName':
                                           projectName, //to fill later
                                       'role': "supervisor",
@@ -196,6 +208,7 @@ class _MembersListState extends State<MembersList> {
                                     .collection('myProjects')
                                     .doc(widget.projectId)
                                     .set({
+                                      'image': projectImg,
                                       'projectName':
                                           projectName, //to fill later
                                       'role': "team member",

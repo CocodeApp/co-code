@@ -66,7 +66,6 @@ class _editProfileState extends State<editProfile> {
             AccountInfo.university = this.university = data['university'];
             AccountInfo.image = this.imageUrl = data['image'];
             this.skills = data['skills'];
-            print(skills.length);
 
             return Scaffold(
                 backgroundColor: Colors.white,
