@@ -20,10 +20,10 @@ class _notificationState extends State<notification> {
           if (snapshot.data == null) return indicator();
           var doc = snapshot.data.docs;
           return ListView.builder(
-            itemCount: doc.length,
+              itemCount: doc.length,
               itemBuilder: (context, index){
                 Map data = doc[index].data();
-              return InkWell(
+                return InkWell(
                   // onTap: (){},
                   child: Padding(
                     padding: const EdgeInsets.all(8.0),
@@ -71,9 +71,14 @@ class _notificationState extends State<notification> {
                       ),
                     ),
                   ),
-              );
+                );
               }
           );
         });
   }
 }
+
+
+
+
+

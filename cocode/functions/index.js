@@ -97,13 +97,16 @@ exports.sendToTopic = functions.firestore
   .onCreate(async snapshot => {
     const project = snapshot.data();
 
-    const payload = { 
-    "notification": { "body": `a new project \"${project.projectName}\" is added`
-    , //last change
-    "title": "new project!" }, 
-     "data": { "click_action": "FLUTTER_NOTIFICATION_CLICK", "id": "1", "status": "done" } };
-     fcm.sendToTopic('projs', payload);
-     return ;
+    const payload = {
+      "notification": {
+        "body": `a new project \"${project.projectName}\" is added`
+        , //last change
+        "title": "new project!"
+      },
+      "data": { "click_action": "FLUTTER_NOTIFICATION_CLICK", "id": "1", "status": "done" }
+    };
+    fcm.sendToTopic('projs', payload);
+    return;
 
   });
 
@@ -114,18 +117,21 @@ exports.notifyAccepted = functions.https.onCall((data, context) => {
   //   project: request.body.project,
   // };
 
-  const payload = { 
-    "notification": { "body": `you were accepted in ${data.project}`
-    , //last change
-    "title":  `congrats ${data.applicatant}!!`}, 
-     "data": { "click_action": "FLUTTER_NOTIFICATION_CLICK", "id": "1", "status": "done" } };
+  const payload = {
+    "notification": {
+      "body": `you were accepted in ${data.project}`
+      , //last change
+      "title": `congrats ${data.applicatant}!!`
+    },
+    "data": { "click_action": "FLUTTER_NOTIFICATION_CLICK", "id": "1", "status": "done" }
+  };
 
-     var snapshots = FirebaseFirestore.instance
-     .collection('User')
-     .doc(data.applicatant)
-     .collection('tokens').get();
-     
-     var tok = snapshots.docs.map((snap)=> snap.id);
+  var snapshots = FirebaseFirestore.instance
+    .collection('User')
+    .doc(data.applicatant)
+    .collection('tokens').get();
+
+  var tok = snapshots.docs.map((snap) => snap.id);
 
 
 
