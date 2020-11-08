@@ -36,6 +36,9 @@ class _homePageControllerState extends State<homePageController> {
       onMessage: (Map<String, dynamic> message) async {
         print("onMessage: $message");
 
+        //add notification
+        //increment badge
+
         await showDialog(
           context: context,
           builder: (context) => AlertDialog(

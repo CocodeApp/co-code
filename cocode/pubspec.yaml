@@ -47,6 +47,7 @@ dependencies:
   adobe_xd: ^1.0.0+1
   firebase_messaging: ^7.0.3
   #cloud_functions: ^0.7.0
+  circular_check_box: ^1.0.4
 
   dots_indicator: ^1.2.0
   slimy_card:
