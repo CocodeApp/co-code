@@ -97,7 +97,27 @@ class _teamMembersNumberState extends State<teamMembersNumber> {
                 color: Colors.indigo,
                 textColor: Colors.white,
                 press: () async {
-                  if (int.parse(widget.number) > int.parse(membersCtrl.text)) {
+                  if (widget.number.isEmpty) {
+                    widget.number = membersCtrl.text;
+                    print("wi" + widget.number);
+                    await FirebaseFirestore.instance
+                        .collection('projects')
+                        .doc(widget.id)
+                        .update({
+                      'membersNum': membersCtrl.text,
+                    });
+                    Navigator.of(context).pop();
+                  } else if (membersCtrl.text.isEmpty ||
+                      membersCtrl.text.trim().isEmpty) {
+                    Fluttertoast.showToast(
+                        msg: "team member number field can't be empty",
+                        gravity: ToastGravity.TOP,
+                        timeInSecForIosWeb: 1,
+                        backgroundColor: Colors.red[900],
+                        textColor: Colors.white,
+                        fontSize: 16.0);
+                  } else if (int.parse(widget.number) >
+                      int.parse(membersCtrl.text)) {
                     Fluttertoast.showToast(
                         msg:
                             "new team member number can't be less than current team member number",

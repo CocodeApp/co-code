@@ -171,24 +171,26 @@ class _changeDueDateState extends State<changeDueDate> {
                   print("m ldmzgmkfdmb");
                   print(_date);
 
-                  // var parsedStart = DateTime.parse(widget.startDate);
-                  // var parsDeadLine = DateTime.parse(_date);
-                  // if (parsDeadLine.isBefore(parsedStart)) {
-                  //   Fluttertoast.showToast(
-                  //       msg: "Dead line can't be before start date",
-                  //       gravity: ToastGravity.TOP,
-                  //       timeInSecForIosWeb: 1,
-                  //       backgroundColor: Colors.red[900],
-                  //       textColor: Colors.white,
-                  //       fontSize: 16.0);
-                  // } else {
-                  await FirebaseFirestore.instance
-                      .collection('projects')
-                      .doc(widget.id)
-                      .update({
-                    'deadline': _date,
-                  });
-                  Navigator.of(context).pop();
+                  var parsedStart =
+                      DateFormat("yyyy/MM/dd").parse(widget.startDate);
+                  var parsDeadLine = DateFormat("yyyy/MM/dd").parse(_date);
+                  if (parsDeadLine.isBefore(parsedStart)) {
+                    Fluttertoast.showToast(
+                        msg: "Dead line can't be before start date",
+                        gravity: ToastGravity.TOP,
+                        timeInSecForIosWeb: 2,
+                        backgroundColor: Colors.red[900],
+                        textColor: Colors.white,
+                        fontSize: 16.0);
+                  } else {
+                    await FirebaseFirestore.instance
+                        .collection('projects')
+                        .doc(widget.id)
+                        .update({
+                      'deadline': _date,
+                    });
+                    Navigator.of(context).pop();
+                  }
                 }),
             SizedBox(height: 20),
             RoundedButton(
