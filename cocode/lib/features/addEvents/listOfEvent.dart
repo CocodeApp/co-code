@@ -30,7 +30,7 @@ class ListOfEvents extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
                     Icon(
-                      Icons.add_outlined,
+                      Icons.add,
                       color: Colors.white,
                     ),
                     SizedBox(
@@ -50,7 +50,7 @@ class ListOfEvents extends StatelessWidget {
                 Navigator.push(context, MaterialPageRoute(builder: (_) {
                   return AddEventFormPage(id: projectId);
                 }));
-              }, 
+              },
             )
           : FloatingActionButton(
               elevation: 0.0,

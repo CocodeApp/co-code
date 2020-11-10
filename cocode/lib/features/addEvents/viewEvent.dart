@@ -91,7 +91,7 @@ class event extends StatelessWidget {
               children: [
                 Row(
                   children: [
-                    Icon(Icons.assignment_outlined, size: 40.0),
+                    Icon(Icons.assignment, size: 40.0),
                     SizedBox(
                       width: 10.0,
                     ),
@@ -131,7 +131,7 @@ class event extends StatelessWidget {
                   width: 384.0,
                   child: Row(
                     children: [
-                      Icon(Icons.lock_clock, size: 40.0),
+                      Icon(Icons.alarm, size: 40.0),
                       SizedBox(
                         width: 5.0,
                       ),
