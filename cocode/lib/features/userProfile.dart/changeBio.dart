@@ -20,19 +20,18 @@ class editBioFormBloc extends FormBloc<String, String> {
       ];
 
   editBioFormBloc() {
-    // _bioFieldBloc.addAsyncValidators([_validatebio]);
+    _bioFieldBloc.addAsyncValidators([_validatebio]);
 
     _bioFieldBloc.updateInitialValue(AccountInfo.bio);
   }
 
-  // Future<String> _validatebio(String bio) async {
-  //   // validate if username exists
-  //   if (bio.length > 140) {
-  //     return "bio should be 140 letter only";
-  //   } else {
-  //     return "";
-  //   }
-  // }
+  Future<String> _validatebio(String bio) async {
+    // validate if username exists
+    if (bio.length > 140) {
+      return "bio should be 140 letter only";
+    }
+    return null;
+  }
 
   StreamSubscription<TextFieldBlocState> _textFieldBlocSubscription;
 
@@ -141,7 +140,12 @@ class _changeBioState extends State<changeBio> {
                 child: Scaffold(
                   backgroundColor: Colors.white,
                   appBar: AppBar(
-                    leading: Container(),
+                    leading: BackButton(
+                      color: Colors.deepOrangeAccent,
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                      },
+                    ),
                     centerTitle: true,
                     backgroundColor: Colors.white,
                     title: Text("Change Bio",
@@ -155,51 +159,38 @@ class _changeBioState extends State<changeBio> {
                         SizedBox(height: 100),
                         Container(
                           //box
-                          height: 100,
+                          height: 250,
                           width: 250.0,
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Container(
-                                width: 125.0,
-                                child: TextFieldBlocBuilder(
-                                  textFieldBloc: _editBioFormBloc._bioFieldBloc,
-                                  suffixButton: SuffixButton
-                                      .circularIndicatorWhenIsAsyncValidating,
-                                  decoration: new InputDecoration(
-                                    labelText: 'Bio',
-                                    border: UnderlineInputBorder(
-                                        borderSide:
-                                            BorderSide(color: Colors.red)),
-                                    focusedBorder: UnderlineInputBorder(
-                                      borderSide: BorderSide(
-                                          color: Colors.indigo, width: 2.0),
-                                    ),
-                                    enabledBorder: UnderlineInputBorder(
-                                      borderSide:
-                                          BorderSide(color: Colors.indigo),
-                                    ),
-                                    disabledBorder: UnderlineInputBorder(
-                                        borderSide:
-                                            BorderSide(color: Colors.red)),
-                                    errorBorder: UnderlineInputBorder(
-                                        borderSide:
-                                            BorderSide(color: Colors.red)),
-                                    contentPadding: EdgeInsets.only(
-                                        left: 15,
-                                        bottom: 11,
-                                        top: 11,
-                                        right: -30),
-                                    hintText: "bio",
-                                  ),
-                                  onChanged: (text) {
-                                    setState(() {
-                                      isEnabled = true;
-                                    });
-                                  },
-                                ),
+                          child: TextFieldBlocBuilder(
+                            maxLines: 15,
+                            keyboardType: TextInputType.multiline,
+                            textFieldBloc: _editBioFormBloc._bioFieldBloc,
+                            suffixButton: SuffixButton
+                                .circularIndicatorWhenIsAsyncValidating,
+                            decoration: new InputDecoration(
+                              labelText: 'Bio',
+                              border: OutlineInputBorder(
+                                  borderSide: BorderSide(color: Colors.red)),
+                              focusedBorder: OutlineInputBorder(
+                                borderSide: BorderSide(
+                                    color: Colors.indigo, width: 2.0),
                               ),
-                            ],
+                              enabledBorder: OutlineInputBorder(
+                                borderSide: BorderSide(color: Colors.indigo),
+                              ),
+                              disabledBorder: OutlineInputBorder(
+                                  borderSide: BorderSide(color: Colors.red)),
+                              errorBorder: OutlineInputBorder(
+                                  borderSide: BorderSide(color: Colors.red)),
+                              contentPadding: EdgeInsets.only(
+                                  left: 15, bottom: 11, top: 11, right: -30),
+                              hintText: "bio",
+                            ),
+                            onChanged: (text) {
+                              setState(() {
+                                isEnabled = true;
+                              });
+                            },
                           ),
                         ),
                         SizedBox(height: 20),

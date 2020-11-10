@@ -232,7 +232,8 @@ class _editProfileState extends State<editProfile> {
                                             style: TextStyle(
                                                 fontSize: 14.0,
                                                 color: Colors.grey)),
-                                        subtitle: Text(this.bio,
+                                        subtitle: Text(
+                                            bio == null ? "" : this.bio,
                                             style: TextStyle(
                                                 fontSize: 17.0,
                                                 color: Colors.black87)),
