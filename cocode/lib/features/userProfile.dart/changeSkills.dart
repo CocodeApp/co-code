@@ -49,29 +49,31 @@ class _changeSkillsState extends State<changeSkills> {
               SizedBox(height: 100),
               skillBuilder(),
               SizedBox(height: 20),
-              RoundedButton(
-                  text: "Save",
-                  color: Colors.indigo,
-                  textColor: Colors.white,
-                  press: () async {
-                    String uID = Auth.getCurrentUserID();
-                    await FirebaseFirestore.instance
-                        .collection('User')
-                        .doc(uID)
-                        .update({
-                      'skills': skillsNotifier.value,
-                    });
+              Column(children: [
+                RoundedButton(
+                    text: "Save",
+                    color: Colors.indigo,
+                    textColor: Colors.white,
+                    press: () async {
+                      String uID = Auth.getCurrentUserID();
+                      await FirebaseFirestore.instance
+                          .collection('User')
+                          .doc(uID)
+                          .update({
+                        'skills': skillsNotifier.value,
+                      });
+                      Navigator.of(context).pop();
+                    }),
+                SizedBox(height: 20),
+                RoundedButton(
+                  text: "Cancel",
+                  color: Colors.blue[100],
+                  textColor: Colors.black,
+                  press: () {
                     Navigator.of(context).pop();
-                  }),
-              SizedBox(height: 20),
-              RoundedButton(
-                text: "Cancel",
-                color: Colors.blue[100],
-                textColor: Colors.black,
-                press: () {
-                  Navigator.of(context).pop();
-                },
-              )
+                  },
+                )
+              ]),
             ],
           ),
         ),
