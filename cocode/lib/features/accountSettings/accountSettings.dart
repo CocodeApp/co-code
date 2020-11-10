@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cloud_functions/cloud_functions.dart';
 import 'package:cocode/features/NotificationHandler/notificationsHandler.dart';
+import 'package:cocode/features/notifications/notificationSettings.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -377,6 +378,38 @@ class _settingsPageState extends State<settingsPage> {
                                   isLoading = false;
                                 });
                               }
+                            },
+                          ),
+                        ),
+                        Card(
+                          child: ListTile(
+                            leading: GestureDetector(
+                              child: Hero(
+                                  tag: 'Notifications',
+                                  child: CircleAvatar(
+                                    backgroundColor: Colors.indigo,
+                                    child: Icon(
+                                      Icons.notifications_active,
+                                      color: Colors.white,
+                                      size: 30.0,
+                                    ),
+                                    foregroundColor: Colors.white,
+                                  )),
+                            ),
+                            dense: false,
+                            title: Text('Notifications',
+                                style: TextStyle(
+                                    fontSize: 14.0, color: Colors.grey)),
+                            // subtitle: Text(AccountInfo.email,
+                            //     style: TextStyle(
+                            //         fontSize: 17.0, color: Colors.black87)),
+                            trailing: Icon(Icons.keyboard_arrow_right),
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                new MaterialPageRoute(
+                                    builder: (context) => new noticationSettings()),
+                              );
                             },
                           ),
                         ),
