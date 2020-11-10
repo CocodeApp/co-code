@@ -103,7 +103,7 @@ exports.sendToTopic = functions.firestore
         , //last change
         "title": "new project!"
       },
-      "data": { "click_action": "FLUTTER_NOTIFICATION_CLICK", "id": "1", "status": "done" }
+      "data": { "click_action": "FLUTTER_NOTIFICATION_CLICK", "id": "1", "status": "done", "project": `${project.projectName}` }
     };
     fcm.sendToTopic('projs', payload);
     return;
