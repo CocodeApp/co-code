@@ -62,7 +62,7 @@ class event extends StatelessWidget {
           ),
           //name
           Transform.translate(
-            offset: Offset(45.2, 150.0),
+            offset: Offset(55.2, 150.0),
             child: SizedBox(
               width: 274.0,
               child: Column(
@@ -71,7 +71,7 @@ class event extends StatelessWidget {
                     eventDetails['name'],
                     style: TextStyle(
                       fontFamily: 'Microsoft Sans Serif',
-                      fontSize: 45,
+                      fontSize: 35,
                       color: const Color(0xff656d78),
                     ),
                     textAlign: TextAlign.center,
@@ -91,7 +91,10 @@ class event extends StatelessWidget {
               children: [
                 Row(
                   children: [
-                    Icon(Icons.assignment, size: 40.0),
+                    SizedBox(
+                      width: 10.0,
+                    ),
+                    Icon(Icons.assignment, size: 35.0),
                     SizedBox(
                       width: 10.0,
                     ),
@@ -104,7 +107,7 @@ class event extends StatelessWidget {
                             'event description : ',
                             style: TextStyle(
                               fontFamily: 'Microsoft PhagsPa',
-                              fontSize: 18,
+                              fontSize: 15,
                               color: const Color(0xff000000),
                               fontWeight: FontWeight.bold,
                             ),
@@ -114,7 +117,7 @@ class event extends StatelessWidget {
                             eventDetails['description'],
                             style: TextStyle(
                               fontFamily: 'Microsoft PhagsPa',
-                              fontSize: 21,
+                              fontSize: 15,
                               color: const Color(0xff656d78),
                             ),
                             textAlign: TextAlign.left,
@@ -131,7 +134,7 @@ class event extends StatelessWidget {
                   width: 384.0,
                   child: Row(
                     children: [
-                      Icon(Icons.alarm, size: 40.0),
+                      Icon(Icons.alarm, size: 35.0),
                       SizedBox(
                         width: 5.0,
                       ),
@@ -142,7 +145,7 @@ class event extends StatelessWidget {
                             'event dates : ',
                             style: TextStyle(
                               fontFamily: 'Microsoft PhagsPa',
-                              fontSize: 18,
+                              fontSize: 15,
                               color: const Color(0xff000000),
                               fontWeight: FontWeight.bold,
                             ),
@@ -160,7 +163,7 @@ class event extends StatelessWidget {
                                 endtime,
                             style: TextStyle(
                               fontFamily: 'Microsoft PhagsPa',
-                              fontSize: 18,
+                              fontSize: 15,
                               color: const Color(0xff656d78),
                             ),
                             textAlign: TextAlign.left,

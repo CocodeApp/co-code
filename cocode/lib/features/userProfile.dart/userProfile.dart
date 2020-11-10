@@ -244,7 +244,16 @@ class _profilePageState extends State<profilePage> {
               itemCount: doc.length,
               itemBuilder: (context, index) {
                 Map data = doc[index].data();
-                String projectImg = data['image'];
+                String projectImg;
+                FirebaseFirestore.instance
+                    .collection('projects')
+                    .doc(doc[index].id)
+                    .get()
+                    .then((value) {
+                  Map<String, dynamic> daa = value.data();
+                  projectImg = daa['image'];
+                });
+
                 print(projectImg);
                 return InkWell(
 //stream list v

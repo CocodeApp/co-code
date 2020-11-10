@@ -17,7 +17,7 @@ class changeSkills extends StatefulWidget {
 class _changeSkillsState extends State<changeSkills> {
   double _currentSliderValue = 0;
   final ValueNotifier<List<Map<String, String>>> skillsNotifier =
-      ValueNotifier<List<Map<String, String>>>([]);
+  ValueNotifier<List<Map<String, String>>>([]);
   TextEditingController eCtrl = new TextEditingController();
   @override
   void initState() {
@@ -49,34 +49,34 @@ class _changeSkillsState extends State<changeSkills> {
               SizedBox(height: 10),
               skillBuilder(),
               SizedBox(height: 20),
-          Padding(
-            padding: EdgeInsets.only(left: 30.0, right: 30.0),
-            child:RoundedButton(
-                  text: "Save",
-                  color: Colors.indigo,
-                  textColor: Colors.white,
-                  press: () async {
-                    String uID = Auth.getCurrentUserID();
-                    await FirebaseFirestore.instance
-                        .collection('User')
-                        .doc(uID)
-                        .update({
-                      'skills': skillsNotifier.value,
-                    });
-                    Navigator.of(context).pop();
-                  })),
+              Padding(
+                  padding: EdgeInsets.only(left: 30.0, right: 30.0),
+                  child:RoundedButton(
+                      text: "Save",
+                      color: Colors.indigo,
+                      textColor: Colors.white,
+                      press: () async {
+                        String uID = Auth.getCurrentUserID();
+                        await FirebaseFirestore.instance
+                            .collection('User')
+                            .doc(uID)
+                            .update({
+                          'skills': skillsNotifier.value,
+                        });
+                        Navigator.of(context).pop();
+                      })),
               SizedBox(height: 20),
-          Padding(
-            padding: EdgeInsets.only(left: 30.0, right: 30.0),
-            child:RoundedButton(
-              text: "Cancel",
-              color: Colors.blue[100],
-              textColor: Colors.black,
-              press: () {
-                Navigator.of(context).pop();
-              },
-            )
-          ),
+              Padding(
+                  padding: EdgeInsets.only(left: 30.0, right: 30.0),
+                  child:RoundedButton(
+                    text: "Cancel",
+                    color: Colors.blue[100],
+                    textColor: Colors.black,
+                    press: () {
+                      Navigator.of(context).pop();
+                    },
+                  )
+              ),
 
             ],
           ),
@@ -147,7 +147,7 @@ class _changeSkillsState extends State<changeSkills> {
                                       max: 100,
                                       divisions: 10,
                                       label: skillsNotifier.value[Index]
-                                          ['value'],
+                                      ['value'],
                                       onChanged: (double value) {
                                         setState(() {
                                           skillsNotifier.value[Index]['value'] =
