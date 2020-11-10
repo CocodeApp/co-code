@@ -46,10 +46,12 @@ class _changeSkillsState extends State<changeSkills> {
         child: Container(
           child: ListView(
             children: [
-              SizedBox(height: 100),
+              SizedBox(height: 10),
               skillBuilder(),
               SizedBox(height: 20),
-              RoundedButton(
+          Padding(
+            padding: EdgeInsets.only(left: 30.0, right: 30.0),
+            child:RoundedButton(
                   text: "Save",
                   color: Colors.indigo,
                   textColor: Colors.white,
@@ -62,16 +64,20 @@ class _changeSkillsState extends State<changeSkills> {
                       'skills': skillsNotifier.value,
                     });
                     Navigator.of(context).pop();
-                  }),
+                  })),
               SizedBox(height: 20),
-              RoundedButton(
-                text: "Cancel",
-                color: Colors.blue[100],
-                textColor: Colors.black,
-                press: () {
-                  Navigator.of(context).pop();
-                },
-              )
+          Padding(
+            padding: EdgeInsets.only(left: 30.0, right: 30.0),
+            child:RoundedButton(
+              text: "Cancel",
+              color: Colors.blue[100],
+              textColor: Colors.black,
+              press: () {
+                Navigator.of(context).pop();
+              },
+            )
+          ),
+
             ],
           ),
         ),

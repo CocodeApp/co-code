@@ -85,13 +85,11 @@ class _editProfileState extends State<editProfile> {
                             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                             children: <Widget>[
                               Avatar(
+                          avatarUrl : imageUrl,
                                 onTap: () {
                                   uploadImage().then((value) {
                                     setState(() {
                                       imageUrl = AccountInfo.image;
-
-                                      print(
-                                          " data['image'] = " + data['image']);
                                     });
                                   });
                                 },
@@ -99,7 +97,7 @@ class _editProfileState extends State<editProfile> {
                               Text("change your Image here ",
                                   style: TextStyle(
                                     fontSize: 15,
-                                    color: Colors.greenAccent,
+                                    color: Colors.white,
                                     fontWeight: FontWeight.w600,
                                   )),
                             ],
