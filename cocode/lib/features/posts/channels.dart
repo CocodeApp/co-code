@@ -8,7 +8,8 @@ import 'package:cocode/Auth.dart';
 class channels extends StatefulWidget {
   var projectId;
   bool isSuper;
-  channels({Key key, @required this.projectId}) : super(key: key);
+  channels({Key key, @required this.projectId, @required this.isSuper})
+      : super(key: key);
   @override
   _channelsState createState() => _channelsState();
 }
@@ -19,14 +20,10 @@ class _channelsState extends State<channels> {
       FirebaseFirestore.instance.collection('projects');
   String user = Auth.getCurrentUserID();
   ValueNotifier<String> supervisor = new ValueNotifier<String>("");
-  ValueNotifier<String> Pname = new ValueNotifier<String>("");
   @override
   Widget build(BuildContext context) {
     projects.doc(widget.projectId).get().then((snapshot) {
       supervisor.value = snapshot.data()['supervisor'];
-    });
-    projects.doc(widget.projectId).get().then((snapshot) {
-      Pname.value = snapshot.data()['projectName'];
     });
     return Scaffold(
       backgroundColor: Colors.white,
@@ -35,15 +32,9 @@ class _channelsState extends State<channels> {
           color: Colors.deepOrangeAccent,
         ),
         backgroundColor: Colors.white,
-        centerTitle: true,
-        title: ValueListenableBuilder(
-          builder: (BuildContext context, value, Widget child) {
-            return Text(
-              Pname.value,
-              style: TextStyle(color: Colors.indigo),
-            );
-          },
-          valueListenable: Pname,
+        title: Text(
+          'Channels',
+          style: TextStyle(color: Colors.indigo),
         ),
       ),
       body: SafeArea(

@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cloud_functions/cloud_functions.dart';
 import 'package:cocode/features/NotificationHandler/notificationsHandler.dart';
@@ -6,7 +8,6 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:kf_drawer/kf_drawer.dart';
-import 'dart:async';
 
 import '../../Auth.dart';
 import 'AccountInfo.dart';
@@ -408,7 +409,8 @@ class _settingsPageState extends State<settingsPage> {
                               Navigator.push(
                                 context,
                                 new MaterialPageRoute(
-                                    builder: (context) => new noticationSettings()),
+                                    builder: (context) =>
+                                        new noticationSettings()),
                               );
                             },
                           ),

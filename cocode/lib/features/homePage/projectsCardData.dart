@@ -68,7 +68,9 @@ class _needTeamMemberState extends State<needTeamMember> {
                     bottomCardHeight: 150,
                     borderRadius: 15,
                     topCardWidget: topCardWidget(
-                      "imeges/logo-5.png",
+                      getDocs['image'] == null
+                          ? "imeges/logo-5.png"
+                          : getDocs['image'],
                       getDocs['projectName'],
                     ),
                     bottomCardWidget: Tooltip(

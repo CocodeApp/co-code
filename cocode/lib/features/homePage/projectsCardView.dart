@@ -3,18 +3,25 @@ import 'package:flutter/material.dart';
 import 'package:spring_button/spring_button.dart';
 
 Widget topCardWidget(String imagePath, String title) {
+  bool hasLogo = imagePath.compareTo('imeges/logo-5.png') != 0;
   return Column(
     mainAxisAlignment: MainAxisAlignment.center,
     children: <Widget>[
-      Container(
-        height: 70,
-        width: 70,
-        decoration: BoxDecoration(
-          color: Color(0xffD1DDED),
-          borderRadius: BorderRadius.circular(15),
-          image: DecorationImage(image: AssetImage(imagePath)),
-        ),
-      ),
+      hasLogo
+          ? CircleAvatar(
+              backgroundColor: Color(0xffD1DDED),
+              radius: 40,
+              backgroundImage: NetworkImage(imagePath),
+            )
+          : Container(
+              height: 70,
+              width: 70,
+              decoration: BoxDecoration(
+                color: Color(0xffD1DDED),
+                borderRadius: BorderRadius.circular(20),
+                image: DecorationImage(image: AssetImage(imagePath)),
+              ),
+            ),
       SizedBox(height: 15),
       Text(
         title,

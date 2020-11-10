@@ -25,6 +25,7 @@ dependencies:
     sdk: flutter
   firebase_core: ^0.5.0
   firebase_auth: ^0.18.0+1
+  firebase_storage: ^4.0.1
   firebase_dynamic_links: ^0.5.1
   intl: ^0.16.1
   cloud_firestore: ^0.14.0+2
@@ -48,6 +49,7 @@ dependencies:
   firebase_messaging: ^7.0.3
   #cloud_functions: ^0.7.0
   circular_check_box: ^1.0.4
+  toggle_switch: ^0.1.8
 
   dots_indicator: ^1.2.0
   slimy_card:

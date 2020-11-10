@@ -5,6 +5,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cocode/features/viewProject/viewProject.dart';
 
 needTeamMember() {
+  String imageURL;
   return StreamBuilder<QuerySnapshot>(
     //becuase firestore return data in a stream we need a stream builder to read this data
     stream:
@@ -25,7 +26,7 @@ needTeamMember() {
         itemBuilder: (context, index) {
           DocumentSnapshot Projectdata = snapshot.data.docs[index];
           Map getDocs = needMembers[index].data();
-
+          print(getDocs['image']);
           return new Container(
               height: 120.0,
               margin: const EdgeInsets.symmetric(
@@ -85,7 +86,9 @@ needTeamMember() {
                     margin: new EdgeInsets.symmetric(vertical: 16.0),
                     alignment: FractionalOffset.centerLeft,
                     child: new Image(
-                      image: new AssetImage("imeges/logo-3.png"),
+                      image: getDocs['image'] == null
+                          ? new AssetImage("imeges/logo-2.png")
+                          : NetworkImage(getDocs['image']),
                       height: 92.0,
                       width: 92.0,
                     ),
