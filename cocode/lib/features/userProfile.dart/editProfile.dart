@@ -75,7 +75,7 @@ class _editProfileState extends State<editProfile> {
                       Expanded(
                         child: Container(
                           decoration: BoxDecoration(
-                            color: Colors.blueAccent[100],
+                            color: Colors.indigo,
                             borderRadius: BorderRadius.only(
                               bottomLeft: Radius.circular(20.0),
                               bottomRight: Radius.circular(20.0),
@@ -84,22 +84,33 @@ class _editProfileState extends State<editProfile> {
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                             children: <Widget>[
-                              Avatar(
+                              GestureDetector(
                                 onTap: () {
                                   uploadImage().then((value) {
-                                    setState(() {
-                                      imageUrl = AccountInfo.image;
-
-                                      print(
-                                          " data['image'] = " + data['image']);
-                                    });
+                                    setState(() {});
                                   });
                                 },
+                                child: Center(
+                                  child: imageUrl == null
+                                      ? CircleAvatar(
+                                          radius: 65.0,
+                                          backgroundColor: Colors.white,
+                                          child: Icon(
+                                            Icons.photo_camera,
+                                            size: 30,
+                                          ),
+                                        )
+                                      : CircleAvatar(
+                                          radius: 65.0,
+                                          backgroundImage:
+                                              NetworkImage(imageUrl),
+                                        ),
+                                ),
                               ),
-                              Text("change your Image here ",
+                              Text("uploade logo ",
                                   style: TextStyle(
                                     fontSize: 15,
-                                    color: Colors.greenAccent,
+                                    color: Colors.white,
                                     fontWeight: FontWeight.w600,
                                   )),
                             ],
