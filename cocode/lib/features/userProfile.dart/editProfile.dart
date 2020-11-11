@@ -107,7 +107,7 @@ class _editProfileState extends State<editProfile> {
                                         ),
                                 ),
                               ),
-                              Text("uploade logo ",
+                              Text("upload photo",
                                   style: TextStyle(
                                     fontSize: 15,
                                     color: Colors.white,
