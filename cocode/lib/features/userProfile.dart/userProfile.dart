@@ -237,7 +237,8 @@ class _profilePageState extends State<profilePage> {
 
         if (snapshot.hasData) {
           return Container(
-            constraints: BoxConstraints(minHeight: 10.0, maxHeight: 100),
+            padding: const EdgeInsets.only(left :20, right: 20),
+            constraints: BoxConstraints(minHeight: 10.0, maxHeight:100,),
             child: ListView.builder(
               scrollDirection: Axis.horizontal,
               itemCount: doc.length,
@@ -444,7 +445,7 @@ class _profilePageState extends State<profilePage> {
           Padding(
             padding: EdgeInsets.all(15.0),
             child: new LinearPercentIndicator(
-              width: MediaQuery.of(context).size.width - 75,
+              width: MediaQuery.of(context).size.width - 95,
               animation: true,
               lineHeight: 25.0,
               animationDuration: 2000,
@@ -455,7 +456,7 @@ class _profilePageState extends State<profilePage> {
                     width: 8,
                   ),
                   Text(
-                    level + '%',
+                    level.substring(0,level.length-2) + '%',
                     style: TextStyle(
                       color: Colors.indigo,
                     ),
