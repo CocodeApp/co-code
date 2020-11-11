@@ -78,58 +78,6 @@ class _settingsPageState extends State<settingsPage> {
                     padding: const EdgeInsets.all(10.0),
                     child: ListView(
                       children: <Widget>[
-                        OutlineButton(
-                          textColor: Colors.indigo,
-                          highlightedBorderColor:
-                              Colors.black.withOpacity(0.12),
-                          onPressed: () async {
-                            String fcmToken = await _fcm.getToken();
-
-                            // Save it to Firestore
-                            if (fcmToken != null) {
-                              _db
-                                  .collection('User')
-                                  .doc(Auth.getCurrentUserID())
-                                  .collection('tokens')
-                                  .doc(fcmToken)
-                                  .set({
-                                    'token': fcmToken,
-                                    'createdAt': FieldValue
-                                        .serverTimestamp(), // optional
-                                  })
-                                  .then((value) => print('yyeeessss'))
-                                  .catchError((e) {
-                                    print('the error is ' + e.toString());
-                                  });
-                              print('token is ' + fcmToken);
-                            }
-
-                            _fcm.subscribeToTopic('projs');
-                            //   print('start');
-                            //   return await FirebaseFunctions.instance
-                            //       .httpsCallable('notifyAccepted')
-                            //       .call();
-                            // }
-
-                            var callable = FirebaseFunctions.instance
-                                .httpsCallable('notifyAccepted');
-
-                            var x = await callable.call(<String, dynamic>{
-                              'applicatant': 'applicantname',
-                              'project': 'applicantname',
-
-                              //replace param1 with the name of the parameter in the Cloud Function and the value you want to insert
-                            }).catchError((onError) {
-                              //Handle your error here if the function failed
-                            });
-
-                            // Navigator.push(context,
-                            //     MaterialPageRoute(builder: (_) {
-                            //   return MessageHandlerx();
-                            // }));
-                          },
-                          child: Text("Try"),
-                        ),
                         Card(
                           child: ListTile(
                               leading: GestureDetector(

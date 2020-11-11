@@ -17,6 +17,7 @@ class homePageView extends StatefulWidget {
 
 class _homePageViewState extends State<homePageView> {
   KFDrawerController _drawerController;
+  String imgUrl;
 
   @override
   void initState() {
@@ -112,7 +113,8 @@ class _homePageViewState extends State<homePageView> {
         if (snapshot.data == null) return Text('');
 
         Map<String, dynamic> data = snapshot.data.data();
-        String imgUrl = data['image'];
+        imgUrl = data['image'];
+
         if (snapshot.hasError) {
           return Text("Something went wrong");
         }
