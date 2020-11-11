@@ -154,7 +154,7 @@ class _updateProjectState extends State<updateProject> {
                                 ),
                                 SizedBox(width: 20),
                                 Text('project status'),
-                                SizedBox(width: 80),
+                                SizedBox(width: 25),
                                 Container(
                                   decoration: BoxDecoration(
                                       borderRadius: BorderRadius.circular(22),
