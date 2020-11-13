@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="co-codeLogos">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/co-codeLogos.zip!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

@@ -58,8 +58,9 @@ class _userProjectsState extends State<userProjects> {
                         builder: (context) {
                           return new viewProject(
                               id: doc[index].id,
-                              tab:
-                                  "member"); //// latefa     // this must lead to the projects that user in
+                              tab: "member",
+                              previouspage:
+                                  "list of applicants"); //// latefa     // this must lead to the projects that user in
                         },
                       ),
                     );

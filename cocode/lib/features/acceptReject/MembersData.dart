@@ -1,3 +1,4 @@
+import 'package:cloud_functions/cloud_functions.dart';
 import 'package:cocode/features/homePage/homePageView.dart';
 import 'package:cocode/features/userProfile.dart/userProfile.dart';
 import 'package:cocode/features/viewProject/viewProject.dart';
@@ -18,9 +19,18 @@ class _MembersListState extends State<MembersList> {
   ValueNotifier<List> tempMember = ValueNotifier<List>([]);
   String role;
   String projectName;
+  String projectImg;
   @override
   Widget build(BuildContext context) {
     Future<void> getTempList() async {
+      Future<DocumentSnapshot> project = FirebaseFirestore.instance
+          .collection("projects")
+          .doc(widget.projectId)
+          .get();
+      await project.then((value) {
+        var data = value.data();
+        projectImg = data['image'];
+      });
       Future<DocumentSnapshot> leaderRef = FirebaseFirestore.instance
           .collection("User")
           .doc(widget.leader)
@@ -53,6 +63,7 @@ class _MembersListState extends State<MembersList> {
               Map<String, dynamic> data = snapshot.data.data();
               String first = data['firstName'];
               String last = data['lastName'];
+              String imgUrl = data['image'];
 
               String fullName = first + " " + last;
               print(first);
@@ -96,14 +107,15 @@ class _MembersListState extends State<MembersList> {
                       ),
                     ),
                     Container(
-                      margin: new EdgeInsets.symmetric(vertical: 10.0),
-                      alignment: FractionalOffset.bottomLeft,
-                      child: new Image(
-                        image: new AssetImage("imeges/man.png"), //later
-                        height: 70.0,
-                        width: 70.0,
-                      ),
-                    ),
+                        margin: new EdgeInsets.symmetric(vertical: 10.0),
+                        alignment: FractionalOffset.bottomLeft,
+                        child: CircleAvatar(
+                          backgroundImage: imgUrl == null
+                              ? new AssetImage("imeges/man.png")
+                              : NetworkImage(imgUrl),
+                          backgroundColor: Colors.white,
+                          radius: 40,
+                        )),
                     Container(
                       alignment: Alignment.center,
                       height: 90.0,
@@ -113,7 +125,7 @@ class _MembersListState extends State<MembersList> {
                           IconButton(
                             icon: Icon(Icons.check_circle),
                             color: Colors.green,
-                            onPressed: () {
+                            onPressed: () async {
                               if (role == "Idea Owner") {
                                 //add the supervisor
                                 FirebaseFirestore.instance
@@ -133,6 +145,7 @@ class _MembersListState extends State<MembersList> {
                                     .collection('myProjects')
                                     .doc(widget.projectId)
                                     .set({
+                                      'image': projectImg,
                                       'projectName':
                                           projectName, //to fill later
                                       'role': "supervisor",
@@ -142,6 +155,18 @@ class _MembersListState extends State<MembersList> {
                                         print("project Added to the user"))
                                     .catchError((error) =>
                                         print("Failed to add project: $error"));
+
+                                var callable = FirebaseFunctions.instance
+                                    .httpsCallable('notifyAccepted');
+
+                                var x = await callable.call(<String, dynamic>{
+                                  'applicatant': id,
+                                  'project': projectName,
+                                  //replace param1 with the name of the parameter in the Cloud Function and the value you want to insert
+                                }).catchError((onError) {
+                                  //Handle your error here if the function failed
+                                  print(onError.toString());
+                                });
                                 //clean the list "not important"
                                 FirebaseFirestore.instance
                                     .runTransaction((transaction) async {
@@ -160,6 +185,7 @@ class _MembersListState extends State<MembersList> {
                                   return viewProject(
                                     id: widget.projectId,
                                     tab: "member",
+                                    previouspage: "list of applicants",
                                   );
                                 }));
                               } else {
@@ -195,6 +221,7 @@ class _MembersListState extends State<MembersList> {
                                     .collection('myProjects')
                                     .doc(widget.projectId)
                                     .set({
+                                      'image': projectImg,
                                       'projectName':
                                           projectName, //to fill later
                                       'role': "team member",
@@ -203,6 +230,19 @@ class _MembersListState extends State<MembersList> {
                                         print("project Added to the user"))
                                     .catchError((error) =>
                                         print("Failed to add project: $error"));
+                                //notify user
+                                var callable = FirebaseFunctions.instance
+                                    .httpsCallable('notifyAccepted');
+
+                                var x = await callable.call(<String, dynamic>{
+                                  'applicatant': id,
+                                  'project': projectName,
+
+                                  //replace param1 with the name of the parameter in the Cloud Function and the value you want to insert
+                                }).catchError((onError) {
+                                  print(onError.toString());
+                                });
+
                                 //remove it from tempmember
                                 tempMember.value.removeAt(index);
                                 tempMember.notifyListeners();

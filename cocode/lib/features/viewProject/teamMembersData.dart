@@ -1,3 +1,4 @@
+import 'package:cocode/buttons/indicator.dart';
 import 'package:cocode/features/homePage/homePageView.dart';
 import 'package:cocode/features/userProfile.dart/userProfile.dart';
 import 'package:flutter/material.dart';
@@ -96,17 +97,36 @@ class _teamMembersListState extends State<teamMembersList> {
                     ),
                   ),
                 ),
-                Container(
-                  margin: new EdgeInsets.symmetric(vertical: 10.0),
-                  alignment: FractionalOffset.bottomLeft,
-                  child: new Image(
-                    image: new AssetImage("imeges/man.png"),
-                    height: 70.0,
-                    width: 70.0,
-                  ),
-                ),
+                userImg(allmembers[index]["Id"]),
               ],
             ));
+      },
+    );
+  }
+
+  Widget userImg(String id) {
+    return FutureBuilder(
+      future: FirebaseFirestore.instance.collection("User").doc(id).get(),
+      builder: (context, snapshot) {
+        if (snapshot.data == null) return Text('');
+
+        Map<String, dynamic> data = snapshot.data.data();
+        String imgUrl = data['image'];
+        if (snapshot.hasError) {
+          return Text("Something went wrong");
+        }
+        if (snapshot.connectionState == ConnectionState.done) {
+          return Container(
+              margin: new EdgeInsets.symmetric(vertical: 10.0),
+              alignment: FractionalOffset.bottomLeft,
+              child: CircleAvatar(
+                backgroundImage: imgUrl == null
+                    ? new AssetImage("imeges/man.png")
+                    : NetworkImage(imgUrl),
+                backgroundColor: Colors.white,
+                radius: 40,
+              ));
+        }
       },
     );
   }

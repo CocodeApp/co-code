@@ -1,12 +1,13 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:cocode/buttons/RoundeButton.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_form_bloc/flutter_form_bloc.dart';
-import 'package:fluttertoast/fluttertoast.dart';
-import 'package:form_bloc/form_bloc.dart';
-import 'package:kf_drawer/kf_drawer.dart';
 import 'dart:async';
+
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:cloud_functions/cloud_functions.dart';
+import 'package:cocode/features/NotificationHandler/notificationsHandler.dart';
+import 'package:cocode/features/notifications/notificationSettings.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:kf_drawer/kf_drawer.dart';
 
 import '../../Auth.dart';
 import 'AccountInfo.dart';
@@ -33,6 +34,11 @@ class _settingsPageState extends State<settingsPage> {
   String lastname;
   bool isLoading;
 
+  final FirebaseFirestore _db = FirebaseFirestore.instance;
+  final FirebaseMessaging _fcm = FirebaseMessaging();
+
+  StreamSubscription iosSubscription;
+
   @override
   void initState() {
     super.initState();
@@ -43,10 +49,17 @@ class _settingsPageState extends State<settingsPage> {
     return new Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        backgroundColor: Colors.blue,
+        backgroundColor: Colors.indigo,
         title: Text(
-          "Edit Account",
+          "Account Settings",
           textAlign: TextAlign.center,
+        ),
+        leading: IconButton(
+          icon: Icon(
+            Icons.menu,
+            color: Colors.deepOrangeAccent,
+          ),
+          onPressed: widget.onMenuPressed,
         ),
       ),
       body: FutureBuilder<DocumentSnapshot>(
@@ -58,22 +71,9 @@ class _settingsPageState extends State<settingsPage> {
             AccountInfo.email = this.email = data['email'];
             AccountInfo.firstname = this.firstname = data['firstName'];
             AccountInfo.lastname = this.lastname = data['lastName'];
-
+//MessageHandler
             return Scaffold(
                 backgroundColor: Colors.white,
-                appBar: AppBar(
-                  title: Text('Account Settings',
-                      style: TextStyle(fontSize: 20, color: Colors.indigo)),
-                  elevation: 0,
-                  backgroundColor: Colors.white,
-                  leading: IconButton(
-                    icon: Icon(
-                      Icons.menu,
-                      color: Colors.deepOrangeAccent,
-                    ),
-                    onPressed: widget.onMenuPressed,
-                  ),
-                ),
                 body: Padding(
                     padding: const EdgeInsets.all(10.0),
                     child: ListView(
@@ -327,6 +327,39 @@ class _settingsPageState extends State<settingsPage> {
                                   isLoading = false;
                                 });
                               }
+                            },
+                          ),
+                        ),
+                        Card(
+                          child: ListTile(
+                            leading: GestureDetector(
+                              child: Hero(
+                                  tag: 'Notifications',
+                                  child: CircleAvatar(
+                                    backgroundColor: Colors.indigo,
+                                    child: Icon(
+                                      Icons.notifications_active,
+                                      color: Colors.white,
+                                      size: 30.0,
+                                    ),
+                                    foregroundColor: Colors.white,
+                                  )),
+                            ),
+                            dense: false,
+                            title: Text('Notifications',
+                                style: TextStyle(
+                                    fontSize: 14.0, color: Colors.grey)),
+                            // subtitle: Text(AccountInfo.email,
+                            //     style: TextStyle(
+                            //         fontSize: 17.0, color: Colors.black87)),
+                            trailing: Icon(Icons.keyboard_arrow_right),
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                new MaterialPageRoute(
+                                    builder: (context) =>
+                                        new noticationSettings()),
+                              );
                             },
                           ),
                         ),

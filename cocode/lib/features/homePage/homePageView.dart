@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cocode/features/accountSettings/accountSettings.dart';
 import 'package:flutter/material.dart';
 import 'package:cocode/features/userProjects/myProjectsPage.dart';
@@ -16,6 +17,7 @@ class homePageView extends StatefulWidget {
 
 class _homePageViewState extends State<homePageView> {
   KFDrawerController _drawerController;
+  String imgUrl;
 
   @override
   void initState() {
@@ -38,23 +40,27 @@ class _homePageViewState extends State<homePageView> {
           page: userProjects(),
         ),
         KFDrawerItem.initWithPage(
-          text: Text('settings', style: TextStyle(color: Colors.white)),
+          text: Text('Settings', style: TextStyle(color: Colors.white)),
           icon: Icon(Icons.settings, color: Colors.white),
           page: settingsPage(),
         ),
       ],
       initialPage: homePageController(),
     );
+    Map data;
+    FirebaseFirestore.instance
+        .collection("User")
+        .doc(Auth.getCurrentUserID())
+        .get()
+        .then((value) {
+      data = value.data();
+    });
   }
 
   Widget build(BuildContext context) {
     return Scaffold(
       body: KFDrawer(
         shadowOffset: 0,
-//        borderRadius: 0.0,
-//        shadowBorderRadius: 0.0,
-        // menuPadding: EdgeInsets.fromLTRB(0, 0, 0, 100.0),
-//        scrollable: true,
         controller: _drawerController,
         header: Padding(
           padding: const EdgeInsets.fromLTRB(0, 100, 0, 0),
@@ -64,12 +70,7 @@ class _homePageViewState extends State<homePageView> {
               width: MediaQuery.of(context).size.width * 0.6,
               child: Column(
                 children: [
-                  InkWell(
-                    child: CircleAvatar(
-                      backgroundImage: AssetImage("imeges/man.png"),
-                      radius: 40,
-                    ),
-                  ),
+                  InkWell(child: userImg()),
                   SizedBox(
                     height: 20,
                   ),
@@ -103,6 +104,35 @@ class _homePageViewState extends State<homePageView> {
           ),
         ),
       ),
+    );
+  }
+
+  Widget userImg() {
+    setState(() {});
+    return FutureBuilder(
+      future: FirebaseFirestore.instance
+          .collection("User")
+          .doc(Auth.getCurrentUserID())
+          .get(),
+      builder: (context, snapshot) {
+        if (snapshot.data == null) return Text('');
+
+        Map<String, dynamic> data = snapshot.data.data();
+        imgUrl = data['image'];
+
+        if (snapshot.hasError) {
+          return Text("Something went wrong");
+        }
+        if (snapshot.connectionState == ConnectionState.done) {
+          return CircleAvatar(
+            backgroundImage: imgUrl == null
+                ? new AssetImage("imeges/man.png")
+                : NetworkImage(imgUrl),
+            backgroundColor: Colors.white,
+            radius: 40,
+          );
+        }
+      },
     );
   }
 }

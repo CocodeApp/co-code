@@ -310,6 +310,18 @@ class _State extends State<form> {
                                 .catchError((error) =>
                                     print("Failed to add project: $error"));
 
+                            //add general channel
+                            project
+                                .collection("messages")
+                                .doc()
+                                .set({
+                                  'name': "general",
+                                })
+                                .then((value) =>
+                                    print("channel Added to projects"))
+                                .catchError((error) => print(
+                                    "Failed to add channel to project: $error"));
+
                             //add project to the owner user account
                             ideaOwnerUser
                                 .doc(Auth.getCurrentUserID())

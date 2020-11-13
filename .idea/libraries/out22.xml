@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="out2">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/cocode/build/flutter_plugin_android_lifecycle/intermediates/merged_java_res/debug/out.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

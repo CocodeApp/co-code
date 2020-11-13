@@ -8,6 +8,8 @@ import 'package:percent_indicator/percent_indicator.dart';
 import 'package:kf_drawer/kf_drawer.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
+import 'editProfile.dart';
+
 class profilePage extends KFDrawerContent {
   var userId;
   Widget
@@ -21,6 +23,7 @@ class _profilePageState extends State<profilePage> {
   String currentName = "";
   String email = '';
   String id = Auth.getCurrentUserID();
+  String imageURL;
 
   @override
   Widget build(BuildContext context) {
@@ -44,7 +47,8 @@ class _profilePageState extends State<profilePage> {
             List<dynamic> skills = data['skills'];
 
             currentName = data['firstName'] + " " + data['lastName'];
-            email = data[email];
+            email = data['email'];
+            imageURL = data['image'];
 
             return Scaffold(
                 backgroundColor: Colors.white,
@@ -80,10 +84,12 @@ class _profilePageState extends State<profilePage> {
                                 context,
                                 MaterialPageRoute(
                                   builder: (context) {
-                                    return new EditProfilePage();
+                                    return new editProfile();
                                   },
                                 ),
-                              );
+                              ).then((value) {
+                                setState(() {});
+                              });
                             },
                           )
                         : Container(),
@@ -103,7 +109,7 @@ class _profilePageState extends State<profilePage> {
                           padding: EdgeInsets.only(bottom: 20),
                           width: MediaQuery.of(context).size.width,
                           decoration: BoxDecoration(
-                            color: Color(0xffD1DDED),
+                            color: Colors.white70,
                             borderRadius: BorderRadius.all(
                               Radius.circular(30.0),
                             ),
@@ -193,16 +199,7 @@ class _profilePageState extends State<profilePage> {
         ),
         GestureDetector(
           // for Edit Skills
-          onTap: () {
-            // Navigator.push(
-            //   context,
-            //   MaterialPageRoute(
-            //     builder: (context) {
-            //       return new ProjectScreen(); // this must lead to the edit char page
-            //     },
-            //   ),
-            // );
-          },
+          onTap: () {},
           child: Text(
             "", //edit skills
             style: TextStyle(color: Colors.grey, fontSize: 17),
@@ -213,8 +210,8 @@ class _profilePageState extends State<profilePage> {
   }
 
   Widget projects(BuildContext context, CollectionReference userProjects) {
-    return StreamBuilder<QuerySnapshot>(
-      stream: userProjects.snapshots(),
+    return FutureBuilder<QuerySnapshot>(
+      future: userProjects.get(),
 // ignore: missing_return
       builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
         if (snapshot.data == null) {
@@ -240,12 +237,24 @@ class _profilePageState extends State<profilePage> {
 
         if (snapshot.hasData) {
           return Container(
-            constraints: BoxConstraints(minHeight: 10.0, maxHeight: 100),
+            padding: const EdgeInsets.only(left :20, right: 20),
+            constraints: BoxConstraints(minHeight: 10.0, maxHeight:100,),
             child: ListView.builder(
               scrollDirection: Axis.horizontal,
               itemCount: doc.length,
               itemBuilder: (context, index) {
                 Map data = doc[index].data();
+                String projectImg;
+                FirebaseFirestore.instance
+                    .collection('projects')
+                    .doc(doc[index].id)
+                    .get()
+                    .then((value) {
+                  Map<String, dynamic> daa = value.data();
+                  projectImg = daa['image'];
+                });
+
+                print(projectImg);
                 return InkWell(
 //stream list v
                   onTap: () {
@@ -256,6 +265,7 @@ class _profilePageState extends State<profilePage> {
                           return new viewProject(
                             id: doc[index].id,
                             tab: "ideaOwner",
+                            previouspage: "",
                           ); //// latefa     // this must lead to the projects that user in
                         },
                       ),
@@ -267,12 +277,13 @@ class _profilePageState extends State<profilePage> {
                       Container(
 //project logo from database
                         height: 0.10 * MediaQuery.of(context).size.height,
-                        width: 0.300 * MediaQuery.of(context).size.width,
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.circular(20.0),
-                          child: Image.asset(
-                            'imeges/logo-2.png', //project logo
-                          ),
+
+                        child: CircleAvatar(
+                          radius: 40,
+                          backgroundColor: Colors.white,
+                          backgroundImage: projectImg == null
+                              ? AssetImage('imeges/logo-2.png')
+                              : NetworkImage(projectImg),
                         ),
                       ),
                       Text(
@@ -298,8 +309,15 @@ class _profilePageState extends State<profilePage> {
     if (data == null) return Container();
     return Container(
       //first part the blue one
-      color: Colors.white,
       height: 0.38 * MediaQuery.of(context).size.height,
+      decoration: BoxDecoration(
+        color: Colors.blueAccent[100],
+        borderRadius: BorderRadius.only(
+          bottomLeft: Radius.circular(30.0),
+          bottomRight: Radius.circular(30.0),
+        ),
+      ),
+
       child: Padding(
           padding: EdgeInsets.only(
             // image position
@@ -318,9 +336,11 @@ class _profilePageState extends State<profilePage> {
                     decoration: BoxDecoration(
                         shape: BoxShape.circle,
                         image: DecorationImage(
-                            fit: BoxFit.cover,
-                            image: AssetImage(
-                                "imeges/man.png")) //// profile imeag MUST be from database
+                          fit: BoxFit.cover,
+                          image: imageURL == null
+                              ? AssetImage('imeges/man.png')
+                              : NetworkImage(data['image']),
+                        ) //// profile imeag MUST be from database
                         ),
                   ),
                   SizedBox(
@@ -416,7 +436,7 @@ class _profilePageState extends State<profilePage> {
   }
 
   skillAndLevel(String skillName, String level) {
-    var skil = int.parse(level);
+    var skil = double.parse(level);
     var percent = skil * 0.01;
     return Padding(
       padding: const EdgeInsets.only(left: 5),
@@ -425,7 +445,7 @@ class _profilePageState extends State<profilePage> {
           Padding(
             padding: EdgeInsets.all(15.0),
             child: new LinearPercentIndicator(
-              width: MediaQuery.of(context).size.width - 75,
+              width: MediaQuery.of(context).size.width - 95,
               animation: true,
               lineHeight: 25.0,
               animationDuration: 2000,
@@ -436,7 +456,7 @@ class _profilePageState extends State<profilePage> {
                     width: 8,
                   ),
                   Text(
-                    level + '%',
+                    level.substring(0,level.length-2) + '%',
                     style: TextStyle(
                       color: Colors.indigo,
                     ),
