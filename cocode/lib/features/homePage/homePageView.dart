@@ -47,16 +47,20 @@ class _homePageViewState extends State<homePageView> {
       ],
       initialPage: homePageController(),
     );
+    Map data;
+    FirebaseFirestore.instance
+        .collection("User")
+        .doc(Auth.getCurrentUserID())
+        .get()
+        .then((value) {
+      data = value.data();
+    });
   }
 
   Widget build(BuildContext context) {
     return Scaffold(
       body: KFDrawer(
         shadowOffset: 0,
-//        borderRadius: 0.0,
-//        shadowBorderRadius: 0.0,
-        // menuPadding: EdgeInsets.fromLTRB(0, 0, 0, 100.0),
-//        scrollable: true,
         controller: _drawerController,
         header: Padding(
           padding: const EdgeInsets.fromLTRB(0, 100, 0, 0),
@@ -104,6 +108,7 @@ class _homePageViewState extends State<homePageView> {
   }
 
   Widget userImg() {
+    setState(() {});
     return FutureBuilder(
       future: FirebaseFirestore.instance
           .collection("User")

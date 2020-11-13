@@ -17,7 +17,7 @@ class changeSkills extends StatefulWidget {
 class _changeSkillsState extends State<changeSkills> {
   double _currentSliderValue = 0;
   final ValueNotifier<List<Map<String, String>>> skillsNotifier =
-  ValueNotifier<List<Map<String, String>>>([]);
+      ValueNotifier<List<Map<String, String>>>([]);
   TextEditingController eCtrl = new TextEditingController();
   @override
   void initState() {
@@ -51,7 +51,7 @@ class _changeSkillsState extends State<changeSkills> {
               SizedBox(height: 20),
               Padding(
                   padding: EdgeInsets.only(left: 30.0, right: 30.0),
-                  child:RoundedButton(
+                  child: RoundedButton(
                       text: "Save",
                       color: Colors.indigo,
                       textColor: Colors.white,
@@ -68,16 +68,14 @@ class _changeSkillsState extends State<changeSkills> {
               SizedBox(height: 20),
               Padding(
                   padding: EdgeInsets.only(left: 30.0, right: 30.0),
-                  child:RoundedButton(
+                  child: RoundedButton(
                     text: "Cancel",
                     color: Colors.blue[100],
                     textColor: Colors.black,
                     press: () {
                       Navigator.of(context).pop();
                     },
-                  )
-              ),
-
+                  )),
             ],
           ),
         ),
@@ -147,7 +145,7 @@ class _changeSkillsState extends State<changeSkills> {
                                       max: 100,
                                       divisions: 10,
                                       label: skillsNotifier.value[Index]
-                                      ['value'],
+                                          ['value'],
                                       onChanged: (double value) {
                                         setState(() {
                                           skillsNotifier.value[Index]['value'] =
@@ -190,12 +188,11 @@ class _changeSkillsState extends State<changeSkills> {
 
   Widget newSkill() {
     return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: [
         Padding(
           padding: EdgeInsets.all(15.0),
           child: Container(
-            width: 100,
+            width: 80,
             child: TextFormField(
               decoration: InputDecoration(
                 hintText: "Skill name",
@@ -223,7 +220,7 @@ class _changeSkillsState extends State<changeSkills> {
           ),
         ),
         Container(
-          width: 200,
+          width: 150,
           child: Slider(
             activeColor: Colors.indigo,
             inactiveColor: Colors.indigo[100],
