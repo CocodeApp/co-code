@@ -53,6 +53,11 @@
       </intent-filter>
 
 
+      <intent-filter>
+         <action android:name="com.google.firebase.MESSAGING_EVENT" />
+     </intent-filter>
+
+
 
         </activity>
         <!-- Don't delete the meta-data below.

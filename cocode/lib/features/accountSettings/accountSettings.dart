@@ -78,6 +78,41 @@ class _settingsPageState extends State<settingsPage> {
                     padding: const EdgeInsets.all(10.0),
                     child: ListView(
                       children: <Widget>[
+                        FlatButton(
+                          padding: EdgeInsets.symmetric(
+                              vertical: 20, horizontal: 40),
+                          color: Colors.blue,
+                          onPressed: () async {
+                            var callable = FirebaseFunctions.instance
+                                .httpsCallable('notifyAccepted');
+
+                            var x = await callable.call(<String, dynamic>{
+                              // 'applicatant': 1,
+                              // 'project': 'random project',
+                              //replace param1 with the name of the parameter in the Cloud Function and the value you want to insert
+                            }).catchError((onError) {
+                              print(onError);
+                              //Handle your error here if the function failed
+                              print(onError.toString());
+                            });
+                          },
+                          child: Text(
+                            'Hi there',
+                            style: TextStyle(color: Colors.red),
+                          ),
+                        ),
+                        //here
+                        // var callable = FirebaseFunctions.instance
+                        //             .httpsCallable('notifyAccepted');
+
+                        //         var x = await callable.call(<String, dynamic>{
+                        //           'applicatant': id,
+                        //           'project': projectName,
+                        //           //replace param1 with the name of the parameter in the Cloud Function and the value you want to insert
+                        //         }).catchError((onError) {
+                        //           //Handle your error here if the function failed
+                        //           print(onError.toString());
+                        //         });
                         Card(
                           child: ListTile(
                               leading: GestureDetector(
