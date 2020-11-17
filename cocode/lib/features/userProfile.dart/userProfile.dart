@@ -21,6 +21,7 @@ class profilePage extends KFDrawerContent {
 
 class _profilePageState extends State<profilePage> {
   String currentName = "";
+  String projectImg;
   String email = '';
   String id = Auth.getCurrentUserID();
   String imageURL;
@@ -244,15 +245,13 @@ class _profilePageState extends State<profilePage> {
               itemCount: doc.length,
               itemBuilder: (context, index) {
                 Map data = doc[index].data();
-                String projectImg;
                 FirebaseFirestore.instance
                     .collection('projects')
-                    .doc(doc[index].id)
-                    .get()
-                    .then((value) {
-                  Map<String, dynamic> daa = value.data();
+                    .doc(doc[index].id);
+                  Map<String, dynamic> daa = data;
                   projectImg = daa['image'];
-                });
+
+               // print("this is projectImg "+projectImg);// only first image
                 return Row(
                   children: [
                     SizedBox(width: 15),
