@@ -55,6 +55,7 @@ class _viewProjectState extends State<viewProject> {
           String currentOwner = data['ideaOwner'];
           String user = Auth.getCurrentUserID();
           bool isSuper = currentSuper.compareTo(user) == 0 ? true : false;
+          bool isOwner = currentOwner.compareTo(user) == 0 ? true : false;
           bool isprojectmember = false;
 
           if (listofmembers.contains(user) ||
@@ -127,7 +128,35 @@ class _viewProjectState extends State<viewProject> {
                             });
                           },
                         )
-                      : Container()
+                      : Container(),
+                  isOwner?
+                  IconButton(
+                  icon:
+                  Icon(
+                  Icons.delete,
+                  color: Colors.red,
+                  ),
+                  onPressed: (){
+                      return AlertDialog(
+                        title: Text('Delete Project'),
+                        content: Text("Are you sure you want to delete project?"),
+                        actions: <Widget>[
+                                FlatButton(
+                                child: Text('Delete'),
+                                onPressed: () {},
+                                ),
+                                FlatButton(
+                                child: Text('Cancel'),
+                                onPressed: () {
+                                Navigator.of(context).pop();
+                                },
+                                )
+                        ],
+                      );
+                      },
+                      )
+                :
+            Container(),
                 ],
                 elevation: 0,
                 leading: BackButton(
@@ -547,6 +576,7 @@ class ProjectDetails extends StatelessWidget {
               ),
             ),
           ),
+
         ],
       ),
     );

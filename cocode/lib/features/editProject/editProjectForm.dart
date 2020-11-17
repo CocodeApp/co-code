@@ -122,7 +122,7 @@ class _updateProjectState extends State<updateProject> {
                                           ),
                                   ),
                                 ),
-                                Text("uploade logo ",
+                                Text("upload logo ",
                                     style: TextStyle(
                                       fontSize: 15,
                                       color: Colors.white,
@@ -339,10 +339,6 @@ class _updateProjectState extends State<updateProject> {
                     )),
           ).then((value) {
             setState(() {
-              //نجد
-              //وش بيصير ب����������د التغيير
-              // this.firstname = AccountInfo.firstname;
-              // this.lastname = AccountInfo.lastname;
             });
           });
         },
