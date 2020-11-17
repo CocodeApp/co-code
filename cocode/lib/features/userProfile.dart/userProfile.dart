@@ -103,13 +103,13 @@ class _profilePageState extends State<profilePage> {
                       //second part the white one
                       Padding(
                         padding: EdgeInsets.only(
-                          top: 260,
+                          top: 280,
                         ),
                         child: Container(
                           padding: EdgeInsets.only(bottom: 20),
                           width: MediaQuery.of(context).size.width,
                           decoration: BoxDecoration(
-                            color: Colors.white70,
+                            color: Colors.white,
                             borderRadius: BorderRadius.all(
                               Radius.circular(30.0),
                             ),
@@ -128,7 +128,7 @@ class _profilePageState extends State<profilePage> {
                                         style: TextStyle(
                                             color: Color(0xff2A4793),
                                             fontWeight: FontWeight.bold,
-                                            fontSize: 16),
+                                            fontSize: 18),
                                       ),
                                     ),
                                   ),
@@ -192,7 +192,7 @@ class _profilePageState extends State<profilePage> {
           style: TextStyle(
               color: Color(0xff2A4793),
               fontWeight: FontWeight.bold,
-              fontSize: 16),
+              fontSize: 18),
         ),
         SizedBox(
           width: 230,
@@ -227,9 +227,9 @@ class _profilePageState extends State<profilePage> {
               currentName +
                   " did not join any projects yet !", // this massage must be static
               style: TextStyle(
-                  color: Colors.redAccent, //// latefa
+                  color: Colors.deepOrangeAccent, //// latefa
                   fontWeight: FontWeight.bold,
-                  fontSize: 15),
+                  fontSize: 16),
               textAlign: TextAlign.center,
             ),
           );
@@ -253,49 +253,60 @@ class _profilePageState extends State<profilePage> {
                   Map<String, dynamic> daa = value.data();
                   projectImg = daa['image'];
                 });
-
-                print(projectImg);
-                return InkWell(
+                return Row(
+                  children: [
+                    SizedBox(width: 15),
+                    InkWell(
 //stream list v
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) {
-                          return new viewProject(
-                            id: doc[index].id,
-                            tab: "ideaOwner",
-                            previouspage: "",
-                          ); //// latefa     // this must lead to the projects that user in
-                        },
-                      ),
-                    );
-                  },
-                  child: Column(
+                    onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) {
+                        return new viewProject(
+                          id: doc[index].id,
+                          tab: "ideaOwner",
+                          previouspage: "",
+                        ); //// latefa     // this must lead to the projects that user in
+                      },
+                    ),
+                  );
+                },
+                child: Column(
 // list of projects from data base
-                    children: [
-                      Container(
-//project logo from database
-                        height: 0.10 * MediaQuery.of(context).size.height,
+                children: [
+                ClipRRect(
+                borderRadius: BorderRadius.circular(20.0),
+                child:Container(
+                height: 70.0,
+                width: 80.0,
+                decoration: BoxDecoration(
+                image: DecorationImage(
+                image:projectImg == null
+                ? AssetImage('imeges/logo-2.png')
+                    : NetworkImage(projectImg),
 
-                        child: CircleAvatar(
-                          radius: 40,
-                          backgroundColor: Colors.white,
-                          backgroundImage: projectImg == null
-                              ? AssetImage('imeges/logo-2.png')
-                              : NetworkImage(projectImg),
-                        ),
-                      ),
-                      Text(
-                        data['projectName'],
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 17,
-                          color: Colors.deepOrangeAccent,
-                        ),
-                      ),
-                    ],
-                  ),
+                fit: BoxFit.fill,
+                ),
+                shape: BoxShape.rectangle,
+                ),
+                )
+
+                ),
+                  SizedBox(width: 10),
+                Text(
+                data['projectName'],
+                style: TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 17,
+                color: Colors.deepOrangeAccent,
+                ),
+                ),
+                ],
+                ),
+
+                ),
+                  ],
                 );
               },
             ),
@@ -307,11 +318,18 @@ class _profilePageState extends State<profilePage> {
 
   Container blueArea(BuildContext context, Map<String, dynamic> data) {
     if (data == null) return Container();
+
     return Container(
       //first part the blue one
-      height: 0.38 * MediaQuery.of(context).size.height,
+      width: MediaQuery.of(context).size.width * 0.9998,
+      height: 0.41 * MediaQuery.of(context).size.height,//ask girls ,9
       decoration: BoxDecoration(
-        color: Colors.blueAccent[100],
+        gradient: new LinearGradient(
+            colors: <Color>[ //7928D1##
+              const Color(0xFF2F80ED), const Color(0xFF56CCF2)],
+            stops: <double>[0.1, 0.7],
+            begin: Alignment.bottomLeft, end: Alignment.topRight
+        ),
         borderRadius: BorderRadius.only(
           bottomLeft: Radius.circular(30.0),
           bottomRight: Radius.circular(30.0),
@@ -321,20 +339,30 @@ class _profilePageState extends State<profilePage> {
       child: Padding(
           padding: EdgeInsets.only(
             // image position
-            left: 20.0,
-            // right: 30.0,
+            left: 15.0,
             top: 0.03 * MediaQuery.of(context).size.height,
           ),
           child: Column(
             children: <Widget>[
               Row(
                 children: <Widget>[
+                  SizedBox(
+                    width: 0.018 * MediaQuery.of(context).size.width,
+                  ),
                   Container(
                     //// profile imeag size
                     height: 0.13 * MediaQuery.of(context).size.height,
                     width: 0.22 * MediaQuery.of(context).size.width,
                     decoration: BoxDecoration(
                         shape: BoxShape.circle,
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.blue[200].withOpacity(0.7),
+                            spreadRadius: 4,
+                            blurRadius: 7,
+                            offset: Offset(0,2), // changes position of shadow
+                          ),
+                        ],
                         image: DecorationImage(
                           fit: BoxFit.cover,
                           image: imageURL == null
@@ -355,7 +383,7 @@ class _profilePageState extends State<profilePage> {
                             data['lastName'] // must be from database
                         ,
                         style: TextStyle(
-                            color: Colors.black,
+                            color: Colors.white,
                             fontSize:
                                 0.083 * MediaQuery.of(context).size.width * 0.8,
                             fontWeight: FontWeight.bold),
@@ -366,7 +394,7 @@ class _profilePageState extends State<profilePage> {
                           Text(
                             '📧 ' + data['email'],
                             style: TextStyle(
-                                color: Color(0xff2A4793),
+                                color: Colors.white70,
                                 fontSize:
                                     0.02 * MediaQuery.of(context).size.height),
                           ),
@@ -376,60 +404,56 @@ class _profilePageState extends State<profilePage> {
                   )
                 ],
               ),
+              SizedBox(height: 10),
               Row(
                 // here is the bio MUST BE 140 LETTER
                 children: <Widget>[
-                  Container(
-                    width: MediaQuery.of(context).size.width * 0.8,
-                    padding: const EdgeInsets.all(3.0),
-                    alignment: Alignment.center,
-
-                    /// max length must be 43
-                    child: new Column(
-                      children: <Widget>[
-                        new Text(
-                          data['bio'] == null ? '' : data['bio'],
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            fontSize: 16,
-                            color: Color(0xff2A4793),
-                          ),
-                        ),
-                      ],
+                  Container(/// max length must be 43
+                    width: MediaQuery.of(context).size.width * 0.9,
+                  //  padding: const EdgeInsets.only(left:3.0,),
+                    //alignment: Alignment.center,
+                   child: new Text(
+                      data['bio'] == null ? '' : data['bio'],
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        fontSize: 17,
+                        color: Colors.black87,
+                      ),
                     ),
                   ),
                 ],
               ),
+              SizedBox(height: 10),
               Column(
                 children: [
-                  SizedBox(width: 9),
+
                   Align(
-                    alignment: Alignment.topLeft,
+                    alignment: Alignment.center,
                     child: Text(
                       data['major'] == null ? '' : 'Major: ' + data['major'],
                       style: TextStyle(
                         fontSize: 16,
-                        color: Colors.black,
-                      ),
-                    ),
-                  ),
-                  SizedBox(
-                    height: 8,
-                  ),
-                  Align(
-                    alignment: Alignment.centerLeft,
-                    child: Text(
-                      data['university'] == null
-                          ? ''
-                          : 'University: ' + data['university'],
-                      style: TextStyle(
-                        fontSize: 16,
-                        color: Colors.black,
+                        color: Colors.white70,
                       ),
                     ),
                   )
                 ],
               ),
+              SizedBox(height: 5),
+              Align(
+                alignment: Alignment.center,
+                child: Text(
+                  data['university'] == null
+                      ? ''
+                      : 'University: ' + data['university'],
+                  style: TextStyle(
+                    fontSize: 16,
+                    color: Colors.white70,
+                  ),
+                ),
+              ),
+              SizedBox(height: 5),
+
             ],
           )),
     );
@@ -444,34 +468,46 @@ class _profilePageState extends State<profilePage> {
         children: <Widget>[
           Padding(
             padding: EdgeInsets.all(15.0),
-            child: new LinearPercentIndicator(
-              width: MediaQuery.of(context).size.width - 95,
-              animation: true,
-              lineHeight: 25.0,
-              animationDuration: 2000,
-              percent: percent,
-              trailing: Row(
-                children: [
-                  SizedBox(
-                    width: 8,
-                  ),
-                  Text(
-                    level.substring(0,level.length-2) + '%',
-                    style: TextStyle(
-                      color: Colors.indigo,
+            child: Row(
+              children: [
+                Container(
+                  decoration: BoxDecoration( boxShadow: [
+                    BoxShadow(
+                      color: Colors.blue[200].withOpacity(0.7),
+                      spreadRadius: 5,
+                      blurRadius: 7,
+                      offset: Offset(0,2), // changes position of shadow
+                    ),],),
+                  child: new LinearPercentIndicator(
+                    width: MediaQuery.of(context).size.width - 95,
+                    animation: true,
+                    lineHeight: 25.0,
+                    animationDuration: 2000,
+                    percent: percent,
+
+                    center: Text(
+                      skillName,
+                      style: TextStyle(fontWeight: FontWeight.bold),
                     ),
+                    linearStrokeCap: LinearStrokeCap.roundAll,
+                    progressColor: Colors.blue[400],
                   ),
-                ],
-              ),
-              center: Text(
-                skillName,
-                style: TextStyle(fontWeight: FontWeight.bold),
-              ),
-              linearStrokeCap: LinearStrokeCap.roundAll,
-              progressColor: Colors.blue[200],
+                ),
+                SizedBox(
+                  width: 10,
+                ),
+                Text(
+                  level.substring(0,level.length-2) + '%',
+                  style: TextStyle(
+                    color: Colors.indigo,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ],
             ),
+
           ),
-        ],
+          ],
       ),
     );
   }
