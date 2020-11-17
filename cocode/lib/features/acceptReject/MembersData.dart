@@ -167,6 +167,7 @@ class _MembersListState extends State<MembersList> {
                                   //Handle your error here if the function failed
                                   print(onError.toString());
                                 });
+
                                 //clean the list "not important"
                                 FirebaseFirestore.instance
                                     .runTransaction((transaction) async {
