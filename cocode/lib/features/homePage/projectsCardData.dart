@@ -16,7 +16,7 @@ class _needTeamMemberState extends State<needTeamMember> {
     return StreamBuilder<QuerySnapshot>(
         stream: Firestore.instance
             .collection('projects')
-            .orderBy('projectName', descending: true)
+            .orderBy('timeCreated', descending: true)
             .snapshots(),
         builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
           if (snapshot.data == null) {
@@ -46,7 +46,7 @@ class _needTeamMemberState extends State<needTeamMember> {
               );
             }
             var x = snapshot.data.docs[i].data();
-            if (x['supervisor'] != '') {
+            if (x['supervisor'] != '' && x['status'] != 'close') {
               needMembers.add(snapshot.data.docs[i]);
             }
           }
@@ -100,7 +100,7 @@ class _needSupervisorState extends State<needSupervisor> {
       //becuase firestore return data in a stream we need a stream builder to read this data
       stream: Firestore.instance
           .collection('projects')
-          .orderBy('projectName', descending: true)
+          .orderBy('timeCreated', descending: true)
           .snapshots(), //our collection
       builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
         if (snapshot.data == null) {
