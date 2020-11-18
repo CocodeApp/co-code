@@ -50,6 +50,7 @@ dependencies:
   #cloud_functions: ^0.7.0
   circular_check_box: ^1.0.4
   toggle_switch: ^0.1.8
+  popup_menu: ^1.0.5
 
   dots_indicator: ^1.2.0
   slimy_card:

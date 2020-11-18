@@ -304,6 +304,7 @@ class _State extends State<form> {
                                   'status': "open",
                                   'supervisor': "", //empty
                                   'teamMembers': [], //empty
+                                  'timeCreated': DateTime.now(),
                                 })
                                 .then((value) =>
                                     print("project Added to projects"))
