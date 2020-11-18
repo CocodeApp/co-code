@@ -16,6 +16,7 @@ import 'package:cocode/features/Login/LoginPage.dart';
 import 'MoreInfoPage.dart';
 import 'package:cocode/features/verifyEmail/VerifyEmail.dart';
 import 'package:cocode/buttons/RoundeButton.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 
 class CommonThings {
   static Size size;
@@ -95,6 +96,24 @@ class RegisterFormBloc extends FormBloc<String, String> {
         'email': _emailFieldBloc.value,
         'userName': _usernameFieldBloc.value,
       });
+
+      //saving token while signing in or signing up
+
+      // Get the token for this device
+      final FirebaseMessaging _fcm = FirebaseMessaging();
+
+      String fcmToken = await _fcm.getToken();
+
+      // Save it to Firestore
+      if (fcmToken != null) {
+        var tokens = reference.collection('tokens').doc(fcmToken);
+
+        await tokens.set({
+          'token': fcmToken,
+          'createdAt': FieldValue.serverTimestamp(), // optional
+          'platform': Platform.operatingSystem // optional
+        });
+      }
 
       yield currentState.toSuccess();
     } catch (e) {

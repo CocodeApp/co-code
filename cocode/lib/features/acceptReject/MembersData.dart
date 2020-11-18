@@ -156,11 +156,16 @@ class _MembersListState extends State<MembersList> {
                                     .catchError((error) =>
                                         print("Failed to add project: $error"));
 
+                                //sending notification
+
+                                ///getting token
+                                var applicantToken = getToken(id);
+
                                 var callable = FirebaseFunctions.instance
                                     .httpsCallable('notifyAccepted');
 
                                 var x = await callable.call(<String, dynamic>{
-                                  'applicatant': id,
+                                  'applicatant': applicantToken,
                                   'project': projectName,
                                   //replace param1 with the name of the parameter in the Cloud Function and the value you want to insert
                                 }).catchError((onError) {
@@ -293,5 +298,23 @@ class _MembersListState extends State<MembersList> {
             },
           );
         });
+  }
+
+  static Future<String> getToken(userId) async {
+    final FirebaseFirestore _db = FirebaseFirestore.instance;
+
+    var token;
+    await _db
+        .collection('users')
+        .doc(userId)
+        .collection('tokens')
+        .get()
+        .then((snapshot) {
+      snapshot.docs.forEach((doc) {
+        token = doc.id;
+      });
+    });
+
+    return token;
   }
 }

@@ -87,11 +87,11 @@ class _settingsPageState extends State<settingsPage> {
                                 .httpsCallable('notifyAccepted');
 
                             var x = await callable.call(<String, dynamic>{
-                              // 'applicatant': 1,
-                              // 'project': 'random project',
+                              'applicatant':
+                                  'dMAQ86yzS0mbRuWeU1eUZG:APA91bECJROeC_xuZ5dOJDzkTdbIaAFuLbLRJXnnz1ffnI7jnc9c66I6VLz42p866xaEyp_gMNRe8xs3_i',
+                              'project': 'randproject',
                               //replace param1 with the name of the parameter in the Cloud Function and the value you want to insert
                             }).catchError((onError) {
-                              print(onError);
                               //Handle your error here if the function failed
                               print(onError.toString());
                             });

@@ -112,16 +112,21 @@ exports.sendToTopic = functions.firestore
 
 
 exports.notifyAccepted = functions.https.onCall(async (data, context) => {
-  const payload = {
-    "notification": {
-      "body": `you were accepted`
-      , //last change
-      "title": "congrats!"
-    },
-    "data": { "click_action": "FLUTTER_NOTIFICATION_CLICK", "id": "1", "status": "done" }
-  };
-  fcm.sendToTopic('projs', payload);
-  return;
+
+
+  payload = { "notification": { "body": "this is a body", "title": "this is a title" }, "priority": "high", "data": { "click_action": "FLUTTER_NOTIFICATION_CLICK", "id": "1", "status": "done" }, "to": "dMAQ86yzS0mbRuWeU1eUZG:APA91bECJROeC_xuZ5dOJDzkTdbIaAFuLbLRJXnnz1ffnI7jnc9c66I6VLz42p866xaEyp_gMNRe8xs3_i" };
+  return fcm.sendToDevice(payload);
+
+  // const payload = {
+  //   "notification": {
+  //     "body": `you were accepted`
+  //     , //last change
+  //     "title": "congrats!"
+  //   },
+  //   "data": { "click_action": "FLUTTER_NOTIFICATION_CLICK", "id": "1", "status": "done" }
+  // };
+  //fcm.sendToTopic('projs', payload);
+  //return;
   // const eventData = {
   //   applicatant: request.body.applicatant,
   //   project: request.body.project,
