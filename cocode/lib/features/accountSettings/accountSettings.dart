@@ -83,18 +83,22 @@ class _settingsPageState extends State<settingsPage> {
                               vertical: 20, horizontal: 40),
                           color: Colors.blue,
                           onPressed: () async {
-                            var callable = FirebaseFunctions.instance
-                                .httpsCallable('notifyAccepted');
+                            var applicantToken =
+                                await getToken(Auth.getCurrentUserID());
 
-                            var x = await callable.call(<String, dynamic>{
-                              'applicatant':
-                                  'dMAQ86yzS0mbRuWeU1eUZG:APA91bECJROeC_xuZ5dOJDzkTdbIaAFuLbLRJXnnz1ffnI7jnc9c66I6VLz42p866xaEyp_gMNRe8xs3_i',
-                              'project': 'randproject',
-                              //replace param1 with the name of the parameter in the Cloud Function and the value you want to insert
-                            }).catchError((onError) {
-                              //Handle your error here if the function failed
-                              print(onError.toString());
+                            await getToken(Auth.getCurrentUserID())
+                                .then((value) async {
+                              var callable = FirebaseFunctions.instance
+                                  .httpsCallable('notifyAccepted');
+
+                              await callable.call(<String, dynamic>{
+                                'applicatant': value,
+                                'project': 'randproject',
+                              }).catchError((onError) {
+                                print(onError.toString());
+                              });
                             });
+                            print(applicantToken);
                           },
                           child: Text(
                             'Hi there',
@@ -425,5 +429,23 @@ class _settingsPageState extends State<settingsPage> {
         },
       ),
     );
+  }
+
+  static Future<List<String>> getToken(userId) async {
+    final FirebaseFirestore _db = FirebaseFirestore.instance;
+
+    List<String> token = [];
+    await _db
+        .collection('User')
+        .doc(userId)
+        .collection('tokens')
+        .get()
+        .then((snapshot) {
+      snapshot.docs.forEach((doc) {
+        token.add(doc.id.toString());
+      });
+    });
+
+    return token;
   }
 }

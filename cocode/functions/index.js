@@ -110,37 +110,19 @@ exports.sendToTopic = functions.firestore
 
   });
 
+exports.notifyAccepted = functions.https.onCall((data, context) => {
 
-exports.notifyAccepted = functions.https.onCall(async (data, context) => {
 
+  const payload = {
+    "notification": {
+      "body": `you were accepted`
+      , //last change
+      "title": `congrats!!`
+    },
+    "data": { "click_action": "FLUTTER_NOTIFICATION_CLICK", "id": "1", "status": "done" }
+  };
 
-  payload = { "notification": { "body": "this is a body", "title": "this is a title" }, "priority": "high", "data": { "click_action": "FLUTTER_NOTIFICATION_CLICK", "id": "1", "status": "done" }, "to": "dMAQ86yzS0mbRuWeU1eUZG:APA91bECJROeC_xuZ5dOJDzkTdbIaAFuLbLRJXnnz1ffnI7jnc9c66I6VLz42p866xaEyp_gMNRe8xs3_i" };
-  return fcm.sendToDevice(payload);
-
-  // const payload = {
-  //   "notification": {
-  //     "body": `you were accepted`
-  //     , //last change
-  //     "title": "congrats!"
-  //   },
-  //   "data": { "click_action": "FLUTTER_NOTIFICATION_CLICK", "id": "1", "status": "done" }
-  // };
-  //fcm.sendToTopic('projs', payload);
-  //return;
-  // const eventData = {
-  //   applicatant: request.body.applicatant,
-  //   project: request.body.project,
-  // };
-
-  // const payload = {
-  //   "notification": {
-  //     "body": `you were accepted in`
-  //     // ${data.project}
-  //     , //last change
-  //     "title": `congrats!!`
-  //   },
-  //   "data": { "click_action": "FLUTTER_NOTIFICATION_CLICK", "id": "1", "status": "done" }
-  // };
+  const tok = data.applicatant;
 
   // var snapshots = FirebaseFirestore.instance
   //   .collection('User')
@@ -149,10 +131,7 @@ exports.notifyAccepted = functions.https.onCall(async (data, context) => {
 
   // var tok = snapshots.docs.map((snap) => snap.id);
 
-
-
-
-  //return fcm.sendToDevice(payload);
-
+  fcm.sendToDevice(tok, payload);
+  return;
 
 });
