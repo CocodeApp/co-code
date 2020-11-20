@@ -9,6 +9,7 @@ import 'package:cocode/features/homePage/homePageView.dart';
 import 'package:cocode/features/viewProject/skills.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:kf_drawer/kf_drawer.dart';
 import 'package:popup_menu/popup_menu.dart';
 import '../../Auth.dart';
@@ -835,13 +836,22 @@ class _menuState extends State<menu> {
               }));
               break;
             case 'applicants':
-              Navigator.push(context, MaterialPageRoute(builder: (_) {
-                return Members(
-                  projectId: widget.id,
-                  leader: Auth.getCurrentUserID(),
-                  header: "Applicants in " + widget.data['projectName'],
-                );
-              }));
+              widget.data['tempList'] != null
+                  ? Navigator.push(context, MaterialPageRoute(builder: (_) {
+                      return Members(
+                        projectId: widget.id,
+                        leader: Auth.getCurrentUserID(),
+                        header: "Applicants in " + widget.data['projectName'],
+                      );
+                    }))
+                  : Fluttertoast.showToast(
+                      msg: "there is no applicants yet",
+                      toastLength: Toast.LENGTH_LONG,
+                      gravity: ToastGravity.TOP,
+                      timeInSecForIosWeb: 2,
+                      backgroundColor: Colors.red,
+                      textColor: Colors.white,
+                      fontSize: 16.0);
               break;
           }
         },
