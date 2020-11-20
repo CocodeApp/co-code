@@ -43,7 +43,6 @@ class _MembersListState extends State<MembersList> {
         projectName = data['projectName'];
         tempMember.value = data["tempList"];
         print(widget.projectId);
-        print(tempMember.value.length);
       }).catchError((e) {
         print(e.toString());
       });

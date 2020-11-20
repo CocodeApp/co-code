@@ -181,53 +181,28 @@ class ProjectDetails extends StatefulWidget {
 }
 
 class _ProjectDetailsState extends State<ProjectDetails> {
-  PopupMenu menu;
-  GlobalKey btnKey = GlobalKey();
   String imageURL;
 
   @override
-  void initState() {
-    super.initState();
-
-    menu = PopupMenu(items: [
-      MenuItem(
-          title: 'channels',
-          image: Icon(
-            Icons.chat,
-            color: Colors.white,
-          )),
-      MenuItem(
-          title: 'applicants',
-          image: Icon(
-            Icons.inbox,
-            color: Colors.white,
-          )),
-      MenuItem(
-          title: 'edit',
-          image: Icon(
-            Icons.settings,
-            color: Colors.white,
-          )),
-    ], onClickMenu: onClickMenu, onDismiss: onDismiss, maxColumn: 4);
-  }
-
-  void stateChanged(bool isShow) {
-    print('menu is ${isShow ? 'showing' : 'closed'}');
-  }
-
-  void onClickMenu(MenuItemProvider item) {}
-
-  void onDismiss() {
-    print('Menu is dismiss');
-  }
-
-  @override
   Widget build(BuildContext context) {
-    PopupMenu.context = context;
+    String whatTab =
+        widget.data['supervisor'] == "" ? "ideaOwner" : "supervisor";
+    List listofmembers = widget.data['teamMembers'];
+    String currentSuper = widget.data['supervisor'];
+    String currentOwner = widget.data['ideaOwner'];
+    String user = Auth.getCurrentUserID();
+    bool isSuper = currentSuper.compareTo(user) == 0 ? true : false;
+    bool isprojectmember = false;
+
+    if (listofmembers.contains(user) ||
+        currentSuper.compareTo(user) == 0 ||
+        currentOwner.compareTo(user) == 0) {
+      isprojectmember = true;
+    }
     final ValueNotifier<bool> wantToApply = ValueNotifier<bool>(true);
     final ValueNotifier<bool> show = ValueNotifier<bool>(true);
-    String status;
 
+    String status;
     Future<void> checkApplying() async {
       CollectionReference leaderprofile = FirebaseFirestore.instance
           .collection('User')
@@ -352,156 +327,6 @@ class _ProjectDetailsState extends State<ProjectDetails> {
                     ),
 
                     //here
-                    // FutureBuilder<DocumentSnapshot>(
-                    //     future: FirebaseFirestore.instance
-                    //         .collection('projects')
-                    //         .doc(id)
-                    //         .get(),
-                    //     builder: (BuildContext context,
-                    //         AsyncSnapshot<DocumentSnapshot> snapshot) {
-                    //       if (snapshot.hasError) {
-                    //         return Text("Something went wrong");
-                    //       }
-                    //       if (snapshot.connectionState ==
-                    //           ConnectionState.done) {
-                    //         Map<String, dynamic> data = snapshot.data.data();
-                    //         List listofmembers = data['teamMembers'];
-                    //         String currentSuper = data['supervisor'];
-                    //         String currentOwner = data['ideaOwner'];
-                    //         String project = data['projectName'];
-                    //         String user = Auth.getCurrentUserID();
-                    //         String listofwhat = "";
-                    //         if (currentSuper.compareTo(user) == 0)
-                    //           listofwhat = "Team Members Applicants";
-                    //         if (currentOwner.compareTo(user) == 0 &&
-                    //             currentSuper ==
-                    //                 "") //if they already have supervisor
-                    //           listofwhat = "Supervisors Applicants";
-
-                    //         //all project members can see it
-                    //         if (listofmembers
-                    //                 .contains(Auth.getCurrentUserID()) ||
-                    //             currentSuper.compareTo(user) == 0 ||
-                    //             currentOwner.compareTo(user) == 0) {
-                    //           return Padding(
-                    //             padding: const EdgeInsets.all(20.0),
-                    //             child: Column(
-                    //               mainAxisAlignment:
-                    //                   MainAxisAlignment.spaceAround,
-                    //               children: <Widget>[
-                    //                 Center(
-                    //                     child: RawMaterialButton(
-                    //                   elevation: 80.0,
-                    //                   fillColor: const Color(0XFF2A4793),
-                    //                   splashColor: const Color(0xff2980b9),
-                    //                   child: Padding(
-                    //                     padding: const EdgeInsets.symmetric(
-                    //                       vertical: 10.0,
-                    //                       horizontal: 35.0,
-                    //                     ),
-                    //                     child: Text(
-                    //                       "View Project channels",
-                    //                       style: TextStyle(
-                    //                           color: Colors.white,
-                    //                           fontSize: 20.0),
-                    //                     ),
-                    //                   ),
-                    //                   onPressed: () {
-                    //                     Navigator.push(context,
-                    //                         MaterialPageRoute(builder: (_) {
-                    //                       return channels(
-                    //                         projectId: id,
-                    //                         isSuper: listofwhat ==
-                    //                                 "Team Members Applicants"
-                    //                             ? true
-                    //                             : false,
-                    //                       ); //update
-                    //                     }));
-                    //                   },
-                    //                   shape: const StadiumBorder(),
-                    //                 )),
-                    //                 SizedBox(
-                    //                   height: 5.0,
-                    //                 ),
-                    //                 Center(
-                    //                   child: listofwhat != ""
-                    //                       ? RawMaterialButton(
-                    //                           elevation: 80.0,
-                    //                           fillColor:
-                    //                               const Color(0XFF2A4793),
-                    //                           splashColor:
-                    //                               const Color(0xff2980b9),
-                    //                           child: Padding(
-                    //                             padding:
-                    //                                 const EdgeInsets.symmetric(
-                    //                               vertical: 10.0,
-                    //                               horizontal: 20.0,
-                    //                             ),
-                    //                             child: Text(
-                    //                               listofwhat,
-                    //                               style: TextStyle(
-                    //                                   color: Colors.white,
-                    //                                   fontSize: 20.0),
-                    //                             ),
-                    //                           ),
-                    //                           onPressed: () {
-                    //                             Navigator.push(context,
-                    //                                 MaterialPageRoute(
-                    //                                     builder: (_) {
-                    //                               return Members(
-                    //                                 projectId: id,
-                    //                                 leader: user,
-                    //                                 header: "Applicants in " +
-                    //                                     project,
-                    //                               );
-                    //                             }));
-                    //                           },
-                    //                           shape: const StadiumBorder(),
-                    //                         )
-                    //                       : SizedBox(
-                    //                           width: 3.0,
-                    //                           height: 3.0,
-                    //                         ),
-                    //                 ),
-                    //               ],
-                    //             ),
-                    //           );
-                    //         }
-                    //         if (listofmembers
-                    //                 .contains(Auth.getCurrentUserID()) ||
-                    //             currentSuper.compareTo(user) == 0 ||
-                    //             currentOwner.compareTo(user) == 0) {
-                    //           //menu
-                    //         }
-                    //       }
-                    //       return Center(
-                    //         child: ValueListenableBuilder(
-                    //           builder: (BuildContext context, bool value,
-                    //               Widget child) {
-                    //             return wantToApply.value
-                    //                 ? FlatButton(
-                    //                     shape: RoundedRectangleBorder(
-                    //                         borderRadius:
-                    //                             BorderRadius.circular(15.0)),
-                    //                     color: Colors.lightGreen,
-                    //                     textColor: Colors.white,
-                    //                     onPressed: apply,
-                    //                     child: Text('Join'),
-                    //                   )
-                    //                 : FlatButton(
-                    //                     shape: RoundedRectangleBorder(
-                    //                         borderRadius:
-                    //                             BorderRadius.circular(15.0)),
-                    //                     color: Colors.blueGrey[200],
-                    //                     textColor: Colors.grey[700],
-                    //                     onPressed: NotApply,
-                    //                     child: Text('Unjoin'),
-                    //                   );
-                    //           },
-                    //           valueListenable: wantToApply,
-                    //         ),
-                    //       );
-                    //     }),
                   ],
                 ),
               ),
@@ -592,40 +417,442 @@ class _ProjectDetailsState extends State<ProjectDetails> {
           SizedBox(
             height: 20,
           ),
-          RawMaterialButton(
-              key: btnKey,
-              shape: const StadiumBorder(),
-              splashColor: Color(0xaaf57862),
-              fillColor: Color(0xccf57862),
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    SizedBox(
-                      width: 5.0,
-                    ),
-                    Text(
-                      'more',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 18.0,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              onPressed: () {
-                customBackground();
-              })
+          isprojectmember
+              ? menu(
+                  data: widget.data,
+                  id: widget.id,
+                  tab: widget.tab,
+                )
+              : ValueListenableBuilder(
+                  builder: (BuildContext context, bool value, Widget child) {
+                    return wantToApply.value
+                        ? OutlineButton(
+                            borderSide: BorderSide(color: Colors.green[300]),
+                            child: Text('Join',
+                                style: TextStyle(color: Colors.green[300])),
+                            onPressed: () {
+                              apply();
+                            },
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(18.0),
+                                side: BorderSide(color: Colors.green[300])),
+                          )
+                        : OutlineButton(
+                            borderSide:
+                                BorderSide(color: Colors.deepOrangeAccent),
+                            child: Text('Unjoin',
+                                style:
+                                    TextStyle(color: Colors.deepOrangeAccent)),
+                            onPressed: () {
+                              NotApply();
+                            },
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(18.0),
+                                side:
+                                    BorderSide(color: Colors.deepOrangeAccent)),
+                          );
+                  },
+                  valueListenable: wantToApply,
+                )
         ],
       ),
     );
   }
+}
 
-  void customBackground() {
-    PopupMenu menu = PopupMenu(
+class menu extends StatefulWidget {
+  Map<String, dynamic> data;
+  var id;
+
+  String tab;
+  menu({@required this.id, @required this.data, @required this.tab});
+  @override
+  _menuState createState() => _menuState();
+}
+
+class _menuState extends State<menu> {
+  PopupMenu superMenu;
+  PopupMenu ownerMenu;
+  PopupMenu memberMenu;
+  GlobalKey memberKey = GlobalKey();
+  GlobalKey ownerKey = GlobalKey();
+  GlobalKey superKey = GlobalKey();
+  @override
+  void initState() {
+    super.initState();
+
+    superMenu = PopupMenu(items: [
+      MenuItem(
+          title: 'channels',
+          image: Icon(
+            Icons.chat,
+            color: Colors.white,
+          )),
+      MenuItem(
+          title: 'applicants',
+          image: Icon(
+            Icons.inbox,
+            color: Colors.white,
+          )),
+      MenuItem(
+          title: 'edit',
+          image: Icon(
+            Icons.settings,
+            color: Colors.white,
+          )),
+    ], onClickMenu: onClickMenu, onDismiss: onDismiss, maxColumn: 4);
+    ownerMenu = PopupMenu(items: [
+      MenuItem(
+          title: 'channels',
+          image: Icon(
+            Icons.chat,
+            color: Colors.white,
+          )),
+      MenuItem(
+          title: 'applicants',
+          image: Icon(
+            Icons.inbox,
+            color: Colors.white,
+          )),
+      MenuItem(
+          title: 'events',
+          image: Icon(
+            Icons.calendar_today,
+            color: Colors.white,
+          )),
+    ], onClickMenu: onClickMenu, onDismiss: onDismiss, maxColumn: 4);
+    memberMenu = PopupMenu(items: [
+      MenuItem(
+          title: 'channels',
+          image: Icon(
+            Icons.chat,
+            color: Colors.white,
+          )),
+      MenuItem(
+          title: 'events',
+          image: Icon(
+            Icons.calendar_today,
+            color: Colors.white,
+          )),
+    ], onClickMenu: onClickMenu, onDismiss: onDismiss, maxColumn: 4);
+  }
+
+  void stateChanged(bool isShow) {
+    print('menu is ${isShow ? 'showing' : 'closed'}');
+  }
+
+  void onClickMenu(MenuItemProvider item) {}
+
+  void onDismiss() {
+    print('Menu is dismiss');
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    PopupMenu.context = context;
+
+    return FutureBuilder<DocumentSnapshot>(
+        future: FirebaseFirestore.instance
+            .collection('projects')
+            .doc(widget.id)
+            .get(),
+        builder:
+            (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
+          if (snapshot.data == null) return Container();
+          if (snapshot.hasError) {
+            return Text("Something went wrong");
+          }
+          if (snapshot.connectionState == ConnectionState.done) {
+            Map<String, dynamic> data = snapshot.data.data();
+            List listofmembers = data['teamMembers'];
+            String currentSuper = data['supervisor'];
+            String currentOwner = data['ideaOwner'];
+            String user = Auth.getCurrentUserID();
+            String listofwhat = "";
+            if (currentSuper.compareTo(user) == 0)
+              listofwhat = "Team Members Applicants";
+            if (currentOwner.compareTo(user) == 0 &&
+                currentSuper == "") //if they already have supervisor
+              listofwhat = "Supervisors Applicants";
+
+            if (listofmembers.contains(Auth.getCurrentUserID())) {
+              return RawMaterialButton(
+                  key: memberKey,
+                  shape: const StadiumBorder(),
+                  splashColor: Color(0xaaf57862),
+                  fillColor: Color(0xccf57862),
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        SizedBox(
+                          width: 5.0,
+                        ),
+                        Text(
+                          'more',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 18.0,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  onPressed: () {
+                    teamMemberMenu();
+                  });
+            } else if (currentSuper.compareTo(user) == 0) {
+              return RawMaterialButton(
+                  key: superKey,
+                  shape: const StadiumBorder(),
+                  splashColor: Color(0xaaf57862),
+                  fillColor: Color(0xccf57862),
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        SizedBox(
+                          width: 5.0,
+                        ),
+                        Text(
+                          'more',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 18.0,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  onPressed: () {
+                    superVisorMenu();
+                  });
+            } else if (currentOwner.compareTo(user) == 0) {
+              return RawMaterialButton(
+                  key: ownerKey,
+                  shape: const StadiumBorder(),
+                  splashColor: Color(0xaaf57862),
+                  fillColor: Color(0xccf57862),
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        SizedBox(
+                          width: 5.0,
+                        ),
+                        Text(
+                          'more',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 18.0,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  onPressed: () {
+                    ideaOwnerMenu();
+                  });
+            }
+            //all project members can see it
+            // if (listofmembers.contains(Auth.getCurrentUserID()) ||
+            //     currentSuper.compareTo(user) == 0 ||
+            //     currentOwner.compareTo(user) == 0) {
+            //   return Padding(
+            //     padding: const EdgeInsets.all(20.0),
+            //     child: Column(
+            //       mainAxisAlignment: MainAxisAlignment.spaceAround,
+            //       children: <Widget>[
+            //         Center(
+            //             child: RawMaterialButton(
+            //           elevation: 80.0,
+            //           fillColor: const Color(0XFF2A4793),
+            //           splashColor: const Color(0xff2980b9),
+            //           child: Padding(
+            //             padding: const EdgeInsets.symmetric(
+            //               vertical: 10.0,
+            //               horizontal: 35.0,
+            //     ),
+            //     child: Text(
+            //       "View Project channels",
+            //       style: TextStyle(color: Colors.white, fontSize: 20.0),
+            //     ),
+            //   ),
+            //   onPressed: () {
+            //     Navigator.push(context, MaterialPageRoute(builder: (_) {
+            //       return channels(
+            //         projectId: widget.id,
+            //         isSuper: listofwhat == "Team Members Applicants"
+            //             ? true
+            //             : false,
+            //       ); //update
+            //     }));
+            //   },
+            //   shape: const StadiumBorder(),
+            // )),
+            // SizedBox(
+            //   height: 5.0,
+            // ),
+            // Center(
+            //   child: listofwhat != ""
+            //       ? RawMaterialButton(
+            //           elevation: 80.0,
+            //           fillColor: const Color(0XFF2A4793),
+            //                   splashColor: const Color(0xff2980b9),
+            //                   child: Padding(
+            //                     padding: const EdgeInsets.symmetric(
+            //                       vertical: 10.0,
+            //                       horizontal: 20.0,
+            //                     ),
+            //                     child: Text(
+            //                       listofwhat,
+            //                       style: TextStyle(
+            //                           color: Colors.white, fontSize: 20.0),
+            //                     ),
+            //                   ),
+            //                   onPressed: () {
+            //                     Navigator.push(context,
+            //                         MaterialPageRoute(builder: (_) {
+            //                       return Members(
+            //                         projectId: widget.id,
+            //                         leader: user,
+            //                         header: "Applicants in " + project,
+            //                       );
+            //                     }));
+            //                   },
+            //                   shape: const StadiumBorder(),
+            //                 )
+            //               : SizedBox(
+            //                   width: 3.0,
+            //                   height: 3.0,
+            //                 ),
+            //         ),
+            //       ],
+            //     ),
+            //   );
+            // }
+          }
+        });
+  }
+
+  void teamMemberMenu() {
+    memberMenu = PopupMenu(
+        backgroundColor: Colors.indigo,
+        lineColor: Colors.white,
+        // maxColumn: 2,
+        items: [
+          MenuItem(
+              title: 'Channels',
+              // textStyle: TextStyle(fontSize: 10.0, color: Colors.tealAccent),
+              image: Icon(
+                Icons.chat,
+                color: Colors.white,
+              )),
+          MenuItem(
+              title: 'events',
+              image: Icon(
+                Icons.calendar_today,
+                color: Colors.white,
+              )),
+        ],
+        onClickMenu: (MenuItemProvider item) {
+          switch (item.menuTitle) {
+            case 'Channels':
+              Navigator.push(context, MaterialPageRoute(builder: (_) {
+                return channels(
+                  projectId: widget.id,
+                  isSuper: false,
+                ); //update
+              }));
+              break;
+            case 'events':
+              return Navigator.push(context, MaterialPageRoute(builder: (_) {
+                return ListOfEvents(
+                  projectId: widget.id,
+                  isSuper: false,
+                );
+              }));
+
+              break;
+          }
+        },
+        stateChanged: stateChanged,
+        onDismiss: onDismiss);
+
+    memberMenu.show(widgetKey: memberKey);
+  }
+
+  void ideaOwnerMenu() {
+    ownerMenu = PopupMenu(
+        backgroundColor: Colors.indigo,
+        lineColor: Colors.white,
+        // maxColumn: 2,
+        items: [
+          MenuItem(
+              title: 'Channels',
+              // textStyle: TextStyle(fontSize: 10.0, color: Colors.tealAccent),
+              image: Icon(
+                Icons.chat,
+                color: Colors.white,
+              )),
+          MenuItem(
+              title: 'applicants',
+              image: Icon(
+                Icons.inbox,
+                color: Colors.white,
+              )),
+          MenuItem(
+              title: 'events',
+              image: Icon(
+                Icons.calendar_today,
+                color: Colors.white,
+              )),
+        ],
+        onClickMenu: (MenuItemProvider item) {
+          switch (item.menuTitle) {
+            case 'events':
+              Navigator.push(context, MaterialPageRoute(builder: (_) {
+                return ListOfEvents(
+                  projectId: widget.id,
+                  isSuper: false,
+                );
+              }));
+
+              break;
+
+            case 'Channels':
+              Navigator.push(context, MaterialPageRoute(builder: (_) {
+                return channels(
+                  projectId: widget.id,
+                  isSuper: false,
+                ); //update
+              }));
+              break;
+            case 'applicants':
+              Navigator.push(context, MaterialPageRoute(builder: (_) {
+                return Members(
+                  projectId: widget.id,
+                  leader: Auth.getCurrentUserID(),
+                  header: "Applicants in " + widget.data['projectName'],
+                );
+              }));
+              break;
+          }
+        },
+        stateChanged: stateChanged,
+        onDismiss: onDismiss);
+
+    ownerMenu.show(widgetKey: ownerKey);
+  }
+
+  void superVisorMenu() {
+    superMenu = PopupMenu(
         backgroundColor: Colors.indigo,
         lineColor: Colors.white,
         // maxColumn: 2,
@@ -677,6 +904,12 @@ class _ProjectDetailsState extends State<ProjectDetails> {
               });
               break;
             case 'Channels':
+              Navigator.push(context, MaterialPageRoute(builder: (_) {
+                return channels(
+                  projectId: widget.id,
+                  isSuper: true,
+                ); //update
+              }));
               break;
             case 'applicants':
               break;
@@ -685,7 +918,7 @@ class _ProjectDetailsState extends State<ProjectDetails> {
         stateChanged: stateChanged,
         onDismiss: onDismiss);
 
-    menu.show(widgetKey: btnKey);
+    superMenu.show(widgetKey: superKey);
   }
 }
 
