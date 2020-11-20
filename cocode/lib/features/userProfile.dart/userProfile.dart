@@ -250,7 +250,6 @@ class _profilePageState extends State<profilePage> {
                     .doc(doc[index].id);
                   Map<String, dynamic> daa = data;
                   projectImg = daa['image'];
-
                // print("this is projectImg "+projectImg);// only first image
                 return Row(
                   children: [
@@ -321,7 +320,7 @@ class _profilePageState extends State<profilePage> {
     return Container(
       //first part the blue one
       width: MediaQuery.of(context).size.width * 0.9998,
-      height: 0.41 * MediaQuery.of(context).size.height,//ask girls ,9
+      height: 0.41 * MediaQuery.of(context).size.height,
       decoration: BoxDecoration(
         gradient: new LinearGradient(
             colors: <Color>[ //7928D1##
