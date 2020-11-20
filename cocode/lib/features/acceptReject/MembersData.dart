@@ -156,16 +156,21 @@ class _MembersListState extends State<MembersList> {
                                     .catchError((error) =>
                                         print("Failed to add project: $error"));
 
-                                var callable = FirebaseFunctions.instance
-                                    .httpsCallable('notifyAccepted');
+                                //sending notification
 
-                                var x = await callable.call(<String, dynamic>{
-                                  'applicatant': id,
-                                  'project': projectName,
-                                  //replace param1 with the name of the parameter in the Cloud Function and the value you want to insert
-                                }).catchError((onError) {
-                                  //Handle your error here if the function failed
-                                  print(onError.toString());
+                                await getToken(id).then((value) async {
+                                  var callable = FirebaseFunctions.instance
+                                      .httpsCallable('notifyAccepted');
+                                  if (value != null) {
+                                    print("it exist !!!!!!!!!!!!!!!!!!!");
+                                    await callable.call(<String, dynamic>{
+                                      'applicatant': value,
+                                      'project': projectName,
+                                      'role': 'supervisor'
+                                    }).catchError((onError) {
+                                      print(onError.toString());
+                                    });
+                                  }
                                 });
 
                                 //clean the list "not important"
@@ -232,16 +237,19 @@ class _MembersListState extends State<MembersList> {
                                     .catchError((error) =>
                                         print("Failed to add project: $error"));
                                 //notify user
-                                var callable = FirebaseFunctions.instance
-                                    .httpsCallable('notifyAccepted');
-
-                                var x = await callable.call(<String, dynamic>{
-                                  'applicatant': id,
-                                  'project': projectName,
-
-                                  //replace param1 with the name of the parameter in the Cloud Function and the value you want to insert
-                                }).catchError((onError) {
-                                  print(onError.toString());
+                                await getToken(id).then((value) async {
+                                  var callable = FirebaseFunctions.instance
+                                      .httpsCallable('notifyAccepted');
+                                  if (value != null) {
+                                    print("it exist !!!!!!!!!!!!!!!!!!!");
+                                    await callable.call(<String, dynamic>{
+                                      'applicatant': value,
+                                      'project': projectName,
+                                      'role': 'member'
+                                    }).catchError((onError) {
+                                      print(onError.toString());
+                                    });
+                                  }
                                 });
 
                                 //remove it from tempmember
@@ -294,5 +302,23 @@ class _MembersListState extends State<MembersList> {
             },
           );
         });
+  }
+
+  static Future<List<String>> getToken(userId) async {
+    final FirebaseFirestore _db = FirebaseFirestore.instance;
+
+    List<String> token = [];
+    await _db
+        .collection('User')
+        .doc(userId)
+        .collection('tokens')
+        .get()
+        .then((snapshot) {
+      snapshot.docs.forEach((doc) {
+        token.add(doc.id.toString());
+      });
+    });
+
+    return token;
   }
 }

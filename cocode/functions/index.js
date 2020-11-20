@@ -111,32 +111,28 @@ exports.sendToTopic = functions.firestore
   });
 
 
-exports.notifyAccepted = functions.https.onCall((data, context) => {
-  // const eventData = {
-  //   applicatant: request.body.applicatant,
-  //   project: request.body.project,
-  // };
-
-  const payload = {
-    "notification": {
-      "body": `you were accepted in ${data.project}`
-      , //last change
-      "title": `congrats ${data.applicatant}!!`
-    },
-    "data": { "click_action": "FLUTTER_NOTIFICATION_CLICK", "id": "1", "status": "done" }
-  };
-
-  var snapshots = FirebaseFirestore.instance
-    .collection('User')
-    .doc(data.applicatant)
-    .collection('tokens').get();
-
-  var tok = snapshots.docs.map((snap) => snap.id);
+  exports.notifyAccepted = functions.https.onCall((data, context) => {
 
 
-
-
-  return fcm.sendToDevice(tok, payload);
-
-
-});
+    const payload = {
+      "notification": {
+        "body": `you were accepted as ${data.role} in ${data.project}`
+        , //last change
+        "title": `congrats!!`
+      },
+      "data": { "click_action": "FLUTTER_NOTIFICATION_CLICK", "id": "1", "status": "done" }
+    };
+  
+    const tok = data.applicatant;
+  
+    // var snapshots = FirebaseFirestore.instance
+    //   .collection('User')
+    //   .doc(data.applicatant)
+    //   .collection('tokens').get();
+  
+    // var tok = snapshots.docs.map((snap) => snap.id);
+  
+    fcm.sendToDevice(tok, payload);
+    return;
+  
+  });
