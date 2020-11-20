@@ -22,6 +22,7 @@ class _MembersListState extends State<MembersList> {
   String projectImg;
   @override
   Widget build(BuildContext context) {
+    bool noApplicants = false;
     Future<void> getTempList() async {
       Future<DocumentSnapshot> project = FirebaseFirestore.instance
           .collection("projects")
@@ -41,7 +42,10 @@ class _MembersListState extends State<MembersList> {
         var data = value.data();
         role = data['role'];
         projectName = data['projectName'];
-        tempMember.value = data["tempList"];
+        if (data["tempList"] != null) {
+          tempMember.value = data["tempList"];
+        } else
+          noApplicants = true;
         print(widget.projectId);
       }).catchError((e) {
         print(e.toString());
@@ -59,6 +63,7 @@ class _MembersListState extends State<MembersList> {
               return Text("Something went wrong");
             }
             if (snapshot.connectionState == ConnectionState.done) {
+              if (noApplicants) return Container();
               Map<String, dynamic> data = snapshot.data.data();
               String first = data['firstName'];
               String last = data['lastName'];

@@ -68,47 +68,6 @@ class _viewProjectState extends State<viewProject> {
           return DefaultTabController(
             length: 3,
             child: Scaffold(
-              // floatingActionButton: isprojectmember
-              //     ? RawMaterialButton(
-              //         shape: const StadiumBorder(),
-              //         splashColor: Color(0xaaf57862),
-              //         fillColor: Color(0xccf57862),
-              //         child: Padding(
-              //           padding: const EdgeInsets.all(8.0),
-              //           child: Row(
-              //             mainAxisSize: MainAxisSize.min,
-              //             mainAxisAlignment: MainAxisAlignment.end,
-              //             children: [
-              //               Icon(
-              //                 Icons.event,
-              //                 color: Colors.white,
-              //               ),
-              //               SizedBox(
-              //                 width: 5.0,
-              //               ),
-              //               Text(
-              //                 'project events',
-              //                 style: TextStyle(
-              //                   color: Colors.white,
-              //                   fontSize: 15.0,
-              //                 ),
-              //               ),
-              //             ],
-              //           ),
-              //         ),
-              //         onPressed: () {
-              //           Navigator.push(context, MaterialPageRoute(builder: (_) {
-              //             return ListOfEvents(
-              //               projectId: widget.id,
-              //               isSuper: isSuper,
-              //             );
-              //           }));
-              //  })
-              // : FloatingActionButton(
-              //     elevation: 0.0,
-              //     backgroundColor: Colors.transparent,
-              //     onPressed: null,
-              //   ),
               backgroundColor: Colors.white,
               appBar: AppBar(
                 elevation: 0,
@@ -550,6 +509,19 @@ class _menuState extends State<menu> {
 
   @override
   Widget build(BuildContext context) {
+    Future<void> checkApplicants() async {
+      CollectionReference leaderprofile = FirebaseFirestore.instance
+          .collection('User')
+          .doc(widget.data[widget.tab])
+          .collection('myProjects');
+
+      await leaderprofile.doc(widget.id).get().then((value) {
+        List listofapplicants = value.data()['tempList'];
+      }).catchError((e) {
+        print(e.toString());
+      });
+    }
+
     PopupMenu.context = context;
 
     return FutureBuilder<DocumentSnapshot>(
@@ -569,12 +541,6 @@ class _menuState extends State<menu> {
             String currentSuper = data['supervisor'];
             String currentOwner = data['ideaOwner'];
             String user = Auth.getCurrentUserID();
-            String listofwhat = "";
-            if (currentSuper.compareTo(user) == 0)
-              listofwhat = "Team Members Applicants";
-            if (currentOwner.compareTo(user) == 0 &&
-                currentSuper == "") //if they already have supervisor
-              listofwhat = "Supervisors Applicants";
 
             if (listofmembers.contains(Auth.getCurrentUserID())) {
               return RawMaterialButton(
@@ -661,45 +627,7 @@ class _menuState extends State<menu> {
                     ideaOwnerMenu();
                   });
             }
-            //all project members can see it
-            // if (listofmembers.contains(Auth.getCurrentUserID()) ||
-            //     currentSuper.compareTo(user) == 0 ||
-            //     currentOwner.compareTo(user) == 0) {
-            //   return Padding(
-            //     padding: const EdgeInsets.all(20.0),
-            //     child: Column(
-            //       mainAxisAlignment: MainAxisAlignment.spaceAround,
-            //       children: <Widget>[
-            //         Center(
-            //             child: RawMaterialButton(
-            //           elevation: 80.0,
-            //           fillColor: const Color(0XFF2A4793),
-            //           splashColor: const Color(0xff2980b9),
-            //           child: Padding(
-            //             padding: const EdgeInsets.symmetric(
-            //               vertical: 10.0,
-            //               horizontal: 35.0,
-            //     ),
-            //     child: Text(
-            //       "View Project channels",
-            //       style: TextStyle(color: Colors.white, fontSize: 20.0),
-            //     ),
-            //   ),
-            //   onPressed: () {
-            //     Navigator.push(context, MaterialPageRoute(builder: (_) {
-            //       return channels(
-            //         projectId: widget.id,
-            //         isSuper: listofwhat == "Team Members Applicants"
-            //             ? true
-            //             : false,
-            //       ); //update
-            //     }));
-            //   },
-            //   shape: const StadiumBorder(),
-            // )),
-            // SizedBox(
-            //   height: 5.0,
-            // ),
+
             // Center(
             //   child: listofwhat != ""
             //       ? RawMaterialButton(
@@ -836,22 +764,14 @@ class _menuState extends State<menu> {
               }));
               break;
             case 'applicants':
-              widget.data['tempList'] != null
-                  ? Navigator.push(context, MaterialPageRoute(builder: (_) {
-                      return Members(
-                        projectId: widget.id,
-                        leader: Auth.getCurrentUserID(),
-                        header: "Applicants in " + widget.data['projectName'],
-                      );
-                    }))
-                  : Fluttertoast.showToast(
-                      msg: "there is no applicants yet",
-                      toastLength: Toast.LENGTH_LONG,
-                      gravity: ToastGravity.TOP,
-                      timeInSecForIosWeb: 2,
-                      backgroundColor: Colors.red,
-                      textColor: Colors.white,
-                      fontSize: 16.0);
+              Navigator.push(context, MaterialPageRoute(builder: (_) {
+                return Members(
+                  projectId: widget.id,
+                  leader: Auth.getCurrentUserID(),
+                  header: "Applicants in " + widget.data['projectName'],
+                );
+              }));
+
               break;
           }
         },
@@ -922,6 +842,13 @@ class _menuState extends State<menu> {
               }));
               break;
             case 'applicants':
+              Navigator.push(context, MaterialPageRoute(builder: (_) {
+                return Members(
+                  projectId: widget.id,
+                  leader: Auth.getCurrentUserID(),
+                  header: "Applicants in " + widget.data['projectName'],
+                );
+              }));
               break;
           }
         },
