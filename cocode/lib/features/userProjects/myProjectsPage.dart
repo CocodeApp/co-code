@@ -60,7 +60,7 @@ class _userProjectsState extends State<userProjects> {
                               id: doc[index].id,
                               tab: "member",
                               previouspage:
-                                  "list of applicants"); //// latefa     // this must lead to the projects that user in
+                                  ""); //// latefa     // this must lead to the projects that user in
                         },
                       ),
                     );
