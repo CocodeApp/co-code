@@ -1,3 +1,5 @@
+
+
 import 'package:cocode/features/addEvents/addEvent.dart';
 import 'package:cocode/features/addEvents/listOfEvent.dart';
 import 'package:cocode/features/editProject/editProjectForm.dart';
@@ -74,10 +76,10 @@ class _viewProjectState extends State<viewProject> {
                 leading: BackButton(
                   color: Colors.indigo,
                   onPressed: () {
-                    if (widget.previouspage.length == 0) {
+                    if (widget.previouspage.length != 0) {
                       Navigator.pop(context);
                     } else {
-                      Navigator.push(context, MaterialPageRoute(builder: (_) {
+                      Navigator.pop(context, MaterialPageRoute(builder: (_) {
                         return homePageView();
                       }));
                     }
@@ -463,21 +465,27 @@ class _menuState extends State<menu> {
     ], onClickMenu: onClickMenu, onDismiss: onDismiss, maxColumn: 4);
     ownerMenu = PopupMenu(items: [
       MenuItem(
-          title: 'channels',
+          title: 'Channels',
           image: Icon(
             Icons.chat,
             color: Colors.white,
           )),
       MenuItem(
-          title: 'applicants',
+          title: 'Applicants',
           image: Icon(
             Icons.inbox,
             color: Colors.white,
           )),
       MenuItem(
-          title: 'events',
+          title: 'Events',
           image: Icon(
             Icons.calendar_today,
+            color: Colors.white,
+          )),
+      MenuItem(
+          title: 'Delete',
+          image: Icon(
+            Icons.delete,
             color: Colors.white,
           )),
     ], onClickMenu: onClickMenu, onDismiss: onDismiss, maxColumn: 4);
@@ -624,7 +632,8 @@ class _menuState extends State<menu> {
                     ),
                   ),
                   onPressed: () {
-                    ideaOwnerMenu();
+                     bool empty = ((currentSuper.isEmpty)&&(listofmembers.isEmpty));
+                    ideaOwnerMenu(empty);
                   });
             }
 
@@ -717,42 +726,50 @@ class _menuState extends State<menu> {
     memberMenu.show(widgetKey: memberKey);
   }
 
-  void ideaOwnerMenu() {
+  void ideaOwnerMenu(bool empty) {
+    List<MenuItemProvider> items = [
+      MenuItem(
+          title: 'Channels',
+          // textStyle: TextStyle(fontSize: 10.0, color: Colors.tealAccent),
+          image: Icon(
+            Icons.chat,
+            color: Colors.white,
+          )),
+      MenuItem(
+          title: 'Applicants',
+          image: Icon(
+            Icons.inbox,
+            color: Colors.white,
+          )),
+      MenuItem(
+          title: 'Events',
+          image: Icon(
+            Icons.calendar_today,
+            color: Colors.white,
+          )),
+    ];
+    if (empty){
+      items.add( MenuItem(
+          title: 'Delete',
+          image: Icon(
+            Icons.delete,
+            color: Colors.white,
+          )));
+    }
     ownerMenu = PopupMenu(
         backgroundColor: Colors.indigo,
         lineColor: Colors.white,
         // maxColumn: 2,
-        items: [
-          MenuItem(
-              title: 'Channels',
-              // textStyle: TextStyle(fontSize: 10.0, color: Colors.tealAccent),
-              image: Icon(
-                Icons.chat,
-                color: Colors.white,
-              )),
-          MenuItem(
-              title: 'applicants',
-              image: Icon(
-                Icons.inbox,
-                color: Colors.white,
-              )),
-          MenuItem(
-              title: 'events',
-              image: Icon(
-                Icons.calendar_today,
-                color: Colors.white,
-              )),
-        ],
+        items: items,
         onClickMenu: (MenuItemProvider item) {
           switch (item.menuTitle) {
-            case 'events':
+            case 'Events':
               Navigator.push(context, MaterialPageRoute(builder: (_) {
                 return ListOfEvents(
                   projectId: widget.id,
                   isSuper: false,
                 );
               }));
-
               break;
 
             case 'Channels':
@@ -763,7 +780,8 @@ class _menuState extends State<menu> {
                 ); //update
               }));
               break;
-            case 'applicants':
+
+            case 'Applicants':
               Navigator.push(context, MaterialPageRoute(builder: (_) {
                 return Members(
                   projectId: widget.id,
@@ -771,7 +789,34 @@ class _menuState extends State<menu> {
                   header: "Applicants in " + widget.data['projectName'],
                 );
               }));
+              break;
 
+            case 'Delete': {
+              /* if the project has no members nor supervisor
+              * display confirmation message
+              * if ok, delete project*/
+              String name = widget.data['projectName'];
+                showDialog(
+                    context: context,
+                    builder: (_) => AlertDialog(
+                      title: Text("Delete Project"),
+                      content: Text("Are you sure you want to delete $name? this can't be undone"),
+                      actions: [
+                        FlatButton(
+                            textColor: Colors.red,
+                            child: Text("Delete"),
+                            onPressed: (){
+                              deleteProject(name);
+                            }),
+                        FlatButton(
+                            child: Text("Cancel"),
+                            onPressed: () {
+                              Navigator.of(context).pop();
+                            }),
+                      ],
+                    ),
+                );
+            }
               break;
           }
         },
@@ -779,6 +824,61 @@ class _menuState extends State<menu> {
         onDismiss: onDismiss);
 
     ownerMenu.show(widgetKey: ownerKey);
+  }
+
+  void deleteProject(String name){
+    final nameController = TextEditingController();
+    showDialog(
+        context: context,
+        builder: (_) => AlertDialog(
+          title: Text("Delete Project"),
+          content: SingleChildScrollView(
+            child: ListBody(
+              children: <Widget>[
+                Text('Type $name to confirm deletion'),
+                TextField(
+                  // decoration: InputDecoration(
+                  // ),
+                  controller: nameController,
+                ),
+              ],
+            ),
+          ),
+          actions: [
+            FlatButton(
+                textColor: Colors.red,
+                child: Text("Delete"),
+                onPressed: (){
+                  if (nameController.text == name){
+                    // Deleting from projects collection
+                    CollectionReference projects = FirebaseFirestore.instance.collection('projects');
+                    projects.doc(widget.id).delete()
+                        .then((value) => "Project deleted")
+                        .catchError((error) => print("Failed to delete project: $error"));
+                    // Deleting from user > myProjects collection
+                    String user = Auth.getCurrentUserID();
+                    CollectionReference userProjects = FirebaseFirestore.instance.collection('User')
+                        .doc(user).collection('myProjects');
+                    userProjects.doc(widget.id).delete()
+                        .then((value) => "User project deleted")
+                        .catchError((error) => print("Failed to delete user project: $error"));
+                    // Navigating to home page after deletion
+                    Navigator.push(context, MaterialPageRoute(builder: (_) {
+                      return homePageView();
+                    }));
+                    Fluttertoast.showToast(
+                        msg: "$name Deleted Successfully",
+                        toastLength: Toast.LENGTH_LONG,
+                        gravity: ToastGravity.TOP,
+                        timeInSecForIosWeb: 5,
+                        backgroundColor: Colors.indigo,
+                        textColor: Colors.white,
+                        fontSize: 16.0);
+                  }
+                }),
+          ],
+        ),
+    );
   }
 
   void superVisorMenu() {
