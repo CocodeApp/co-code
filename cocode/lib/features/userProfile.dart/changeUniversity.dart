@@ -159,7 +159,7 @@ class _changeUniversityState extends State<changeUniversity> {
                               ),
                             ),
                             Container(
-                              width: 125.0,
+                              width: 300.0,
                               child: TextFieldBlocBuilder(
                                 textFieldBloc: _editBioFormBloc._uniFieldBloc,
                                 suffixButton: SuffixButton
@@ -168,7 +168,7 @@ class _changeUniversityState extends State<changeUniversity> {
                                 textAlignVertical: TextAlignVertical.center,
                                 style: TextStyle(fontSize: 20),
                                 decoration: new InputDecoration(
-                                  labelText: 'University',
+                                  labelText: '                       University',
                                   border: UnderlineInputBorder(
                                       borderSide:
                                           BorderSide(color: Colors.red)),

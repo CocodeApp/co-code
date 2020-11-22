@@ -87,50 +87,96 @@ class _channelsState extends State<channels> {
         scrollDirection: Axis.vertical,
         itemCount: channels.length,
         itemBuilder: (context, index) {
-          return Container(
-            height: 120.0,
-            margin: const EdgeInsets.symmetric(
-              vertical: 16.0,
-              horizontal: 24.0,
-            ),
-            child: Stack(children: [
-              Container(
-                clipBehavior: Clip.hardEdge,
-                alignment: Alignment.center,
-                height: 124.0,
-                decoration: new BoxDecoration(
-                  color: new Color(0xFFD1DDED),
-                  shape: BoxShape.rectangle,
-                  borderRadius: new BorderRadius.circular(8.0),
-                  boxShadow: <BoxShadow>[
-                    new BoxShadow(
-                      color: Colors.black12,
-                      blurRadius: 10.0,
-                      offset: new Offset(0.0, 10.0),
+          return InkWell(
+            onTap: () {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => Chat(
+                        projectId: widget.projectId,
+                        channleId: channels[index].id),
+                  ));
+            },
+            child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Card(
+                  elevation: 2,
+                  child: ClipPath(
+                    child: Container(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.fromLTRB(25, 5, 0, 5),
+                            child: Text(
+                              channels[index].data()['name'],
+                              textAlign: TextAlign.left,
+                              style: TextStyle(
+                                fontSize: 16,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                      height: 60,
+                      decoration: BoxDecoration(
+                          border: Border(
+                              left: BorderSide(
+                                  color: index % 2 == 0
+                                      ? Colors.indigo
+                                      : Colors.deepOrangeAccent,
+                                  width: 5))),
                     ),
-                  ],
-                ),
-                child: InkWell(
-                  splashColor: Colors.blue.withAlpha(30),
-                  onTap: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => Chat(
-                              projectId: widget.projectId,
-                              channleId: channels[index].id),
-                        ));
-                  },
-                  child: ListTile(
-                    title: Text(
-                      channels[index].data()['name'],
-                      textAlign: TextAlign.center,
-                    ),
+                    clipper: ShapeBorderClipper(
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(3))),
                   ),
-                ),
-              ),
-            ]),
+                )),
           );
+          // Container(
+          //   height: 120.0,
+          //   margin: const EdgeInsets.symmetric(
+          //     vertical: 16.0,
+          //     horizontal: 24.0,
+          //   ),
+          //   child: Stack(children: [
+          //     Container(
+          //       clipBehavior: Clip.hardEdge,
+          //       alignment: Alignment.center,
+          //       height: 124.0,
+          //       decoration: new BoxDecoration(
+          //         color: new Color(0xFFD1DDED),
+          //         shape: BoxShape.rectangle,
+          //         borderRadius: new BorderRadius.circular(8.0),
+          //         boxShadow: <BoxShadow>[
+          //           new BoxShadow(
+          //             color: Colors.black12,
+          //             blurRadius: 10.0,
+          //             offset: new Offset(0.0, 10.0),
+          //           ),
+          //         ],
+          //       ),
+          //       child: InkWell(
+          //         splashColor: Colors.blue.withAlpha(30),
+          //         onTap: () {
+          //           Navigator.push(
+          //               context,
+          //               MaterialPageRoute(
+          //                 builder: (context) => Chat(
+          //                     projectId: widget.projectId,
+          //                     channleId: channels[index].id),
+          //               ));
+          //         },
+          //         child: ListTile(
+          //           title: Text(
+          //             channels[index].data()['name'],
+          //             textAlign: TextAlign.center,
+          //           ),
+          //         ),
+          //       ),
+          //     ),
+          //   ]),
+          // );
         });
   }
 

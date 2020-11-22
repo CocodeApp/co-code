@@ -159,15 +159,17 @@ class _changeMajorState extends State<changeMajor> {
                                       ),
                                     ),
                                     Container(
-                                      width: 125.0,
+                                      width: 300.0,
                                       child: TextFieldBlocBuilder(
                                         textFieldBloc: _editBioFormBloc._majorFieldBloc,
                                         suffixButton: SuffixButton
                                             .circularIndicatorWhenIsAsyncValidating,
                                         textAlign: TextAlign.center,
                                      textAlignVertical: TextAlignVertical.center,                                        style: TextStyle(fontSize: 20),
+
                                         decoration: new InputDecoration(
-                                          labelText:  '    Major',
+                                          labelText:  '                          Major',
+
                                           border: UnderlineInputBorder(
                                               borderSide:
                                               BorderSide(color: Colors.red)),
