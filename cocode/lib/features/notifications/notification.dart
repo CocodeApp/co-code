@@ -3,7 +3,7 @@ import 'package:cocode/buttons/indicator.dart';
 import 'package:cocode/Auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:kf_drawer/kf_drawer.dart';
-import 'notificationSettings.dart';
+
 
 class notification extends KFDrawerContent {
   @override

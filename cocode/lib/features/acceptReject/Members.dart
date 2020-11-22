@@ -23,7 +23,7 @@ class _MembersState extends State<Members> {
         leading: BackButton(
           color: Colors.deepOrangeAccent,
           onPressed: () =>
-              (Navigator.push(context, MaterialPageRoute(builder: (_) {
+              (Navigator.pop(context, MaterialPageRoute(builder: (_) {
             return viewProject(
               id: widget.projectId,
               tab: "member",
