@@ -16,7 +16,7 @@ class _notificationState extends State<notification> {
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<QuerySnapshot>(
-        stream: notifications.snapshots(),
+        stream: notifications.orderBy('time', descending: true).snapshots(),
         builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot){
           if (snapshot.data == null) return indicator();
           var doc = snapshot.data.docs;
