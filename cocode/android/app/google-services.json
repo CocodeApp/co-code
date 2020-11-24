@@ -59,8 +59,6 @@
       },
       "oauth_client": [
         {
-<<<<<<< HEAD
-=======
           "client_id": "592759573393-8tvbn4eakg3el71jllee6ctv3tdu6o82.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
@@ -69,7 +67,6 @@
           }
         },
         {
->>>>>>> cloud_notifications
           "client_id": "592759573393-rot9rvg9711vucjior7kg1kcn8crnvar.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
