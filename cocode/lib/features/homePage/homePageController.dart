@@ -89,6 +89,7 @@ class _homePageControllerState extends State<homePageController> {
     users.doc(user).collection('notifications').add({
       'title' : title,
       'body' : body,
+      'time' : DateTime.now(),
     });
   }
 
