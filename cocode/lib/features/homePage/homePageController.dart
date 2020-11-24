@@ -59,10 +59,12 @@ class _homePageControllerState extends State<homePageController> {
       },
       onLaunch: (Map<String, dynamic> message) async {
         print("onLaunch: $message");
+        addNoti(message['notification']['title'], message['notification']['body']);
         return;
       },
       onResume: (Map<String, dynamic> message) async {
         print("onResume: $message");
+        addNoti(message['notification']['title'], message['notification']['body']);
         return;
       },
     );
