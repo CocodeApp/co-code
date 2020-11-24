@@ -43,7 +43,7 @@ class _profilePageState extends State<profilePage> {
             Map<String, dynamic> data = snapshot.data.data();
             CollectionReference userProjects = FirebaseFirestore.instance
                 .collection('User')
-                .doc(id)
+                .doc(widget.userId)
                 .collection('myProjects');
             List<dynamic> skills = data['skills'];
 
@@ -238,74 +238,72 @@ class _profilePageState extends State<profilePage> {
 
         if (snapshot.hasData) {
           return Container(
-            padding: const EdgeInsets.only(left :20, right: 20),
-            constraints: BoxConstraints(minHeight: 10.0, maxHeight:100,),
+            padding: const EdgeInsets.only(left: 20, right: 20),
+            constraints: BoxConstraints(
+              minHeight: 10.0,
+              maxHeight: 100,
+            ),
             child: ListView.builder(
               scrollDirection: Axis.horizontal,
               itemCount: doc.length,
               itemBuilder: (context, index) {
                 Map data = doc[index].data();
-                FirebaseFirestore.instance
-                    .collection('projects')
-                    .doc(doc[index].id);
-                  Map<String, dynamic> daa = data;
-                  projectImg = daa['image'];
-               // print("this is projectImg "+projectImg);// only first image
+                String projectImg;
+
+                projectImg;
                 return Row(
                   children: [
                     SizedBox(width: 15),
                     InkWell(
 //stream list v
-                    onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) {
-                        return new viewProject(
-                          id: doc[index].id,
-                          tab: "ideaOwner",
-                          previouspage: "",
-                        ); //// latefa     // this must lead to the projects that user in
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) {
+                              return new viewProject(
+                                id: doc[index].id,
+                                tab: "ideaOwner",
+                                previouspage: "",
+                              ); //// latefa     // this must lead to the projects that user in
+                            },
+                          ),
+                        );
                       },
-                    ),
-                  );
-                },
-                child: Column(
+                      child: Column(
 // list of projects from data base
-                children: [
-                ClipRRect(
-                borderRadius: BorderRadius.circular(20.0),
-                child:Container(
-                height: 70.0,
-                width: 80.0,
-                decoration: BoxDecoration(
-                image: DecorationImage(
-                image:projectImg == null
-                ? AssetImage('imeges/logo-2.png')
-                    : NetworkImage(projectImg),
-
-                fit: BoxFit.fill,
-                ),
-                shape: BoxShape.rectangle,
-                ),
-                )
-
-                ),
-                  SizedBox(width: 10),
-                Text(
-                data['projectName'],
-                style: TextStyle(
-                fontWeight: FontWeight.bold,
-                fontSize: 17,
-                color: Colors.deepOrangeAccent,
-                ),
-                ),
-                ],
-                ),
-
-                ),
+                        children: [
+                          ClipRRect(
+                              borderRadius: BorderRadius.circular(20.0),
+                              child: Container(
+                                height: 70.0,
+                                width: 80.0,
+                                decoration: BoxDecoration(
+                                  image: DecorationImage(
+                                    image: projectImg == null
+                                        ? AssetImage('imeges/logo-2.png')
+                                        : NetworkImage(projectImg),
+                                    fit: BoxFit.fill,
+                                  ),
+                                  shape: BoxShape.rectangle,
+                                ),
+                              )),
+                          SizedBox(width: 10),
+                          Text(
+                            data['projectName'],
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 17,
+                              color: Colors.deepOrangeAccent,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
                   ],
                 );
+
+                // print("this is projectImg "+projectImg);// only first image
               },
             ),
           );
@@ -322,12 +320,13 @@ class _profilePageState extends State<profilePage> {
       width: MediaQuery.of(context).size.width * 0.9998,
       height: 0.41 * MediaQuery.of(context).size.height,
       decoration: BoxDecoration(
-        gradient: new LinearGradient(
-            colors: <Color>[ //7928D1##
-              const Color(0xFF2F80ED), const Color(0xFF56CCF2)],
-            stops: <double>[0.1, 0.7],
-            begin: Alignment.bottomLeft, end: Alignment.topRight
-        ),
+        gradient: new LinearGradient(colors: <Color>[
+          //7928D1##
+          const Color(0xFF2F80ED), const Color(0xFF56CCF2)
+        ], stops: <double>[
+          0.1,
+          0.7
+        ], begin: Alignment.bottomLeft, end: Alignment.topRight),
         borderRadius: BorderRadius.only(
           bottomLeft: Radius.circular(30.0),
           bottomRight: Radius.circular(30.0),
@@ -358,7 +357,7 @@ class _profilePageState extends State<profilePage> {
                             color: Colors.blue[200].withOpacity(0.7),
                             spreadRadius: 4,
                             blurRadius: 7,
-                            offset: Offset(0,2), // changes position of shadow
+                            offset: Offset(0, 2), // changes position of shadow
                           ),
                         ],
                         image: DecorationImage(
@@ -406,11 +405,12 @@ class _profilePageState extends State<profilePage> {
               Row(
                 // here is the bio MUST BE 140 LETTER
                 children: <Widget>[
-                  Container(/// max length must be 43
+                  Container(
+                    /// max length must be 43
                     width: MediaQuery.of(context).size.width * 0.9,
-                  //  padding: const EdgeInsets.only(left:3.0,),
+                    //  padding: const EdgeInsets.only(left:3.0,),
                     //alignment: Alignment.center,
-                   child: new Text(
+                    child: new Text(
                       data['bio'] == null ? '' : data['bio'],
                       textAlign: TextAlign.center,
                       style: TextStyle(
@@ -424,7 +424,6 @@ class _profilePageState extends State<profilePage> {
               SizedBox(height: 10),
               Column(
                 children: [
-
                   Align(
                     alignment: Alignment.center,
                     child: Text(
@@ -451,7 +450,6 @@ class _profilePageState extends State<profilePage> {
                 ),
               ),
               SizedBox(height: 5),
-
             ],
           )),
     );
@@ -469,20 +467,22 @@ class _profilePageState extends State<profilePage> {
             child: Row(
               children: [
                 Container(
-                  decoration: BoxDecoration( boxShadow: [
-                    BoxShadow(
-                      color: Colors.blue[200].withOpacity(0.7),
-                      spreadRadius: 5,
-                      blurRadius: 7,
-                      offset: Offset(0,2), // changes position of shadow
-                    ),],),
+                  decoration: BoxDecoration(
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.blue[200].withOpacity(0.7),
+                        spreadRadius: 5,
+                        blurRadius: 7,
+                        offset: Offset(0, 2), // changes position of shadow
+                      ),
+                    ],
+                  ),
                   child: new LinearPercentIndicator(
                     width: MediaQuery.of(context).size.width - 95,
                     animation: true,
                     lineHeight: 25.0,
                     animationDuration: 2000,
                     percent: percent,
-
                     center: Text(
                       skillName,
                       style: TextStyle(fontWeight: FontWeight.bold),
@@ -495,7 +495,7 @@ class _profilePageState extends State<profilePage> {
                   width: 10,
                 ),
                 Text(
-                  level.substring(0,level.length-2) + '%',
+                  level.substring(0, level.length - 2) + '%',
                   style: TextStyle(
                     color: Colors.indigo,
                     fontWeight: FontWeight.bold,
@@ -503,9 +503,8 @@ class _profilePageState extends State<profilePage> {
                 ),
               ],
             ),
-
           ),
-          ],
+        ],
       ),
     );
   }
