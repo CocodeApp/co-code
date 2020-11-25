@@ -37,7 +37,8 @@ class _homePageControllerState extends State<homePageController> {
       onMessage: (Map<String, dynamic> message) async {
         print("onMessage: $message");
 
-        addNoti(message['notification']['title'], message['notification']['body']);
+        addNoti(
+            message['notification']['title'], message['notification']['body']);
         //increment badge
 
         await showDialog(
@@ -85,14 +86,14 @@ class _homePageControllerState extends State<homePageController> {
     _pageController.jumpToPage(selectedIndex);
   }
 
-  void addNoti(String title, String body){
+  void addNoti(String title, String body) {
     CollectionReference users = FirebaseFirestore.instance.collection('User');
     String user = Auth.getCurrentUserID();
-    if (title != null && body != null){
+    if (title != null && body != null) {
       users.doc(user).collection('notifications').add({
-        'title' : title,
-        'body' : body,
-        'time' : DateTime.now(),
+        'title': title,
+        'body': body,
+        'time': DateTime.now(),
       });
     }
   }
