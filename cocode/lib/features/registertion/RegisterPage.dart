@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_form_bloc/flutter_form_bloc.dart';
@@ -95,6 +96,23 @@ class RegisterFormBloc extends FormBloc<String, String> {
         'email': _emailFieldBloc.value,
         'userName': _usernameFieldBloc.value,
       });
+
+      final FirebaseMessaging _fcm = FirebaseMessaging();
+      final FirebaseFirestore _db = FirebaseFirestore.instance;
+
+      String fcmToken = await _fcm.getToken();
+
+      // Save it to Firestore
+      if (fcmToken != null) {
+        var tokens =
+            _db.collection('User').doc(uID).collection('tokens').doc(fcmToken);
+
+        tokens.set({
+          'token': fcmToken,
+          'createdAt': FieldValue.serverTimestamp(), // optional
+          'platform': Platform.operatingSystem // optional
+        });
+      }
 
       yield currentState.toSuccess();
     } catch (e) {
