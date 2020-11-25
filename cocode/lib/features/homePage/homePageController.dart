@@ -59,12 +59,12 @@ class _homePageControllerState extends State<homePageController> {
       },
       onLaunch: (Map<String, dynamic> message) async {
         print("onLaunch: $message");
-        addNoti(message['notification']['title'], message['notification']['body']);
+        //addNoti(message['notification']['title'], message['notification']['body']);
         return;
       },
       onResume: (Map<String, dynamic> message) async {
         print("onResume: $message");
-        addNoti(message['notification']['title'], message['notification']['body']);
+        //addNoti(message['notification']['title'], message['notification']['body']);
         return;
       },
     );
@@ -88,11 +88,13 @@ class _homePageControllerState extends State<homePageController> {
   void addNoti(String title, String body){
     CollectionReference users = FirebaseFirestore.instance.collection('User');
     String user = Auth.getCurrentUserID();
-    users.doc(user).collection('notifications').add({
-      'title' : title,
-      'body' : body,
-      'time' : DateTime.now(),
-    });
+    if (title != null && body != null){
+      users.doc(user).collection('notifications').add({
+        'title' : title,
+        'body' : body,
+        'time' : DateTime.now(),
+      });
+    }
   }
 
   Widget build(BuildContext context) {
