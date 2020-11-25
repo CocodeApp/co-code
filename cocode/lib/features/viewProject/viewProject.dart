@@ -683,7 +683,7 @@ class _menuState extends State<menu> {
     memberMenu = PopupMenu(
         backgroundColor: Colors.indigo,
         lineColor: Colors.white,
-        // maxColumn: 2,
+        //maxColumn: 2,
         items: [
           MenuItem(
               title: 'Channels',
@@ -693,7 +693,7 @@ class _menuState extends State<menu> {
                 color: Colors.white,
               )),
           MenuItem(
-              title: 'events',
+              title: 'Events',
               image: Icon(
                 Icons.calendar_today,
                 color: Colors.white,
@@ -745,6 +745,12 @@ class _menuState extends State<menu> {
           title: 'Events',
           image: Icon(
             Icons.calendar_today,
+            color: Colors.white,
+          )),
+      MenuItem(
+          title: 'edit',
+          image: Icon(
+            Icons.edit,
             color: Colors.white,
           )),
     ];
@@ -818,6 +824,17 @@ class _menuState extends State<menu> {
                 );
             }
               break;
+
+            case 'edit':
+              Navigator.push(
+                context,
+                new MaterialPageRoute(
+                    builder: (context) => new updateProject(id: widget.id)),
+              ).then((value) {
+                setState(() {});
+              });
+              break;
+
           }
         },
         stateChanged: stateChanged,
@@ -929,7 +946,7 @@ class _menuState extends State<menu> {
                 context,
                 new MaterialPageRoute(
                     builder: (context) => new updateProject(id: widget.id)),
-              ).then((valeu) {
+              ).then((value) {
                 setState(() {});
               });
               break;
